@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@config "../tailwind.config.js";
+
+body {
+  font-family: 'Rubik', sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
