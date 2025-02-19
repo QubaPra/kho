@@ -9,3 +9,7 @@ body {
 button {
   cursor: pointer;
 }
+
+material-symbols-outlined {
+  color: white;
+}
