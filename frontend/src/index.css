@@ -13,3 +13,9 @@ button {
 material-symbols-outlined {
   color: white;
 }
+
+input[type=text] {
+  word-wrap: break-word;
+  word-break: break-all;
+  height: 80px;
+}
