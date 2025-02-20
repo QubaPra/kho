@@ -35,6 +35,7 @@ function App() {
   const [editTaskId, setEditTaskId] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [editEndDate, setEditEndDate] = useState("");
+  const [editCategories, setEditCategories] = useState([]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -61,13 +62,19 @@ function App() {
     setEditTaskId(task.id);
     setEditContent(task.content);
     setEditEndDate(task.endDate);
+    setEditCategories(task.categories);
   };
 
   const handleApproveClick = () => {
     setTasks(
       tasks.map((task) =>
         task.id === editTaskId
-          ? { ...task, content: editContent, endDate: editEndDate }
+          ? {
+              ...task,
+              content: editContent,
+              endDate: editEndDate,
+              categories: editCategories,
+            }
           : task
       )
     );
@@ -79,33 +86,36 @@ function App() {
   };
 
   const handleSelectCategory = (category) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === editTaskId
-          ? {
-              ...task,
-              categories: [...new Set([...task.categories, category.id])],
-            }
-          : task
-      )
-    );
+    setEditCategories([...new Set([...editCategories, category.id])]);
   };
 
   const handleRemoveCategory = (categoryId) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === editTaskId
-          ? {
-              ...task,
-              categories: task.categories.filter((id) => id !== categoryId),
-            }
-          : task
-      )
-    );
+    setEditCategories(editCategories.filter((id) => id !== categoryId));
   };
 
   const getCategoriesByIds = (ids) => {
     return categories.filter((category) => ids.includes(category.id));
+  };
+
+  function handleAddTaskClick() {
+    const newTask = {
+      id: tasks.length + 1,
+      content: "",
+      categories: [],
+      endDate: "",
+    };
+    setTasks([...tasks, newTask]);
+    setEditTaskId(newTask.id);
+    setEditContent(newTask.content);
+    setEditEndDate(newTask.endDate);
+    setEditCategories(newTask.categories);
+  }
+
+  const handleDeleteClick = (taskId) => {
+    const confirmed = window.confirm("Czy na pewno chcesz usunąć to zadanie?");
+    if (confirmed) {
+      setTasks(tasks.filter((task) => task.id !== taskId));
+    }
   };
 
   return (
@@ -225,7 +235,9 @@ function App() {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {tasks.map((task, index) => {
-                  const taskCategories = getCategoriesByIds(task.categories);
+                  const taskCategories = getCategoriesByIds(
+                    editTaskId === task.id ? editCategories : task.categories
+                  );
                   return (
                     <tr key={task.id}>
                       <td className="p-3">{index + 1}</td>
@@ -276,7 +288,7 @@ function App() {
                         )}
                         {editTaskId === task.id && (
                           <CategoryDropdown
-                            selectedCategories={task.categories}
+                            selectedCategories={editCategories}
                             onSelectCategory={handleSelectCategory}
                           />
                         )}
@@ -295,7 +307,7 @@ function App() {
                         ) : (
                           <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
                             <p>{task.endDate}</p>
-                            <span className="material-symbols-outlined text-gray-900 dark:text-gray-900">
+                            <span className="material-symbols-outlined text-white dark:text-gray-900">
                               calendar_month
                             </span>
                           </div>
@@ -325,7 +337,10 @@ function App() {
                             >
                               edit
                             </button>
-                            <button className="material-symbols-outlined text-gray-400 hover:text-red-600">
+                            <button
+                              className="material-symbols-outlined text-gray-400 hover:text-red-600"
+                              onClick={() => handleDeleteClick(task.id)}
+                            >
                               delete
                             </button>
                           </>
@@ -336,7 +351,10 @@ function App() {
                 })}
               </tbody>
             </table>
-            <button className="mt-4 flex items-center text-blue-600 hover:text-blue-800">
+            <button
+              className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
+              onClick={handleAddTaskClick}
+            >
               <span className="material-symbols-outlined mr-1">add</span>
               Nowe zadanie
             </button>
