@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import categories from "./assets/categories";
 import CategoryDropdown from "./components/CategoryDropdown";
+import CommentsSection from "./components/CommentsSection";
+import DateDropdown from "./components/DateDropdown";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -14,6 +16,19 @@ function App() {
       return prefersDark;
     }
   });
+
+  function getLatestEndDate(tasks) {
+    if (tasks.length === 0) return "";
+    const dates = tasks
+      .map((task) => new Date(task.endDate))
+      .filter((date) => !isNaN(date));
+    if (dates.length === 0) return "";
+    const latestDate = new Date(Math.max(...dates));
+    return latestDate.toLocaleDateString("pl-PL", {
+      month: "long",
+      year: "numeric",
+    });
+  }
 
   const [tasks, setTasks] = useState([
     {
@@ -29,6 +44,14 @@ function App() {
         "Nie będę nic robić regularnie przez najbliższe 2 miesiące żeby ćwiczyć technikę “nionierobienia”",
       categories: [2, 6, 7, 8, 10, 12, 11],
       endDate: "październik 2025",
+    },
+  ]);
+
+  const [comments, setComments] = useState([
+    {
+      date: "23 lipca 2024",
+      author: "Andrzej Żarnowski",
+      content: "Jak dla mnie jest w porządku! :)",
     },
   ]);
 
@@ -66,22 +89,30 @@ function App() {
   };
 
   const handleApproveClick = () => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === editTaskId
-          ? {
-              ...task,
-              content: editContent,
-              endDate: editEndDate,
-              categories: editCategories,
-            }
-          : task
-      )
-    );
+    if (editContent.trim() === "" && editEndDate.trim() === "" && editCategories.length === 0) {
+      setTasks(tasks.filter((task) => task.id !== editTaskId));
+    } else {
+      setTasks(
+        tasks.map((task) =>
+          task.id === editTaskId
+            ? {
+                ...task,
+                content: editContent,
+                endDate: editEndDate,
+                categories: editCategories,
+              }
+            : task
+        )
+      );
+    }
     setEditTaskId(null);
   };
-
+  
   const handleCancelClick = () => {
+    const task = tasks.find((task) => task.id === editTaskId);
+    if (task && task.content.trim() === "" && task.endDate.trim() === "" && task.categories.length === 0) {
+      setTasks(tasks.filter((task) => task.id !== editTaskId));
+    }
     setEditTaskId(null);
   };
 
@@ -118,6 +149,19 @@ function App() {
     }
   };
 
+  const handleAddComment = (content) => {
+    const newComment = {
+      date: new Intl.DateTimeFormat("pl-PL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date()),
+      author: "Ty",
+      content,
+    };
+    setComments([...comments, newComment]);
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen dark:text-gray-100 text-gray-800">
       <header className="bg-white dark:bg-gray-900 shadow-sm">
@@ -137,15 +181,15 @@ function App() {
           </div>
           <div className="flex items-center space-x-2">
             <button
-              className="material-symbols-outlined bg-gray-900 dark:bg-gray-100 dark:text-gray-800 text-gray-100 p-2 rounded-lg"
+              className="material-symbols-outlined bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 p-2 rounded-lg"
               onClick={toggleDarkMode}
             >
               {isDarkMode ? "light_mode" : "dark_mode"}
             </button>
-            <button className="material-symbols-outlined bg-green-500 p-2 rounded-lg">
+            <button className="material-symbols-outlined bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg">
               person
             </button>
-            <button className="material-symbols-outlined bg-red-500 p-2 rounded-lg">
+            <button className="material-symbols-outlined p-2 rounded-lg bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
               logout
             </button>
           </div>
@@ -184,7 +228,7 @@ function App() {
             </div>
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
               <p className="font-semibold">Data zakończenia:</p>
-              <span>marzec 2026</span>
+              <span>{getLatestEndDate(tasks)}</span>
             </div>
           </div>
 
@@ -214,9 +258,9 @@ function App() {
           <div className="mt-12">
             <h3 className="text-xl font-medium mb-4">Zadania</h3>
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
                 <tr>
-                  <th className="p-3" style={{ width: "1%" }}>
+                  <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
                     Lp
                   </th>
                   <th className="p-3" style={{ width: "48%" }}>
@@ -228,7 +272,7 @@ function App() {
                   <th className="p-3" style={{ width: "17%" }}>
                     Data zakończenia
                   </th>
-                  <th className="p-3" style={{ width: "7%" }}>
+                  <th className="p-3 rounded-tr-lg" style={{ width: "7%" }}>
                     Edycja
                   </th>
                 </tr>
@@ -295,15 +339,10 @@ function App() {
                       </td>
                       <td className="p-3">
                         {editTaskId === task.id ? (
-                          <button
-                            onChange={(e) => setEditEndDate(e.target.value)}
-                            className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-2 flex items-center justify-between"
-                          >
-                            <p>{editEndDate}</p>
-                            <span className="material-symbols-outlined">
-                              calendar_month
-                            </span>
-                          </button>
+                          <DateDropdown
+                            selectedDate={editEndDate}
+                            onSelectDate={(date) => setEditEndDate(date)}
+                          />
                         ) : (
                           <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
                             <p>{task.endDate}</p>
@@ -360,32 +399,10 @@ function App() {
             </button>
           </div>
 
-          <div className="space-y-6 mt-12">
-            <h3 className="text-xl font-medium">Komentarze</h3>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  23 lipca 2024
-                </p>
-                <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                  <p className="font-medium">Andrzej Żarnowski:</p>
-                  <p>Jak dla mnie jest w porządku! :)</p>
-                </div>
-              </div>
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    placeholder="Twój komentarz"
-                    className="flex-1 p-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-600"
-                  />
-                  <button className="material-symbols-outlined text-blue-600 hover:text-blue-800">
-                    send
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <CommentsSection
+            comments={comments}
+            onAddComment={handleAddComment}
+          />
         </div>
       </main>
     </div>

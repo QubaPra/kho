@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import categories from "../assets/categories";
 
 function CategoryDropdown({ selectedCategories, onSelectCategory }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -17,8 +18,21 @@ function CategoryDropdown({ selectedCategories, onSelectCategory }) {
     (category) => !selectedCategories.includes(category.id)
   );
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         className="bg-gray-200 dark:bg-gray-700 px-3 py-1 mt-2 rounded-full w-fit flex items-center"
         onClick={toggleDropdown}
@@ -26,7 +40,7 @@ function CategoryDropdown({ selectedCategories, onSelectCategory }) {
         <span className="material-symbols-outlined">add</span>
       </button>
       {isOpen && (
-        <div className="absolute bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 flex flex-wrap w-96 p-3 space-y-2 space-x-2">
+        <div className="absolute bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 flex flex-wrap w-96 p-3 space-y-2 space-x-2 mt-2">
           {availableCategories.map((category) => (
             <button
               key={category.id}
