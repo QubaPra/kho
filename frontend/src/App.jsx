@@ -82,7 +82,23 @@ function App() {
     setTasks(
       tasks.map((task) =>
         task.id === editTaskId
-          ? { ...task, categories: [...task.categories, category.id] }
+          ? {
+              ...task,
+              categories: [...new Set([...task.categories, category.id])],
+            }
+          : task
+      )
+    );
+  };
+
+  const handleRemoveCategory = (categoryId) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === editTaskId
+          ? {
+              ...task,
+              categories: task.categories.filter((id) => id !== categoryId),
+            }
           : task
       )
     );
@@ -134,7 +150,9 @@ function App() {
             </h2>
             <div className="flex space-x-2">
               <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
-                <span className="material-symbols-outlined">list_alt_check</span>
+                <span className="material-symbols-outlined">
+                  list_alt_check
+                </span>
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
               <button>
@@ -230,17 +248,32 @@ function App() {
                         )}
                       </td>
                       <td className="pt-1 pb-3 flex flex-wrap space-x-2">
-                        {taskCategories.map((category) => (
-                          <div
-                            key={category.id}
-                            className={`${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
-                          >
-                            <span className="material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span>{category.name}</span>
-                          </div>
-                        ))}
+                        {taskCategories.map((category) =>
+                          editTaskId === task.id ? (
+                            <button
+                              key={category.id}
+                              className={`category-button ${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                              onClick={() => handleRemoveCategory(category.id)}
+                            >
+                              <span className="category-icon material-symbols-outlined">
+                                {category.icon}
+                              </span>
+                              <span className="category-name">
+                                {category.name}
+                              </span>
+                            </button>
+                          ) : (
+                            <div
+                              key={category.id}
+                              className={`${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            >
+                              <span className="material-symbols-outlined">
+                                {category.icon}
+                              </span>
+                              <span>{category.name}</span>
+                            </div>
+                          )
+                        )}
                         {editTaskId === task.id && (
                           <CategoryDropdown
                             selectedCategories={task.categories}

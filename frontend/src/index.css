@@ -19,3 +19,31 @@ input[type=text] {
   word-break: break-all;
   height: 80px;
 }
+
+
+
+.category-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-button .category-icon,
+.category-button .category-name {
+  transition: opacity 0.2s;
+}
+
+.category-button:hover .category-icon,
+.category-button:hover .category-name {
+  opacity: 0;
+}
+
+.category-button:hover::after {
+  content: 'close';
+  font-family: 'Material Symbols Outlined';
+  position: absolute;
+  opacity: 1;
+  transition: opacity 0.2s;
+  font-size: 24px;
+}
