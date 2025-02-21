@@ -124,7 +124,7 @@ function NewTrial() {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col">
           <h2 className="text-2xl font-semibold mb-12">
-            Tworzenie nowej próby HO
+            Edycja twojej próby HO
           </h2>
           <form
             className="flex justify-between"

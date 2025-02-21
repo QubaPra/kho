@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 
 function Login() {
+
+  useEffect(() => {
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+    
+        const handleKeyDown = (e) => {
+          if (e.key === " ") {
+            e.preventDefault();
+          }
+        };
+    
+        emailInput.addEventListener("keydown", handleKeyDown);
+        passwordInput.addEventListener("keydown", handleKeyDown);
+    
+        return () => {
+          emailInput.removeEventListener("keydown", handleKeyDown);
+          passwordInput.removeEventListener("keydown", handleKeyDown);
+        };
+      }, []);
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -24,7 +45,7 @@ function Login() {
             </button>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-md hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
+              className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
             >
               Zaloguj się
             </button>

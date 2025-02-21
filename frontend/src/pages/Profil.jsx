@@ -7,22 +7,21 @@ function Register() {
   const [errors, setErrors] = useState({});
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Przykładowe dane
+  const exampleData = {
+    email: "example@example.com",
+    name: "Jan Kowalski",
+    password: "examplePassword"
+  };
 
   useEffect(() => {
-      const emailInput = document.getElementById("email");
-  
-      const handleKeyDown = (e) => {
-        if (e.key === " ") {
-          e.preventDefault();
-        }
-      };
-  
-      emailInput.addEventListener("keydown", handleKeyDown);
-  
-      return () => {
-        emailInput.removeEventListener("keydown", handleKeyDown);
-      };
-    }, []);
+    // Uzupełnianie inputów przykładowymi danymi przy ładowaniu strony
+    setEmail(exampleData.email);
+    setName(exampleData.name);
+    setPassword(exampleData.password);
+  }, []);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -100,23 +99,27 @@ function Register() {
     setIsCapsLockOn(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = () => {
     if (validate()) {
       // Submit form
       console.log("Form submitted");
+      setIsEditing(false);
     }
   };
 
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-          <h2 className="text-2xl font-semibold mb-12">Zarejestruj się</h2>
-          <form style={{ width: "30%" }} onSubmit={handleSubmit}>
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
+          <h2 className="text-2xl font-semibold mb-12">Twoje dane</h2>
+          <div style={{ width: "30%" }}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Email *
+                Email (login)
               </label>
               <input
                 type="email"
@@ -124,6 +127,7 @@ function Register() {
                 name="email"
                 value={email}
                 onChange={handleEmailChange}
+                disabled={!isEditing}
               />
               {errors.email && (
                 <p className="text-red-500 dark:text-red-600 text-sm">
@@ -133,7 +137,7 @@ function Register() {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Imię i nazwisko *
+                Imię i nazwisko
               </label>
               <input
                 type="text"
@@ -141,6 +145,7 @@ function Register() {
                 name="name"
                 value={name}
                 onChange={handleNameChange}
+                disabled={!isEditing}
               />
               {errors.name && (
                 <p className="text-red-500 dark:text-red-600 text-sm">
@@ -150,7 +155,7 @@ function Register() {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Hasło *
+                Hasło
               </label>
               <input
                 type="password"
@@ -160,6 +165,7 @@ function Register() {
                 onChange={handlePasswordChange}
                 onFocus={handlePasswordFocus}
                 onBlur={handlePasswordBlur}
+                disabled={!isEditing}
               />
               {errors.password && (
                 <p className="text-red-500 dark:text-red-600 text-sm">
@@ -173,13 +179,32 @@ function Register() {
               )}
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
-            >
-              Zarejestruj się
-            </button>
-          </form>
+            <div className="flex space-x-4">
+              {isEditing ? (
+                <button
+                  type="button"
+                  onClick={handleSaveClick}
+                  className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
+                >
+                  Zapisz
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleEditClick}
+                  className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
+                >
+                  Edytuj
+                </button>
+              )}
+              <button
+                type="button"
+                className="w-full text-white mt-2 py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+              >
+                Usuń konto
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
