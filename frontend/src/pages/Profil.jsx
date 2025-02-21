@@ -115,7 +115,7 @@ function Register() {
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
-          <h2 className="text-2xl font-semibold mb-12">Twoje dane</h2>
+          <h2 className="text-2xl font-semibold mb-12 mt-1">Twoje dane</h2>
           <div style={{ width: "30%" }}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -184,24 +184,34 @@ function Register() {
                 <button
                   type="button"
                   onClick={handleSaveClick}
-                  className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
-                >
-                  Zapisz
+                  className="w-full bg-green-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 focus:outline-none"
+                  >
+                  <span className="material-symbols-outlined">
+                  check
+                </span>
+                <span>Zapisz</span>
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleEditClick}
-                  className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
+                  className="w-full bg-blue-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
                 >
-                  Edytuj
+                  <span className="material-symbols-outlined">
+                  edit_square
+                </span>
+                <span>Edytuj</span>
+                  
                 </button>
               )}
               <button
                 type="button"
-                className="w-full text-white mt-2 py-2 px-4 rounded-lg bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
-              >
-                Usuń konto
+                className="w-full text-white mt-2 py-2 px-4 rounded-lg flex justify-center space-x-1 bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+                >
+                <span className="material-symbols-outlined">
+                delete
+              </span>
+              <span>Usuń konto</span>
               </button>
             </div>
           </div>

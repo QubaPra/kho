@@ -112,7 +112,7 @@ function Register() {
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-          <h2 className="text-2xl font-semibold mb-12">Zarejestruj się</h2>
+          <h2 className="text-2xl font-semibold mb-12 mt-1">Zarejestruj się</h2>
           <form style={{ width: "30%" }} onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">

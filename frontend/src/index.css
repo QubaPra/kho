@@ -11,9 +11,7 @@ button {
   cursor: pointer;
 }
 
-material-symbols-outlined {
-  color: white;
-}
+
 
 th {
   @apply p-3;
@@ -64,8 +62,12 @@ select {
   
   
   @apply appearance-none bg-no-repeat bg-right;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23FFFFFF'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%231e2939'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
   background-position: right 0.5rem center;
+}
+
+.dark select {  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23f3f4f6'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

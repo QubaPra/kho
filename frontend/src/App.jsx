@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import NewTrial from "./pages/NewTrial";
 import EditTrial from "./pages/EditTrial";
 import Profil from "./pages/Profil";
+import UsersList from "./pages/UsersList";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/nowa-proba" element={<NewTrial />} />
         <Route path="edycja-proby" element={<EditTrial />} />
         <Route path="/profil" element={<Profil />} />
+        <Route path="/uzytkownicy" element={<UsersList />} />
       </Routes>
     </Router>
   );

@@ -3,6 +3,7 @@ import categories from "../assets/categories";
 import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   function getLatestEndDate(tasks) {
@@ -162,9 +163,9 @@ function Dashboard() {
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
               <button>
-                <span className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                <Link to="/edycja-proby" className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
                   edit_square
-                </span>
+                </Link>
               </button>
               <button>
                 <span className="material-symbols-outlined bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
