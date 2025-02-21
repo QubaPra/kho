@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const DateDropdown = ({ selectedDate, onSelectDate }) => {
+const MonthDropdown = ({ selectedDate, onSelectDate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isYearSelection, setIsYearSelection] = useState(false);
   const [date, setDate] = useState(selectedDate);
@@ -93,4 +93,4 @@ const DateDropdown = ({ selectedDate, onSelectDate }) => {
   );
 };
 
-export default DateDropdown;
+export default MonthDropdown;

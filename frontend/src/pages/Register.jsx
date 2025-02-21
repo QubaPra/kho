@@ -93,16 +93,13 @@ function Register() {
   };
 
   return (
-    <div class="bg-gray-100 dark:bg-black min-h-screen">
-      <div class="max-w-7xl mx-auto px-4 py-6">
-        <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-          <h2 class="text-2xl font-semibold mb-12">Zarejestruj się</h2>
+    <div className="bg-gray-100 dark:bg-black min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
+          <h2 className="text-2xl font-semibold mb-12">Zarejestruj się</h2>
           <form style={{ width: "30%" }} onSubmit={handleSubmit}>
-            <div class="mb-4">
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-              >
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Email *
               </label>
               <input
@@ -112,13 +109,14 @@ function Register() {
                 value={email}
                 onChange={handleEmailChange}
               />
-              {errors.email && <p class="text-red-500 dark:text-red-600 text-sm">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 dark:text-red-600 text-sm">
+                  {errors.email}
+                </p>
+              )}
             </div>
-            <div class="mb-4">
-              <label
-                for="name"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-              >
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Imię i nazwisko *
               </label>
               <input
@@ -128,13 +126,14 @@ function Register() {
                 value={name}
                 onChange={handleNameChange}
               />
-              {errors.name && <p class="text-red-500 dark:text-red-600 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 dark:text-red-600 text-sm">
+                  {errors.name}
+                </p>
+              )}
             </div>
-            <div class="mb-4">
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-              >
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Hasło *
               </label>
               <input
@@ -146,13 +145,21 @@ function Register() {
                 onFocus={handlePasswordFocus}
                 onBlur={handlePasswordBlur}
               />
-              {errors.password && <p class="text-red-500 dark:text-red-600 text-sm">{errors.password}</p>}
-              {isCapsLockOn && <p class="text-yellow-500 dark:text-yellow-600 text-sm">Capslock jest włączony</p>}
+              {errors.password && (
+                <p className="text-red-500 dark:text-red-600 text-sm">
+                  {errors.password}
+                </p>
+              )}
+              {isCapsLockOn && (
+                <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+                  Capslock jest włączony
+                </p>
+              )}
             </div>
 
             <button
               type="submit"
-              class="w-full bg-blue-700 text-white mt-2 py-2 px-4 rounded-md hover:bg-blue-800 focus:outline-none "
+              className="w-full bg-blue-700 text-white  mt-2 py-2 px-4 rounded-md hover:bg-blue-800 focus:outline-none "
             >
               Zarejestruj się
             </button>

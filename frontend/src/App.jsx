@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import NewTrial from "./pages/NewTrial";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/logowanie" element={<Login />} />
         <Route path="/rejestracja" element={<Register />} />
+        <Route path="/nowa-proba" element={<NewTrial />} />
       </Routes>
     </Router>
   );
