@@ -11,16 +11,20 @@ function CommentsSection({ comments, onAddComment }) {
   };
 
   useEffect(() => {
-      const textareas = document.querySelectorAll(".auto-resize-textarea");
-      textareas.forEach((textarea) => {
-        textarea.style.height = "auto";
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      });
+    const textareas = document.querySelectorAll(".auto-resize-textarea");
+    textareas.forEach((textarea) => {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
     });
+  });
 
   return (
     <div class="space-y-6 mt-12">
-      <h3 class="text-xl font-medium">Komentarze</h3>
+      <div class="flex items-center space-x-1.5 text-xl mb-4">
+        <span class="material-symbols-outlined ">chat</span>
+        <span class="text-xl font-medium">Komentarze</span>
+      </div>
+
       <div class="space-y-4">
         {comments.map((comment, index) => (
           <div key={index} class="space-y-1 w-fit">

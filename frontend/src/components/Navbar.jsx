@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -18,22 +19,21 @@ function Navbar() {
   };
 
   useEffect(() => {
-      if (isDarkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-      localStorage.setItem("theme", isDarkMode ? "dark" : "light");
-    }, [isDarkMode]);
-
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
 
   return (
     <header class="bg-white dark:bg-gray-900 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-2">
-          <button class="text-xl font-semibold dark:text-gray-100">
+          <Link to="/" class="text-xl font-semibold dark:text-gray-100">
             eKapituła HKK
-          </button>
+          </Link>
         </div>
         <div class="max-w-7xl mx-auto px-4 py-2 flex items-center space-x-6">
           <button class="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-300">
@@ -60,6 +60,6 @@ function Navbar() {
       </div>
     </header>
   );
-};
+}
 
 export default Navbar;

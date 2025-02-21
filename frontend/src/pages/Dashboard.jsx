@@ -205,9 +205,18 @@ function Dashboard() {
           </div>
 
           <div class="mt-12">
-            <h3 class="text-xl font-medium mb-4">Zadania</h3>
+            <div class="flex items-center space-x-1.5 text-xl mb-4">
+              <span class="material-symbols-outlined ">
+              task_alt
+              </span>
+              <span class="text-xl font-medium">Zadania</span>
+            </div>
+
+
+            
+            
             <table class="w-full">
-              <thead class="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+              <thead class="bg-green-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
                 <tr>
                   <th class="p-3 rounded-tl-lg" style={{ width: "1%" }}>
                     Lp
