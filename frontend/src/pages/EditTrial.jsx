@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function NewTrial() {
+const EditTrial = () => {
   const [privEmail, setPrivateEmail] = useState("");
   const [mentorMail, setMentorEmail] = useState("");
   const [name, setName] = useState("");
@@ -263,4 +263,4 @@ function NewTrial() {
   );
 }
 
-export default NewTrial;
+export default EditTrial;

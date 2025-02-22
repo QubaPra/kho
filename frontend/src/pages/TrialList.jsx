@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function TrialList() {
+const TrialList = () => {
   const [data, setData] = useState([
     { name: "Jan Kowalski",
       state: "otwarta RL 2/2021/2022",

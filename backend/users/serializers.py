@@ -8,7 +8,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'login', 'full_name', 'role', 'last_login', 'date_joined')
+        fields = ('id', 'login', 'full_name', 'role', 'last_login', 'date_joined', 'password')  # Dodaj 'password'
         extra_kwargs = {
             'password': {'write_only': True},
             'login': {'validators': []},  # Disable unique validator for login
@@ -26,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.login = validated_data.get('login', instance.login)
         instance.full_name = validated_data.get('full_name', instance.full_name)
+        instance.role = validated_data.get('role', instance.role)  # Dodaj aktualizację roli
         if 'password' in validated_data:
             instance.password = make_password(validated_data['password'])
         instance.save()

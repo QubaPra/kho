@@ -1,45 +1,85 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-
-function Login() {
+const Login = ({ setIsAuthenticated }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-    
-        const handleKeyDown = (e) => {
-          if (e.key === " ") {
-            e.preventDefault();
-          }
-        };
-    
-        emailInput.addEventListener("keydown", handleKeyDown);
-        passwordInput.addEventListener("keydown", handleKeyDown);
-    
-        return () => {
-          emailInput.removeEventListener("keydown", handleKeyDown);
-          passwordInput.removeEventListener("keydown", handleKeyDown);
-        };
-      }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/"); // Przekierowanie na stronę główną, jeśli użytkownik jest zalogowany
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    const handleKeyDown = (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+      }
+    };
+
+    emailInput.addEventListener("keydown", handleKeyDown);
+    passwordInput.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      emailInput.removeEventListener("keydown", handleKeyDown);
+      passwordInput.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8000/api/login/", {
+        login: email,
+        password: password,
+      });
+      localStorage.setItem("token", response.data.token);
+      setIsAuthenticated(true);
+      navigate("/"); // Przekierowanie na stronę główną po zalogowaniu
+    } catch (error) {
+      setError("Nieprawidłowe dane logowania");
+    }
+  };
 
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
           <h2 className="text-2xl font-semibold mb-12 mt-1">Zaloguj się</h2>
-          <form style={{ width: "30%" }}>
+          <form style={{ width: "30%" }} onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Email
               </label>
-              <input type="email" id="email" name="email" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Hasło
               </label>
-              <input type="password" id="password" name="password" />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
+            {error && <p className="text-red-500">{error}</p>}
             <button className="text-sm text-blue-600 dark:text-blue-700 mb-4 hover:underline ">
               Zapomniałem danych logowania
             </button>

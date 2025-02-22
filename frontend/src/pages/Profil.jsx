@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Register() {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");

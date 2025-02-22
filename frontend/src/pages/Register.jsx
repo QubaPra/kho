@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Dodaj import
+import axios from "axios";
 
-function Register() {
+const Register = ({ setIsAuthenticated }) => { // Dodaj argument
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const navigate = useNavigate();
+
+useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/"); // Przekierowanie na stronę główną, jeśli użytkownik jest zalogowany
+    }
+  }, [navigate]);
 
   useEffect(() => {
-      const emailInput = document.getElementById("email");
-  
-      const handleKeyDown = (e) => {
-        if (e.key === " ") {
-          e.preventDefault();
-        }
-      };
-  
-      emailInput.addEventListener("keydown", handleKeyDown);
-  
-      return () => {
-        emailInput.removeEventListener("keydown", handleKeyDown);
-      };
-    }, []);
+    const emailInput = document.getElementById("email");
+
+    const handleKeyDown = (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+      }
+    };
+
+    emailInput.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      emailInput.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -100,11 +110,26 @@ function Register() {
     setIsCapsLockOn(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      // Submit form
-      console.log("Form submitted");
+      try {
+        await axios.post("http://localhost:8000/api/register/", {
+          login: email,
+          password: password,
+          full_name: name,
+        });
+        // Automatyczne logowanie po rejestracji
+        const response = await axios.post("http://localhost:8000/api/login/", {
+          login: email,
+          password: password,
+        });
+        localStorage.setItem("token", response.data.token);
+        setIsAuthenticated(true);
+        navigate("/"); // Przekierowanie na stronę główną
+      } catch (error) {
+        setErrors({ ...errors, form: "Rejestracja nie powiodła się" });
+      }
     }
   };
 
@@ -172,7 +197,11 @@ function Register() {
                 </p>
               )}
             </div>
-
+            {errors.form && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.form}
+              </p>
+            )}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "

@@ -5,7 +5,7 @@ import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
 import { Link } from "react-router-dom";
 
-function Dashboard() {
+const Dashboard = () => {
   function getLatestEndDate(tasks) {
     if (tasks.length === 0) return "";
     const dates = tasks

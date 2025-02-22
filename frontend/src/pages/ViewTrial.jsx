@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import categories from "../assets/categories";
-import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
-import MonthDropdown from "../components/MonthDropdown";
 
-function Dashboard() {
+const ViewTrial = () => {
   function getLatestEndDate(tasks) {
     if (tasks.length === 0) return "";
     const dates = tasks
@@ -188,4 +186,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default ViewTrial;

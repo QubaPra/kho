@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function NewTrial() {
+const NewTrial = () => {
   const [privEmail, setPrivateEmail] = useState("");
   const [mentorMail, setMentorEmail] = useState("");
   const [name, setName] = useState("");

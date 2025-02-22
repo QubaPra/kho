@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function Navbar() {
+const Navbar = ({ setIsAuthenticated, user }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
@@ -27,6 +27,16 @@ function Navbar() {
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    // Przekierowanie na stronę logowania
+    navigate("/logowanie");
+  };
+
   return (
     <header className="bg-white dark:bg-gray-900 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -36,12 +46,16 @@ function Navbar() {
           </Link>
         </div>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center space-x-6">
-          <Link to="/uzytkownicy" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
-            Użytkownicy
-          </Link>
-          <Link to="/proby" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
-            Wszystkie próby
-          </Link>
+          {user?.role === "Administrator" && (
+            <Link to="/uzytkownicy" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
+              Użytkownicy
+            </Link>
+          )}
+          {(user?.role === "Administrator" || user?.role === "Członek kapituły") && (
+            <Link to="/proby" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
+              Wszystkie próby
+            </Link>
+          )}
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -53,7 +67,10 @@ function Navbar() {
           <Link to="/profil" className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg">
             person
           </Link>
-          <button className="material-symbols-outlined p-2 rounded-lg text-white bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+          <button
+            className="material-symbols-outlined p-2 rounded-lg text-white bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+            onClick={handleLogout}
+          >
             logout
           </button>
         </div>
