@@ -12,24 +12,25 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Team',
+            name='Category',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
+                ('icon', models.CharField(max_length=50)),
+                ('font_color', models.CharField(max_length=50)),
+                ('bg_color', models.CharField(max_length=50)),
+                ('dark_font_color', models.CharField(max_length=50)),
+                ('dark_bg_color', models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='Trial',
+            name='Task',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rank', models.CharField(choices=[('mł.', 'mł.'), ('wyw.', 'wyw.'), ('ćw.', 'ćw.')], max_length=4)),
-                ('email', models.EmailField(max_length=254)),
-                ('birth_date', models.DateField()),
-                ('team', models.CharField(max_length=100)),
-                ('mentor_mail', models.EmailField(max_length=254)),
-                ('mentor_name', models.CharField(max_length=100)),
-                ('created_time', models.DateTimeField(auto_now_add=True)),
-                ('edited_time', models.DateTimeField(auto_now=True)),
+                ('content', models.TextField()),
+                ('end_date', models.CharField(max_length=7)),
+                ('is_done', models.BooleanField(default=False)),
+                ('categories', models.ManyToManyField(to='tasks.category')),
             ],
         ),
     ]

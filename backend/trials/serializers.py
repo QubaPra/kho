@@ -1,11 +1,7 @@
 # backend/trials/serializers.py
 from rest_framework import serializers
-from .models import Trial, Task
-
-class TaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = '__all__'
+from .models import Trial
+from tasks.serializers import TaskSerializer
 
 class TrialSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)

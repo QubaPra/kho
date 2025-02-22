@@ -1,8 +1,8 @@
-# backend/trials/urls.py
+# backend/tasks/urls.py
 from rest_framework.routers import DefaultRouter
-from .views import TrialViewSet
+from .views import TaskViewSet
 
 router = DefaultRouter()
-router.register(r'trials', TrialViewSet)
+router.register(r'tasks', TaskViewSet)
 
 urlpatterns = router.urls
