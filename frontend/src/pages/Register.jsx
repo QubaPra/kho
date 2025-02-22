@@ -16,6 +16,9 @@ useEffect(() => {
     if (token) {
       navigate("/"); // Przekierowanie na stronę główną, jeśli użytkownik jest zalogowany
     }
+    else {
+      setIsAuthenticated(false);
+    }
   }, [navigate]);
 
   useEffect(() => {
@@ -120,11 +123,21 @@ useEffect(() => {
           full_name: name,
         });
         // Automatyczne logowanie po rejestracji
-        const response = await axios.post("http://localhost:8000/api/login/", {
-          login: email,
-          password: password,
+        const response = await fetch('http://127.0.0.1:8000/api/login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ login: email, password }),
         });
-        localStorage.setItem("token", response.data.token);
+  
+        if (!response.ok) {
+          throw new Error('Nieprawidłowe dane logowania');
+        }
+  
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
         setIsAuthenticated(true);
         navigate("/"); // Przekierowanie na stronę główną
       } catch (error) {

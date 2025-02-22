@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Profil = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -9,18 +11,22 @@ const Register = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Przykładowe dane
-  const exampleData = {
-    email: "example@example.com",
-    name: "Jan Kowalski",
-    password: "examplePassword"
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Uzupełnianie inputów przykładowymi danymi przy ładowaniu strony
-    setEmail(exampleData.email);
-    setName(exampleData.name);
-    setPassword(exampleData.password);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/users/me/");
+        const userData = response.data;
+        setEmail(userData.login);
+        setName(userData.full_name);
+        // Nie ustawiamy hasła, ponieważ nie powinno być ono dostępne
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   useEffect(() => {
@@ -103,11 +109,32 @@ const Register = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (validate()) {
-      // Submit form
-      console.log("Form submitted");
-      setIsEditing(false);
+      try {
+        await axios.patch("/users/me/", {
+          login: email,
+          full_name: name,
+        });
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Error updating user data:", error);
+      }
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    const confirmed = window.confirm("Czy na pewno chcesz usunąć swoje konto?");
+    if (confirmed) {
+      try {
+        await axios.delete("/users/me/");
+        // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
+        localStorage.removeItem("access_token");        
+        // Przekierowanie na stronę rejestracja
+        navigate("/rejestracja");
+      } catch (error) {
+        console.error("Error deleting user account:", error);
+      }
     }
   };
 
@@ -185,11 +212,9 @@ const Register = () => {
                   type="button"
                   onClick={handleSaveClick}
                   className="w-full bg-green-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 focus:outline-none"
-                  >
-                  <span className="material-symbols-outlined">
-                  check
-                </span>
-                <span>Zapisz</span>
+                >
+                  <span className="material-symbols-outlined">check</span>
+                  <span>Zapisz</span>
                 </button>
               ) : (
                 <button
@@ -197,21 +222,17 @@ const Register = () => {
                   onClick={handleEditClick}
                   className="w-full bg-blue-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
                 >
-                  <span className="material-symbols-outlined">
-                  edit_square
-                </span>
-                <span>Edytuj</span>
-                  
+                  <span className="material-symbols-outlined">edit_square</span>
+                  <span>Edytuj</span>
                 </button>
               )}
               <button
                 type="button"
+                onClick={handleDeleteClick}
                 className="w-full text-white mt-2 py-2 px-4 rounded-lg flex justify-center space-x-1 bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
-                >
-                <span className="material-symbols-outlined">
-                delete
-              </span>
-              <span>Usuń konto</span>
+              >
+                <span className="material-symbols-outlined">delete</span>
+                <span>Usuń konto</span>
               </button>
             </div>
           </div>
@@ -219,6 +240,6 @@ const Register = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Register;
+export default Profil;

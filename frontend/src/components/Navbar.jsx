@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const Navbar = ({ setIsAuthenticated, user }) => {
+const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
@@ -33,8 +33,6 @@ const Navbar = ({ setIsAuthenticated, user }) => {
     // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
     localStorage.removeItem("access_token");
     setIsAuthenticated(false);
-    // Przekierowanie na stronę logowania
-    navigate("/logowanie");
   };
 
   return (
@@ -46,12 +44,12 @@ const Navbar = ({ setIsAuthenticated, user }) => {
           </Link>
         </div>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center space-x-6">
-          {user?.role === "Administrator" && (
+          {isAuthenticated && user?.role === "Administrator" && (
             <Link to="/uzytkownicy" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
               Użytkownicy
             </Link>
           )}
-          {(user?.role === "Administrator" || user?.role === "Członek kapituły") && (
+          {isAuthenticated && (user?.role === "Administrator" || user?.role === "Członek kapituły") && (
             <Link to="/proby" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
               Wszystkie próby
             </Link>
@@ -64,15 +62,30 @@ const Navbar = ({ setIsAuthenticated, user }) => {
           >
             {isDarkMode ? "light_mode" : "dark_mode"}
           </button>
-          <Link to="/profil" className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg">
-            person
-          </Link>
-          <button
-            className="material-symbols-outlined p-2 rounded-lg text-white bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
-            onClick={handleLogout}
-          >
-            logout
-          </button>
+          {isAuthenticated ? (
+            <>
+              <Link to="/profil" className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg">
+                person
+              </Link>
+              <button
+                className="material-symbols-outlined p-2 rounded-lg text-white bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+                onClick={handleLogout}
+              >
+                logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/rejestracja" className="flex items-center space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 p-2 rounded-lg">
+                <span className="material-symbols-outlined">person_add</span>
+                <span>Rejestracja</span>
+              </Link>
+              <Link to="/logowanie" className="flex items-center space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded-lg">
+                <span className="material-symbols-outlined">login</span>
+                <span>Logowanie</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
