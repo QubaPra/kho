@@ -4,6 +4,7 @@ import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
 import { Link } from "react-router-dom";
+import axios from "../api/axios";
 
 const Dashboard = () => {
   function getLatestEndDate(tasks) {
@@ -43,6 +44,20 @@ const Dashboard = () => {
       content: "Jak dla mnie jest w porządku! :)",
     },
   ]);
+
+  const handleDeleteTrial = async () => {
+    const confirmed = window.confirm("Czy na pewno chcesz usunąć tę próbę?");
+    if (confirmed) {
+      try {
+        await axios.delete("/trials/me");
+        // Możesz dodać dodatkowe działania po udanym usunięciu, np. przekierowanie
+        alert("Próba została usunięta.");
+      } catch (error) {
+        console.error("Błąd podczas usuwania próby:", error);
+        alert("Wystąpił błąd podczas usuwania próby.");
+      }
+    }
+  };
 
   const [editTaskId, setEditTaskId] = useState(null);
   const [editContent, setEditContent] = useState("");
@@ -167,7 +182,7 @@ const Dashboard = () => {
                   edit_square
                 </Link>
               </button>
-              <button>
+              <button onClick={handleDeleteTrial}>
                 <span className="material-symbols-outlined bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
                   delete
                 </span>

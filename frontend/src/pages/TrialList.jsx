@@ -1,28 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "../api/axios";
 
 const TrialList = () => {
-  const [data, setData] = useState([
-    { name: "Jan Kowalski",
-      state: "otwarta RL 2/2021/2022",
-      endDate: "lipiec 2021",
-    },
-    {
-      name: "Anna Nowak",
-      state: "zaakceptowana przez kapitułę (do otwarcia)",
-      endDate: "czerwiec 2022",
-    },
-    {
-      name: "Emil Tokarz",
-      state: "do akceptacji przez opiekuna",
-      endDate: "luty 2022",
-    },
-  ]);
+  const [data, setData] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/trials/");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const sortData = (key) => {
     let direction = "ascending";
@@ -46,10 +45,10 @@ const TrialList = () => {
     setFilter(event.target.value);
   };
 
-  const filteredData = data.filter((user) =>
-    user.name.toLowerCase().includes(filter.toLowerCase()) ||
-    user.state.toLowerCase().includes(filter.toLowerCase()) ||
-    user.endDate.toLowerCase().includes(filter.toLowerCase())
+  const filteredData = data.filter((trial) =>
+    trial.name.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.state.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.endDate.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
@@ -149,7 +148,6 @@ const TrialList = () => {
                 </th>
                 <th
                   className="p-3 rounded-tr-lg cursor-pointer w-1/12"
-                  onClick={() => sortData("role")}
                 >
                   <div className="flex justify-between items-center">
                     <span>Szczegóły</span>                    
@@ -158,13 +156,13 @@ const TrialList = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredData.map((user, index) => (
-                <tr key={index}>
-                  <td className="p-3">{user.name}</td>
-                  <td className="p-3">{user.state}</td>
-                  <td className="p-3">{user.endDate}</td>  
+              {filteredData.map((trial, index) => (
+                <tr key={trial.id}>
+                  <td className="p-3">{trial.name}</td>
+                  <td className="p-3">{trial.state}</td>
+                  <td className="p-3">{trial.endDate}</td>  
                   <td className="p-3">
-                    <Link to="/proba/<id>" className="material-symbols-outlined text-blue-600 hover:text-blue-800">
+                    <Link to={`/proba/${trial.id}`} className="material-symbols-outlined text-blue-600 hover:text-blue-800">
                       info
                     </Link>
                   </td>                  

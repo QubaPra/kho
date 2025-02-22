@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const EditTrial = () => {
   const [privEmail, setPrivateEmail] = useState("");
@@ -8,8 +10,27 @@ const EditTrial = () => {
   const [team, setTeam] = useState("");
   const [rank, setRank] = useState("");
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
+    
+    const fetchTrialData = async () => {
+      try {
+        const response = await axios.get("/trials/me"); // Zakładając, że ID próby to 1
+        const trial = response.data;
+        setPrivateEmail(trial.email);
+        setMentorEmail(trial.mentor_mail);
+        setName(trial.mentor_name);
+        setDate(trial.birth_date);
+        setTeam(trial.team);
+        setRank(trial.rank);
+      } catch (error) {
+        console.error("Błąd podczas pobierania danych próby:", error);
+      }
+    };
+
+    fetchTrialData();
+
     const dateInput = document.getElementById("date");
     const privEmailInput = document.getElementById("privEmail");
     const mentorEmailInput = document.getElementById("mentorEmail");
@@ -111,11 +132,22 @@ const EditTrial = () => {
     setErrors((prevErrors) => ({ ...prevErrors, rank: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      // Submit form
-      console.log("Form submitted");
+      try {
+        await axios.patch("/trials/me", {
+          email: privEmail,
+          mentor_mail: mentorMail,
+          mentor_name: name,
+          birth_date: date,
+          team: team,
+          rank: rank,
+        });
+        navigate("/");
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji próby:", error);
+      }
     }
   };
 
@@ -253,7 +285,7 @@ const EditTrial = () => {
                 type="submit"
                 className="w-full bg-blue-700 text-white mt-2 mb-4 py-2 px-4 rounded-lg hover:bg-blue-800 focus:outline-none "
               >
-                Zarejestruj się
+                Zapisz
               </button>
             </div>
           </form>

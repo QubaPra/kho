@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
-const NewTrial = () => {
+const NewTrial = ({ user }) => {
   const [privEmail, setPrivateEmail] = useState("");
   const [mentorMail, setMentorEmail] = useState("");
   const [name, setName] = useState("");
@@ -8,8 +10,13 @@ const NewTrial = () => {
   const [team, setTeam] = useState("");
   const [rank, setRank] = useState("");
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (user && user.login) {
+      setPrivateEmail(user.login);
+    }
+
     const dateInput = document.getElementById("date");
     const privEmailInput = document.getElementById("privEmail");
     const mentorEmailInput = document.getElementById("mentorEmail");
@@ -29,7 +36,7 @@ const NewTrial = () => {
       privEmailInput.removeEventListener("keydown", handleKeyDown);
       mentorEmailInput.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [user]);
 
   const validate = () => {
     const newErrors = {};
@@ -111,11 +118,23 @@ const NewTrial = () => {
     setErrors((prevErrors) => ({ ...prevErrors, rank: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      // Submit form
-      console.log("Form submitted");
+      try {
+        const response = await axios.post("/trials/me", {
+          email: privEmail,
+          mentor_mail: mentorMail,
+          mentor_name: name,
+          birth_date: date,
+          team: team,
+          rank: rank,
+        });
+        console.log("Form submitted successfully:", response.data);
+        navigate("/");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     }
   };
 
