@@ -6,7 +6,27 @@ import MonthDropdown from "../components/MonthDropdown";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 
-const Dashboard = () => {
+const Dashboard = ({user}) => {
+  const [trial, setTrial] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetchTrialData = async () => {
+      try {
+        const response = await axios.get("/trials/me");
+        setTrial(response.data);
+        setTasks(response.data.tasks || []);
+        // Zakładając, że komentarze są częścią danych próby
+        setComments(response.data.comments || []);
+      } catch (error) {
+        console.error("Błąd podczas pobierania danych próby:", error);
+      }
+    };
+
+    fetchTrialData();
+  }, []);
+
   function getLatestEndDate(tasks) {
     if (tasks.length === 0) return "";
     const dates = tasks
@@ -20,37 +40,11 @@ const Dashboard = () => {
     });
   }
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      content:
-        "Będę regularnie uczył się muzyki aby osiągnąć wynik 12% na egzaminie maturalnym",
-      categories: [],
-      endDate: "marzec 2026",
-    },
-    {
-      id: 2,
-      content:
-        "Nie będę nic robić regularnie przez najbliższe 2 miesiące żeby ćwiczyć technikę “nionierobienia”",
-      categories: [2, 6, 7, 8, 10, 12, 11],
-      endDate: "październik 2025",
-    },
-  ]);
-
-  const [comments, setComments] = useState([
-    {
-      date: "23 lipca 2024",
-      author: "Andrzej Żarnowski",
-      content: "Jak dla mnie jest w porządku! :)",
-    },
-  ]);
-
   const handleDeleteTrial = async () => {
     const confirmed = window.confirm("Czy na pewno chcesz usunąć tę próbę?");
     if (confirmed) {
       try {
         await axios.delete("/trials/me");
-        // Możesz dodać dodatkowe działania po udanym usunięciu, np. przekierowanie
         alert("Próba została usunięta.");
       } catch (error) {
         console.error("Błąd podczas usuwania próby:", error);
@@ -162,13 +156,17 @@ const Dashboard = () => {
     setComments([...comments, newComment]);
   };
 
+  if (!trial) {
+    return <div>Ładowanie...</div>;
+  }
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-semibold">
-              wyw. Jakub Prażuch próba na stopień HO
+              {trial.rank} {user.full_name} próba na stopień HO
             </h2>
             <div className="flex space-x-2">
               <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
@@ -203,23 +201,23 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <div>
               <p className="text-sm text-gray-400">Email do kontaktu</p>
-              <p className="font-medium">jakub.prazuch@malopolska.zhr.pl</p>
+              <p className="font-medium">{trial.email}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Email opiekuna</p>
-              <p className="font-medium">andrzej.zarnowski@malopolska.zhr.pl</p>
+              <p className="font-medium">{trial.mentor_mail}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Data urodzenia</p>
-              <p className="font-medium">25 lipca 2005</p>
+              <p className="font-medium">{new Date(trial.birth_date).toLocaleDateString("pl-PL")}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
-              <p className="font-medium">Andrzej Żarnowski</p>
+              <p className="font-medium">{trial.mentor_name}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Drużyna</p>
-              <p className="font-medium">40 KDH Barykada</p>
+              <p className="font-medium">{trial.team}</p>
             </div>
           </div>
 

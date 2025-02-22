@@ -39,7 +39,7 @@ const App = () => {
     <>
       <Navbar setIsAuthenticated={setIsAuthenticated} user={user} isAuthenticated={isAuthenticated} />
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/logowanie" />} />
+        <Route path="/" element={isAuthenticated ? <Dashboard user={user}/> : <Navigate to="/logowanie" />} />
         <Route path="/logowanie" element={<Login setIsAuthenticated={setIsAuthenticated}/>} />
         <Route path="/rejestracja" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
         <Route path="/nowa-proba" element={isAuthenticated ? <NewTrial user={user}/> : <Navigate to="/logowanie" />} />
