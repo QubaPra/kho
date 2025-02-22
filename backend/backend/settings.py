@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users',
     'trials',
     'tasks',
+    'comments',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',

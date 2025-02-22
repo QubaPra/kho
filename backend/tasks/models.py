@@ -18,6 +18,6 @@ class Category(models.Model):
 class Task(models.Model):
     trial = models.ForeignKey(Trial, on_delete=models.CASCADE, related_name='tasks')
     content = models.TextField()
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, blank=True)
     end_date = models.CharField(max_length=7)  # Format: MM-YYYY
     is_done = models.BooleanField(default=False)

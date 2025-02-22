@@ -2,11 +2,12 @@
 from rest_framework import serializers
 from .models import Trial
 from tasks.serializers import TaskSerializer
+from comments.serializers import CommentSerializer
 
 class TrialSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
-
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Trial
