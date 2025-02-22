@@ -31,7 +31,7 @@ const Navbar = ({ setIsAuthenticated, user }) => {
 
   const handleLogout = () => {
     // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     setIsAuthenticated(false);
     // Przekierowanie na stronę logowania
     navigate("/logowanie");

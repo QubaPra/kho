@@ -9,7 +9,7 @@ const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (token) {
       navigate("/"); // Przekierowanie na stronę główną, jeśli użytkownik jest zalogowany
     }
@@ -36,16 +36,33 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
-        login: email,
-        password: password,
+      const response = await fetch('http://127.0.0.1:8000/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ login: email, password }),
       });
-      localStorage.setItem("token", response.data.token);
+
+      if (!response.ok) {
+        throw new Error('Nieprawidłowe dane logowania');
+      }
+
+      const data = await response.json();
+
+      // Zapisujemy token w localStorage
+      localStorage.setItem('access_token', data.access);
+      localStorage.setItem('refresh_token', data.refresh);
+
+      // Ustawiamy stan logowania w App.jsx
       setIsAuthenticated(true);
-      navigate("/"); // Przekierowanie na stronę główną po zalogowaniu
+
+      // Przekierowujemy na Dashboard
+      navigate('/');
     } catch (error) {
-      setError("Nieprawidłowe dane logowania");
+      setError(error.message);
     }
   };
 

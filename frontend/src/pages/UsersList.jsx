@@ -65,30 +65,30 @@ const UsersList = () => {
           <table className="w-1/2">
             <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
               <tr>
-                <th className="p-3 rounded-tl-lg w-1/3 cursor-pointer" onClick={() => sortData("name")}>
+                <th className="p-3 rounded-tl-lg w-1/3 cursor-pointer" onClick={() => sortData("full_name")}>
                   <div className="flex justify-between items-center">
                     <span>Imię i nazwisko</span>
-                    {sortConfig.key === "name" && sortConfig.direction === "ascending" && (
+                    {sortConfig.key === "full_name" && sortConfig.direction === "ascending" && (
                       <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
                         north
                       </span>
                     )}
-                    {sortConfig.key === "name" && sortConfig.direction === "descending" && (
+                    {sortConfig.key === "full_name" && sortConfig.direction === "descending" && (
                       <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
                         south
                       </span>
                     )}
                   </div>
                 </th>
-                <th className="w-1/3 cursor-pointer" onClick={() => sortData("email")}>
+                <th className="w-1/3 cursor-pointer" onClick={() => sortData("login")}>
                   <div className="flex justify-between items-center">
                     <span>Email</span>
-                    {sortConfig.key === "email" && sortConfig.direction === "ascending" && (
+                    {sortConfig.key === "login" && sortConfig.direction === "ascending" && (
                       <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
                         north
                       </span>
                     )}
-                    {sortConfig.key === "email" && sortConfig.direction === "descending" && (
+                    {sortConfig.key === "login" && sortConfig.direction === "descending" && (
                       <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
                         south
                       </span>

@@ -10,30 +10,28 @@ import Profil from "./pages/Profil";
 import UsersList from "./pages/UsersList";
 import TrialList from "./pages/TrialList";
 import ViewTrial from "./pages/ViewTrial";
-import axios from "axios";
+import axios from "./api/axios";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     return !!token;
   });
 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      axios.get('http://localhost:8000/api/users/me/', {
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      })
-      .then(response => {
+    const fetchUserRole = async () => {
+      try {
+        const response = await axios.get('/users/me/');
         setUser(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
-      });
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchUserRole();
     }
   }, [isAuthenticated]);
 
