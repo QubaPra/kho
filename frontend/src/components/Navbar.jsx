@@ -39,9 +39,9 @@ function Navbar() {
           <Link to="/uzytkownicy" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
             Użytkownicy
           </Link>
-          <button className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
+          <Link to="/proby" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
             Wszystkie próby
-          </button>
+          </Link>
         </div>
         <div className="flex items-center space-x-2">
           <button

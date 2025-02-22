@@ -53,7 +53,7 @@ function UsersList() {
           </h2>
 
           <table className="w-1/2">
-            <thead className="bg-green-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+            <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
               <tr>
               <th className="p-3 rounded-tl-lg w-1/3 cursor-pointer" onClick={() => sortData("name")}>
   <div
