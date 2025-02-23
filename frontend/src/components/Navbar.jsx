@@ -20,6 +20,8 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   const handleLogout = () => {
     // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
     localStorage.removeItem("access_token");
+    localStorage.removeItem("trial")
+    localStorage.removeItem("tasks")
     setIsAuthenticated(false);
   };
 

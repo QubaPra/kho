@@ -7,6 +7,7 @@ const UsersList = () => {
     key: null,
     direction: "ascending",
   });
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +55,16 @@ const UsersList = () => {
     }
   };
 
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredData = data.filter((user) =>
+    user.full_name.toLowerCase().includes(filter.toLowerCase()) ||
+    user.login.toLowerCase().includes(filter.toLowerCase()) ||
+    user.role.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -61,7 +72,15 @@ const UsersList = () => {
           <h2 className="text-2xl font-semibold mb-12 mt-1">
             Lista użytkowników
           </h2>
-
+          <div className="mb-4 flex w-1/3 items-center">
+            <input
+              type="text"
+              placeholder="Filtruj użytkowników..."
+              value={filter}
+              onChange={handleFilterChange}
+            />
+            <span className="material-symbols-outlined ml-2">search</span>
+          </div>
           <table className="w-1/2">
             <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
               <tr>
@@ -113,7 +132,7 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {data.map((user, index) => (
+              {filteredData.map((user, index) => (
                 <tr key={user.id}>
                   <td className="p-3">{user.full_name}</td>
                   <td className="p-3">{user.login}</td>

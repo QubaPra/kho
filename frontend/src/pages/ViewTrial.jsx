@@ -110,19 +110,6 @@ const ViewTrial = ({ user }) => {
   const getCategoriesByIds = (ids) => {
     return categories.filter((category) => ids.includes(category.id));
   };
-
-  const handleAddComment = (content) => {
-    const newComment = {
-      date: new Intl.DateTimeFormat("pl-PL", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date()),
-      author: "Ty",
-      content,
-    };
-    setComments([...comments, newComment]);
-  };
   
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
@@ -138,10 +125,12 @@ const ViewTrial = ({ user }) => {
               <p className="font-semibold">Stan:</p>
               <span>{trial.status}</span>
             </div>
-            <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
-              <p className="font-semibold">Data zakończenia:</p>
-              <span>{getLatestEndDate(tasks)}</span>
-            </div>
+            {getLatestEndDate(tasks) && (
+              <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+                <p className="font-semibold">Data zakończenia:</p>
+                <span>{getLatestEndDate(tasks)}</span>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
