@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Task
-from .serializers import TaskSerializer
+from .models import Task, Category
+from .serializers import TaskSerializer, CategorySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 
@@ -17,4 +17,9 @@ class TaskMeView(generics.ListCreateAPIView, generics.DestroyAPIView):
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+class TaskCategoryView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]

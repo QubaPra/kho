@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import categories from "../assets/categories";
 import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
@@ -10,6 +9,7 @@ const Dashboard = ({ user }) => {
   const [trial, setTrial] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [comments, setComments] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchTrialData = async () => {
@@ -17,7 +17,7 @@ const Dashboard = ({ user }) => {
         const response = await axios.get("/trials/me");
         console.log("Odpowiedź z API (fetchTrialData):", response.data);
         const trialData = response.data;
-  
+
         // Formatowanie dat zadań
         const formattedTasks = trialData.tasks.map(task => {
           if (!task.end_date || !/^\d{2}-\d{4}$/.test(task.end_date)) {
@@ -34,7 +34,7 @@ const Dashboard = ({ user }) => {
             end_date: formattedEndDate,
           };
         });
-  
+
         setTrial(trialData);
         setTasks(formattedTasks);
         setComments(trialData.comments || []);
@@ -42,8 +42,19 @@ const Dashboard = ({ user }) => {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
     };
-  
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("/categories");
+        console.log("Odpowiedź z API (fetchCategories):", response.data);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Błąd podczas pobierania kategorii:", error);
+      }
+    };
+
     fetchTrialData();
+    fetchCategories();
   }, []);
 
   function getLatestEndDate(tasks) {
@@ -351,7 +362,7 @@ const Dashboard = ({ user }) => {
                         editTaskId === task.id ? (
                           <button
                             key={category.id}
-                            className={`category-button ${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
                             onClick={() => handleRemoveCategory(category.id)}
                           >
                             <span className="category-icon material-symbols-outlined">
@@ -364,7 +375,7 @@ const Dashboard = ({ user }) => {
                         ) : (
                           <div
                             key={category.id}
-                            className={`${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
                           >
                             <span className="material-symbols-outlined">
                               {category.icon}
