@@ -6,7 +6,7 @@ import MonthDropdown from "../components/MonthDropdown";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 
-const Dashboard = ({user}) => {
+const Dashboard = ({ user }) => {
   const [trial, setTrial] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [comments, setComments] = useState([]);
@@ -16,39 +16,34 @@ const Dashboard = ({user}) => {
       try {
         const response = await axios.get("/trials/me");
         console.log("Odpowiedź z API (fetchTrialData):", response.data);
-        setTrial(response.data);
-        setTasks(response.data.tasks || []);
-        setComments(response.data.comments || []);
+        const trialData = response.data;
+  
+        // Formatowanie dat zadań
+        const formattedTasks = trialData.tasks.map(task => {
+          if (!task.end_date || !/^\d{2}-\d{4}$/.test(task.end_date)) {
+            return {
+              ...task,
+              end_date: "",
+            };
+          }
+          const [month, year] = task.end_date.split("-");
+          const monthName = Object.keys(monthMap).find(key => monthMap[key] === month);
+          const formattedEndDate = `${monthName} ${year}`;
+          return {
+            ...task,
+            end_date: formattedEndDate,
+          };
+        });
+  
+        setTrial(trialData);
+        setTasks(formattedTasks);
+        setComments(trialData.comments || []);
       } catch (error) {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
     };
-    
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get("/tasks/me");
-        console.log("Odpowiedź z API (fetchTasks):", response.data);
-        const formattedTasks = response.data.map(task => {
-          const [month, year] = task.end_date.split("-");
-          const date = new Date(`${year}-${month}-01`);
-          const formattedEndDate = date.toLocaleDateString("pl-PL", {
-            month: "long",
-            year: "numeric",
-          });
-          return {
-            ...task,
-            endDate: formattedEndDate,
-          };
-        });
-        console.log("Sformatowane zadania:", formattedTasks);
-        setTasks(formattedTasks);
-      } catch (error) {
-        console.error("Błąd podczas pobierania zadań:", error);
-      }
-    };
   
     fetchTrialData();
-    fetchTasks();
   }, []);
 
   function getLatestEndDate(tasks) {
@@ -56,16 +51,17 @@ const Dashboard = ({user}) => {
     const dates = tasks
       .map((task) => {
         if (!task.end_date) {
-
           return NaN; // Sprawdzenie, czy endDate jest zdefiniowane
         }
-        const [month, year] = task.end_date.split("-");
+        const [monthName, year] = task.end_date.split(" ");
+        const month = monthMap[monthName.toLowerCase()];
+        if (!month || !year) {
+          return NaN;
+        }
         return new Date(`${year}-${month}-01`);
       })
       .filter((date) => {
         const isValid = !isNaN(date);
-        if (!isValid) {
-        }
         return isValid;
       });
     if (dates.length === 0) return "";
@@ -109,6 +105,21 @@ const Dashboard = ({user}) => {
     setEditCategories(task.categories);
   };
 
+  const monthMap = {
+    styczeń: "01",
+    luty: "02",
+    marzec: "03",
+    kwiecień: "04",
+    maj: "05",
+    czerwiec: "06",
+    lipiec: "07",
+    sierpień: "08",
+    wrzesień: "09",
+    październik: "10",
+    listopad: "11",
+    grudzień: "12",
+  };
+
   const handleApproveClick = async () => {
     if (
       editContent.trim() === "" &&
@@ -118,16 +129,20 @@ const Dashboard = ({user}) => {
       await handleDeleteTask(editTaskId);
     } else {
       try {
-        const formattedEndDate = new Date(editEndDate).toLocaleDateString("pl-PL", {
-          month: "2-digit",
-          year: "numeric",
-        }).replace(/\./g, '-');
+        console.log("editEndDate:", editEndDate);
+        let formattedEndDate = "";
+        if (editEndDate.trim() !== "") {
+          const [monthName, year] = editEndDate.split(" ");
+          if (monthName && year && monthMap[monthName.toLowerCase()]) {
+            formattedEndDate = `${monthMap[monthName.toLowerCase()]}-${year}`;
+          }
+        }
         const payload = {
           content: editContent,
           end_date: formattedEndDate,
           categories: editCategories,
         };
-        console.log("Wysyłany JSON:", payload);
+        console.log("Wysyłany JSON (handleApproveClick):", payload); // Dodany console.log
         const response = await axios.patch(`/tasks/${editTaskId}`, payload);
         console.log("Odpowiedź z API:", response.data);
         setTasks(
@@ -136,10 +151,7 @@ const Dashboard = ({user}) => {
               ? {
                   ...task,
                   content: editContent,
-                  endDate: new Date(editEndDate).toLocaleDateString("pl-PL", {
-                    month: "long",
-                    year: "numeric",
-                  }),
+                  end_date: editEndDate, // Zaktualizowane end_date
                   categories: editCategories,
                 }
               : task
@@ -152,8 +164,18 @@ const Dashboard = ({user}) => {
     setEditTaskId(null);
   };
 
-  const handleCancelClick = () => {
+  const handleCancelClick = async () => {
     setEditTaskId(null);
+  
+    const originalTask = tasks.find((task) => task.id === editTaskId);
+  
+    if (
+      originalTask.content.trim() === "" &&
+      originalTask.end_date.trim() === "" &&
+      originalTask.categories.length === 0
+    ) {
+      await handleDeleteTask(editTaskId);
+    }
   };
 
   const handleSelectCategory = (category) => {
@@ -174,6 +196,7 @@ const Dashboard = ({user}) => {
         content: "",
         categories: [],
         end_date: "",
+        trial: trial.id,
       };
       console.log("Wysyłany JSON (handleAddTaskClick):", payload);
       const response = await axios.post("/tasks/me", payload);
@@ -190,15 +213,12 @@ const Dashboard = ({user}) => {
   };
 
   const handleDeleteTask = async (taskId) => {
-    const confirmed = window.confirm("Czy na pewno chcesz usunąć to zadanie?");
-    if (confirmed) {
-      try {
-        console.log("Usuwanie zadania o ID:", taskId);
-        await axios.delete(`/tasks/${taskId}`);
-        setTasks(tasks.filter((task) => task.id !== taskId));
-      } catch (error) {
-        console.error("Błąd podczas usuwania zadania:", error);
-      }
+    try {
+      console.log("Usuwanie zadania o ID:", taskId);
+      await axios.delete(`/tasks/${taskId}`);
+      setTasks(tasks.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.error("Błąd podczas usuwania zadania:", error);
     }
   };
 
@@ -368,10 +388,7 @@ const Dashboard = ({user}) => {
                         />
                       ) : (
                         <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
-                          <p>{new Date(task.end_date).toLocaleDateString("pl-PL", {
-                            month: "long",
-                            year: "numeric",
-                          })}</p>
+                          <p>{task.end_date}</p>
                           <span className="material-symbols-outlined text-white dark:text-gray-900">
                             calendar_month
                           </span>
