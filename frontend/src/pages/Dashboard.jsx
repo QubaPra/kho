@@ -15,9 +15,9 @@ const Dashboard = ({ user }) => {
     const fetchTrialData = async () => {
       try {
         const response = await axios.get("/trials/me");
-        console.log("Odpowiedź z API (fetchTrialData):", response.data);
-        const trialData = response.data;
 
+        const trialData = response.data;
+    
         // Formatowanie dat zadań
         const formattedTasks = trialData.tasks.map(task => {
           if (!task.end_date || !/^\d{2}-\d{4}$/.test(task.end_date)) {
@@ -34,25 +34,40 @@ const Dashboard = ({ user }) => {
             end_date: formattedEndDate,
           };
         });
-
+    
+        // Formatowanie created_date
+        const formattedComments = trialData.comments.map(comment => {
+          const formattedDate = new Intl.DateTimeFormat("pl-PL", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(comment.created_date));
+          return {
+            ...comment,
+            created_date: formattedDate,
+            user: user && comment.user === user.full_name ? "Ty" : comment.user,
+          };
+        });
+    
         setTrial(trialData);
         setTasks(formattedTasks);
-        setComments(trialData.comments || []);
+        setComments(formattedComments);
+  
       } catch (error) {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
     };
-
+  
     const fetchCategories = async () => {
       try {
         const response = await axios.get("/categories");
-        console.log("Odpowiedź z API (fetchCategories):", response.data);
+
         setCategories(response.data);
       } catch (error) {
         console.error("Błąd podczas pobierania kategorii:", error);
       }
     };
-
+  
     fetchTrialData();
     fetchCategories();
   }, []);
@@ -233,17 +248,30 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  const handleAddComment = (content) => {
-    const newComment = {
-      date: new Intl.DateTimeFormat("pl-PL", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date()),
-      author: "Ty",
-      content,
-    };
-    setComments([...comments, newComment]);
+  const handleAddComment = async (content) => {
+    try {
+      const payload = {
+        content,
+        trial: trial.id,
+      };
+      console.log("Wysyłany JSON (handleAddComment):", payload);
+      const response = await axios.post("/comments/", payload);
+      console.log("Odpowiedź z API (handleAddComment):", response.data);
+  
+      const newComment = {
+        ...response.data,
+        created_date: new Intl.DateTimeFormat("pl-PL", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }).format(new Date(response.data.created_date)),
+        user: user && response.data.user === user.full_name ? "Ty" : response.data.user,
+      };
+  
+      setComments([...comments, newComment]);
+    } catch (error) {
+      console.error("Błąd podczas dodawania komentarza:", error);
+    }
   };
 
   if (!trial) {

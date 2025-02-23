@@ -29,10 +29,10 @@ function CommentsSection({ comments, onAddComment }) {
         {comments.map((comment, index) => (
           <div key={index} className="space-y-1 w-fit">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {comment.date}
+              {comment.created_date}
             </p>
             <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-              <p className="font-medium">{comment.author}:</p>
+              <p className="font-medium">{comment.user}:</p>
               <p className="whitespace-pre-wrap">{comment.content}</p>
             </div>
           </div>

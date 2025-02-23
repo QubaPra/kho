@@ -35,6 +35,10 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
+  if (isAuthenticated && !user) {
+    return <div>Ładowanie...</div>;
+  }
+
   return (
     <>
       <Navbar setIsAuthenticated={setIsAuthenticated} user={user} isAuthenticated={isAuthenticated} />
