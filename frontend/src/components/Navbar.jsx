@@ -1,18 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      return savedTheme === "dark";
-    } else {
-      const prefersDark =
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-      return prefersDark;
-    }
-  });
+  const [isDarkMode, setIsDarkMode] = useState("theme" in localStorage ? localStorage.getItem("theme") === "dark" : false);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -26,8 +16,6 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
     }
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
   }, [isDarkMode]);
-
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)

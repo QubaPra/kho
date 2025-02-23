@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import categories from "../assets/categories";
 
-function CategoryDropdown({ selectedCategories, onSelectCategory }) {
+function CategoryDropdown({ selectedCategories, onSelectCategory, categories }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -48,7 +47,7 @@ function CategoryDropdown({ selectedCategories, onSelectCategory }) {
           {availableCategories.map((category) => (
             <button
               key={category.id}
-              className={`${category.bgColor} ${category.fontColor} ${category.darkBgColor} ${category.darkFontColor} px-3 py-1  rounded-full text-sm w-fit  flex  items-center space-x-1`}
+              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1  rounded-full text-sm w-fit  flex  items-center space-x-1`}
               onClick={() => handleCategoryClick(category)}
             >
               <span className="material-symbols-outlined">{category.icon}</span>

@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 
-function CommentsSection({ comments, user, trialId }) {
+function CommentsSection({ comments, trialId }) {
   const [formattedComments, setFormattedComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
+    console.log("1");
     const formatComments = comments.map((comment) => {
       const formattedDate = new Intl.DateTimeFormat("pl-PL", {
         day: "numeric",
@@ -18,9 +20,7 @@ function CommentsSection({ comments, user, trialId }) {
       };
     });
     setFormattedComments(formatComments);
-  }, [comments]);
-
-  const [newComment, setNewComment] = useState("");
+  }, [comments]);  
 
   const handleAddComment = async () => {
     if (newComment.trim()) {
@@ -53,11 +53,12 @@ function CommentsSection({ comments, user, trialId }) {
       textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
     });
-  });
+  }, [newComment]);
 
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
+    console.log("2");
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
     }
@@ -72,15 +73,15 @@ function CommentsSection({ comments, user, trialId }) {
   
       <div className="space-y-4 max-h-96 overflow-y-auto" ref={scrollContainerRef}>
         {formattedComments.map((comment, index) => (
-          <div key={index} className="space-y-1 w-fit">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {comment.created_date}
-            </p>
-            <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-              <p className="font-medium">{comment.user}:</p>
-              <p className="whitespace-pre-wrap">{comment.content}</p>
-            </div>
+          <div key={index} className="space-y-1 w-fit max-w-11/12">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {comment.created_date}
+          </p>
+          <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+            <p className="font-medium">{comment.user}:</p>
+            <p className="whitespace-pre-wrap break-words">{comment.content}</p>
           </div>
+        </div>
         ))}
         
       </div>

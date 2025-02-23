@@ -1,23 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 
+const monthMap = {
+  styczeń: "01",
+  luty: "02",
+  marzec: "03",
+  kwiecień: "04",
+  maj: "05",
+  czerwiec: "06",
+  lipiec: "07",
+  sierpień: "08",
+  wrzesień: "09",
+  październik: "10",
+  listopad: "11",
+  grudzień: "12",
+};
+
 const Dashboard = ({ user }) => {
-  const [trial, setTrial] = useState(null);
-  const [tasks, setTasks] = useState([]);
+  const [trial, setTrial] = useState(() => {
+    const savedTrial = localStorage.getItem("trial");
+    return savedTrial ? JSON.parse(savedTrial) : "";
+  });
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   const [comments, setComments] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [editTaskId, setEditTaskId] = useState(null);
+  const [editContent, setEditContent] = useState("");
+  const [editEndDate, setEditEndDate] = useState("");
+  const [editCategories, setEditCategories] = useState([]);
 
   useEffect(() => {
     const fetchTrialData = async () => {
       try {
         const response = await axios.get("/trials/me");
-
         const trialData = response.data;
-        console.log("Dane próby:", trialData); // Dodany console.log
 
         // Formatowanie dat zadań
         const formattedTasks = trialData.tasks.map((task) => {
@@ -41,6 +64,10 @@ const Dashboard = ({ user }) => {
         setTrial(trialData);
         setTasks(formattedTasks);
         setComments(trialData.comments);
+
+        // Zapisz dane w localStorage
+        localStorage.setItem("trial", JSON.stringify(trialData));
+        localStorage.setItem("tasks", JSON.stringify(formattedTasks));
       } catch (error) {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
@@ -59,7 +86,7 @@ const Dashboard = ({ user }) => {
     fetchCategories();
   }, []);
 
-  function getLatestEndDate(tasks) {
+  const getLatestEndDate = useCallback((tasks) => {
     if (tasks.length === 0) return "";
     const dates = tasks
       .map((task) => {
@@ -73,17 +100,14 @@ const Dashboard = ({ user }) => {
         }
         return new Date(`${year}-${month}-01`);
       })
-      .filter((date) => {
-        const isValid = !isNaN(date);
-        return isValid;
-      });
+      .filter((date) => !isNaN(date));
     if (dates.length === 0) return "";
     const latestDate = new Date(Math.max(...dates));
     return latestDate.toLocaleDateString("pl-PL", {
       month: "long",
       year: "numeric",
     });
-  }
+  }, []);
 
   const handleDeleteTrial = async () => {
     const confirmed = window.confirm("Czy na pewno chcesz usunąć tę próbę?");
@@ -91,6 +115,8 @@ const Dashboard = ({ user }) => {
       try {
         await axios.delete("/trials/me");
         alert("Próba została usunięta.");
+        localStorage.removeItem("trial");
+        localStorage.removeItem("tasks");
       } catch (error) {
         console.error("Błąd podczas usuwania próby:", error);
         alert("Wystąpił błąd podczas usuwania próby.");
@@ -98,39 +124,19 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  const [editTaskId, setEditTaskId] = useState(null);
-  const [editContent, setEditContent] = useState("");
-  const [editEndDate, setEditEndDate] = useState("");
-  const [editCategories, setEditCategories] = useState([]);
-
   useEffect(() => {
     const textareas = document.querySelectorAll(".auto-resize-textarea");
     textareas.forEach((textarea) => {
       textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
     });
-  });
+  }, [editContent, trial]);
 
   const handleEditClick = (task) => {
     setEditTaskId(task.id);
     setEditContent(task.content);
     setEditEndDate(task.end_date);
     setEditCategories(task.categories);
-  };
-
-  const monthMap = {
-    styczeń: "01",
-    luty: "02",
-    marzec: "03",
-    kwiecień: "04",
-    maj: "05",
-    czerwiec: "06",
-    lipiec: "07",
-    sierpień: "08",
-    wrzesień: "09",
-    październik: "10",
-    listopad: "11",
-    grudzień: "12",
   };
 
   const handleApproveClick = async () => {
@@ -142,7 +148,6 @@ const Dashboard = ({ user }) => {
       await handleDeleteTask(editTaskId);
     } else {
       try {
-        console.log("editEndDate:", editEndDate);
         let formattedEndDate = "";
         if (editEndDate.trim() !== "") {
           const [monthName, year] = editEndDate.split(" ");
@@ -155,21 +160,20 @@ const Dashboard = ({ user }) => {
           end_date: formattedEndDate,
           categories: editCategories,
         };
-        console.log("Wysyłany JSON (handleApproveClick):", payload); // Dodany console.log
         const response = await axios.patch(`/tasks/${editTaskId}`, payload);
-        console.log("Odpowiedź z API:", response.data);
         setTasks(
           tasks.map((task) =>
             task.id === editTaskId
               ? {
                   ...task,
                   content: editContent,
-                  end_date: editEndDate, // Zaktualizowane end_date
+                  end_date: editEndDate,
                   categories: editCategories,
                 }
               : task
           )
         );
+        localStorage.setItem("tasks", JSON.stringify(tasks));
       } catch (error) {
         console.error("Błąd podczas aktualizacji zadania:", error);
       }
@@ -199,9 +203,10 @@ const Dashboard = ({ user }) => {
     setEditCategories(editCategories.filter((id) => id !== categoryId));
   };
 
-  const getCategoriesByIds = (ids) => {
-    return categories.filter((category) => ids.includes(category.id));
-  };
+  const getCategoriesByIds = useCallback(
+    (ids) => categories.filter((category) => ids.includes(category.id)),
+    [categories]
+  );
 
   const handleAddTaskClick = async () => {
     try {
@@ -211,15 +216,14 @@ const Dashboard = ({ user }) => {
         end_date: "",
         trial: trial.id,
       };
-      console.log("Wysyłany JSON (handleAddTaskClick):", payload);
       const response = await axios.post("/tasks/me", payload);
-      console.log("Odpowiedź z API (handleAddTaskClick):", response.data);
       const newTask = response.data;
       setTasks([...tasks, newTask]);
       setEditTaskId(newTask.id);
       setEditContent(newTask.content);
       setEditEndDate(newTask.end_date);
       setEditCategories(newTask.categories);
+      localStorage.setItem("tasks", JSON.stringify([...tasks, newTask]));
     } catch (error) {
       console.error("Błąd podczas dodawania zadania:", error);
     }
@@ -227,17 +231,14 @@ const Dashboard = ({ user }) => {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      console.log("Usuwanie zadania o ID:", taskId);
       await axios.delete(`/tasks/${taskId}`);
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      const updatedTasks = tasks.filter((task) => task.id !== taskId);
+      setTasks(updatedTasks);
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     } catch (error) {
       console.error("Błąd podczas usuwania zadania:", error);
     }
   };
-
-  if (!trial) {
-    return <div>Ładowanie...</div>;
-  }
 
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
@@ -254,14 +255,12 @@ const Dashboard = ({ user }) => {
                 </span>
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
-              <button>
-                <Link
-                  to="/edycja-proby"
-                  className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                >
-                  edit_square
-                </Link>
-              </button>
+              <Link
+                to="/edycja-proby"
+                className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              >
+                edit_square
+              </Link>
               <button onClick={handleDeleteTrial}>
                 <span className="material-symbols-outlined bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
                   delete
@@ -384,6 +383,7 @@ const Dashboard = ({ user }) => {
                           <CategoryDropdown
                             selectedCategories={editCategories}
                             onSelectCategory={handleSelectCategory}
+                            categories={categories}
                           />
                         )}
                       </td>
@@ -448,8 +448,7 @@ const Dashboard = ({ user }) => {
               Nowe zadanie
             </button>
           </div>
-
-          <CommentsSection comments={comments} user={user} trialId={trial.id} />
+          <CommentsSection comments={comments} trialId={trial.id} />
         </div>
       </main>
     </div>

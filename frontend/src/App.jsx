@@ -16,9 +16,9 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const token = localStorage.getItem('access_token');
     return !!token;
-  });
+  }); 
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -27,6 +27,9 @@ const App = () => {
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user role:', error);
+        localStorage.removeItem('access_token');
+        setIsAuthenticated(false);
+
       }
     };
 
