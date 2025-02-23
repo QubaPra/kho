@@ -1,14 +1,14 @@
 # backend/trials/views.py
 from rest_framework import viewsets, generics, mixins
 from .models import Trial
-from .serializers import TrialSerializer
+from .serializers import TrialSerializer, TrialListSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
 class TrialListView(generics.ListAPIView):
     queryset = Trial.objects.all()
-    serializer_class = TrialSerializer
+    serializer_class = TrialListSerializer
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):

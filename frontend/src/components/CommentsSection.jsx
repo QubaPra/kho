@@ -6,7 +6,6 @@ function CommentsSection({ comments, trialId }) {
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
-    console.log("1");
     const formatComments = comments.map((comment) => {
       const formattedDate = new Intl.DateTimeFormat("pl-PL", {
         day: "numeric",
@@ -58,7 +57,6 @@ function CommentsSection({ comments, trialId }) {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    console.log("2");
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
     }

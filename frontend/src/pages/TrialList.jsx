@@ -15,6 +15,7 @@ const TrialList = () => {
       try {
         const response = await axios.get("/trials/");
         setData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -46,9 +47,11 @@ const TrialList = () => {
   };
 
   const filteredData = data.filter((trial) =>
-    trial.name.toLowerCase().includes(filter.toLowerCase()) ||
-    trial.state.toLowerCase().includes(filter.toLowerCase()) ||
-    trial.endDate.toLowerCase().includes(filter.toLowerCase())
+    trial.user.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.status.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.end_date.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.team.toLowerCase().includes(filter.toLowerCase()) ||
+    trial.mentor_name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
@@ -69,12 +72,12 @@ const TrialList = () => {
             <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
               <tr>
                 <th
-                  className="p-3 rounded-tl-lg cursor-pointer w-3/12"
-                  onClick={() => sortData("name")}
+                  className="p-3 rounded-tl-lg cursor-pointer w-2/12"
+                  onClick={() => sortData("user")}
                 >
                   <div className="flex justify-between items-center">
                     <span>Imię i nazwisko</span>
-                    {sortConfig.key === "name" &&
+                    {sortConfig.key === "user" &&
                       sortConfig.direction === "ascending" && (
                         <span
                           className="material-symbols-outlined"
@@ -83,7 +86,7 @@ const TrialList = () => {
                           north
                         </span>
                       )}
-                    {sortConfig.key === "name" &&
+                    {sortConfig.key === "user" &&
                       sortConfig.direction === "descending" && (
                         <span
                           className="material-symbols-outlined"
@@ -95,12 +98,64 @@ const TrialList = () => {
                   </div>
                 </th>
                 <th
-                  className=" cursor-pointer w-5/12"
-                  onClick={() => sortData("state")}
+                  className="cursor-pointer w-2/12"
+                  onClick={() => sortData("team")}
+                >
+                  <div className="flex justify-between items-center">
+                    <span>Drużyna</span>
+                    {sortConfig.key === "team" &&
+                      sortConfig.direction === "ascending" && (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          north
+                        </span>
+                      )}
+                    {sortConfig.key === "team" &&
+                      sortConfig.direction === "descending" && (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          south
+                        </span>
+                      )}
+                  </div>
+                </th>
+                <th
+                  className="cursor-pointer w-2/12"
+                  onClick={() => sortData("mentor_name")}
+                >
+                  <div className="flex justify-between items-center">
+                    <span>Opiekun</span>
+                    {sortConfig.key === "mentor_name" &&
+                      sortConfig.direction === "ascending" && (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          north
+                        </span>
+                      )}
+                    {sortConfig.key === "mentor_name" &&
+                      sortConfig.direction === "descending" && (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          south
+                        </span>
+                      )}
+                  </div>
+                </th>
+                <th
+                  className="cursor-pointer w-2/12"
+                  onClick={() => sortData("status")}
                 >
                   <div className="flex justify-between items-center">
                     <span>Stan próby</span>
-                    {sortConfig.key === "state" &&
+                    {sortConfig.key === "status" &&
                       sortConfig.direction === "ascending" && (
                         <span
                           className="material-symbols-outlined"
@@ -109,7 +164,7 @@ const TrialList = () => {
                           north
                         </span>
                       )}
-                    {sortConfig.key === "state" &&
+                    {sortConfig.key === "status" &&
                       sortConfig.direction === "descending" && (
                         <span
                           className="material-symbols-outlined"
@@ -121,12 +176,12 @@ const TrialList = () => {
                   </div>
                 </th>
                 <th
-                  className="cursor-pointer w-3/12"
-                  onClick={() => sortData("endDate")}
+                  className="cursor-pointer w-2/12"
+                  onClick={() => sortData("end_date")}
                 >
                   <div className="flex justify-between items-center">
                     <span>Data zakończenia</span>
-                    {sortConfig.key === "endDate" &&
+                    {sortConfig.key === "end_date" &&
                       sortConfig.direction === "ascending" && (
                         <span
                           className="material-symbols-outlined"
@@ -135,7 +190,7 @@ const TrialList = () => {
                           north
                         </span>
                       )}
-                    {sortConfig.key === "endDate" &&
+                    {sortConfig.key === "end_date" &&
                       sortConfig.direction === "descending" && (
                         <span
                           className="material-symbols-outlined"
@@ -158,9 +213,11 @@ const TrialList = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredData.map((trial, index) => (
                 <tr key={trial.id}>
-                  <td className="p-3">{trial.name}</td>
-                  <td className="p-3">{trial.state}</td>
-                  <td className="p-3">{trial.endDate}</td>  
+                  <td className="p-3">{trial.user}</td>
+                  <td className="p-3">{trial.team}</td>
+                  <td className="p-3">{trial.mentor_name}</td>
+                  <td className="p-3">{trial.status}</td>
+                  <td className="p-3">{trial.end_date}</td>  
                   <td className="p-3">
                     <Link to={`/proba/${trial.id}`} className="material-symbols-outlined text-blue-600 hover:text-blue-800">
                       info

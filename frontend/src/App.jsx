@@ -52,7 +52,7 @@ const App = () => {
         <Route path="/profil" element={isAuthenticated ? <Profil setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/logowanie" />} />
         <Route path="/uzytkownicy" element={isAuthenticated ? <UsersList /> : <Navigate to="/logowanie" />} />
         <Route path="/proby" element={isAuthenticated ? <TrialList /> : <Navigate to="/logowanie" />} />
-        <Route path="/proba/:id" element={isAuthenticated ? <ViewTrial /> : <Navigate to="/logowanie" />} />
+        <Route path="/proba/:id" element={isAuthenticated ? <ViewTrial user={user}/> : <Navigate to="/logowanie" />} />
       </Routes>
     </>
   );
