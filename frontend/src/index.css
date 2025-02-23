@@ -91,3 +91,32 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #f3f4f6;
   background-clip: content-box;
 }
+
+/* Stylizacja pionowego paska przewijania */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-white;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-300;
+}
+
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-900;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-800;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-700;
+}

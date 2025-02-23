@@ -1,12 +1,56 @@
 import { useState, useEffect } from "react";
+import axios from "../api/axios";
 
-function CommentsSection({ comments, onAddComment }) {
+function CommentsSection({ comments, user, trialId }) {
+  const [formattedComments, setFormattedComments] = useState([]);
+
+  useEffect(() => {
+    const formatComments = comments.map((comment) => {
+      const formattedDate = new Intl.DateTimeFormat("pl-PL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date(comment.created_date));
+      return {
+        ...comment,
+        created_date: formattedDate,
+        user: comment.user === user.full_name ? "Ty" : comment.full_name,
+      };
+    });
+    setFormattedComments(formatComments);
+  }, [comments]);
+
   const [newComment, setNewComment] = useState("");
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (newComment.trim()) {
-      onAddComment(newComment);
-      setNewComment("");
+      try {
+        const payload = {
+          content: newComment,
+          trial: trialId,
+        };
+        console.log("Wysyłany JSON (handleAddComment):", payload);
+        const response = await axios.post("/comments/", payload);
+        console.log("Odpowiedź z API (handleAddComment):", response.data);
+
+        const newCommentData = {
+          ...response.data,
+          created_date: new Intl.DateTimeFormat("pl-PL", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(response.data.created_date)),
+          user:
+            user && response.data.user === user.full_name
+              ? "Ty"
+              : response.data.user,
+        };
+
+        setFormattedComments([...formattedComments, newCommentData]);
+        setNewComment("");
+      } catch (error) {
+        console.error("Błąd podczas dodawania komentarza:", error);
+      }
     }
   };
 
@@ -24,9 +68,9 @@ function CommentsSection({ comments, onAddComment }) {
         <span className="material-symbols-outlined ">chat</span>
         <span className="text-xl font-medium">Komentarze</span>
       </div>
-
-      <div className="space-y-4">
-        {comments.map((comment, index) => (
+  
+      <div className="space-y-4 max-h-96 overflow-y-auto">
+        {formattedComments.map((comment, index) => (
           <div key={index} className="space-y-1 w-fit">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {comment.created_date}
@@ -37,7 +81,9 @@ function CommentsSection({ comments, onAddComment }) {
             </div>
           </div>
         ))}
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+        
+      </div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
           <div className="flex items-center space-x-2">
             <textarea
               className="auto-resize-textarea border-gray-200 dark:border-gray-700"
@@ -54,7 +100,6 @@ function CommentsSection({ comments, onAddComment }) {
             </button>
           </div>
         </div>
-      </div>
     </div>
   );
 }

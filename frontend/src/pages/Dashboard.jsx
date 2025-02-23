@@ -17,9 +17,9 @@ const Dashboard = ({ user }) => {
         const response = await axios.get("/trials/me");
 
         const trialData = response.data;
-    
+
         // Formatowanie dat zadań
-        const formattedTasks = trialData.tasks.map(task => {
+        const formattedTasks = trialData.tasks.map((task) => {
           if (!task.end_date || !/^\d{2}-\d{4}$/.test(task.end_date)) {
             return {
               ...task,
@@ -27,37 +27,24 @@ const Dashboard = ({ user }) => {
             };
           }
           const [month, year] = task.end_date.split("-");
-          const monthName = Object.keys(monthMap).find(key => monthMap[key] === month);
+          const monthName = Object.keys(monthMap).find(
+            (key) => monthMap[key] === month
+          );
           const formattedEndDate = `${monthName} ${year}`;
           return {
             ...task,
             end_date: formattedEndDate,
           };
         });
-    
-        // Formatowanie created_date
-        const formattedComments = trialData.comments.map(comment => {
-          const formattedDate = new Intl.DateTimeFormat("pl-PL", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }).format(new Date(comment.created_date));
-          return {
-            ...comment,
-            created_date: formattedDate,
-            user: user && comment.user === user.full_name ? "Ty" : comment.user,
-          };
-        });
-    
+
         setTrial(trialData);
         setTasks(formattedTasks);
-        setComments(formattedComments);
-  
+        setComments(trialData.comments);
       } catch (error) {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
     };
-  
+
     const fetchCategories = async () => {
       try {
         const response = await axios.get("/categories");
@@ -67,7 +54,7 @@ const Dashboard = ({ user }) => {
         console.error("Błąd podczas pobierania kategorii:", error);
       }
     };
-  
+
     fetchTrialData();
     fetchCategories();
   }, []);
@@ -192,9 +179,9 @@ const Dashboard = ({ user }) => {
 
   const handleCancelClick = async () => {
     setEditTaskId(null);
-  
+
     const originalTask = tasks.find((task) => task.id === editTaskId);
-  
+
     if (
       originalTask.content.trim() === "" &&
       originalTask.end_date.trim() === "" &&
@@ -248,32 +235,6 @@ const Dashboard = ({ user }) => {
     }
   };
 
-  const handleAddComment = async (content) => {
-    try {
-      const payload = {
-        content,
-        trial: trial.id,
-      };
-      console.log("Wysyłany JSON (handleAddComment):", payload);
-      const response = await axios.post("/comments/", payload);
-      console.log("Odpowiedź z API (handleAddComment):", response.data);
-  
-      const newComment = {
-        ...response.data,
-        created_date: new Intl.DateTimeFormat("pl-PL", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        }).format(new Date(response.data.created_date)),
-        user: user && response.data.user === user.full_name ? "Ty" : response.data.user,
-      };
-  
-      setComments([...comments, newComment]);
-    } catch (error) {
-      console.error("Błąd podczas dodawania komentarza:", error);
-    }
-  };
-
   if (!trial) {
     return <div>Ładowanie...</div>;
   }
@@ -294,7 +255,10 @@ const Dashboard = ({ user }) => {
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
               <button>
-                <Link to="/edycja-proby" className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                <Link
+                  to="/edycja-proby"
+                  className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                >
                   edit_square
                 </Link>
               </button>
@@ -327,7 +291,9 @@ const Dashboard = ({ user }) => {
             </div>
             <div>
               <p className="text-sm text-gray-400">Data urodzenia</p>
-              <p className="font-medium">{new Date(trial.birth_date).toLocaleDateString("pl-PL")}</p>
+              <p className="font-medium">
+                {new Date(trial.birth_date).toLocaleDateString("pl-PL")}
+              </p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
@@ -340,155 +306,152 @@ const Dashboard = ({ user }) => {
           </div>
 
           <div className="mt-12">
-          <div className="flex items-center space-x-1.5 text-xl mb-4">
-            <span className="material-symbols-outlined ">task_alt</span>
-            <span className="text-xl font-medium">Zadania</span>
+            <div className="flex items-center space-x-1.5 text-xl mb-4">
+              <span className="material-symbols-outlined ">task_alt</span>
+              <span className="text-xl font-medium">Zadania</span>
+            </div>
+
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+                <tr>
+                  <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
+                    Lp
+                  </th>
+                  <th style={{ width: "48%" }}>Treść zadania</th>
+                  <th style={{ width: "27%" }}>Kategoria zadania</th>
+                  <th style={{ width: "17%" }}>Data zakończenia</th>
+                  <th className="p-3 rounded-tr-lg" style={{ width: "7%" }}>
+                    Edycja
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {tasks.map((task, index) => {
+                  const taskCategories = getCategoriesByIds(
+                    editTaskId === task.id ? editCategories : task.categories
+                  );
+                  return (
+                    <tr key={task.id}>
+                      <td className="p-3">{index + 1}</td>
+                      <td className="p-3">
+                        {editTaskId === task.id ? (
+                          <textarea
+                            className="auto-resize-textarea border-gray-200 dark:border-gray-700"
+                            value={editContent}
+                            onChange={(e) => setEditContent(e.target.value)}
+                            placeholder="Treść zadania"
+                            rows={1}
+                          ></textarea>
+                        ) : (
+                          <textarea
+                            className="auto-resize-textarea border-white dark:border-gray-900"
+                            value={task.content}
+                            rows={1}
+                            readOnly
+                          ></textarea>
+                        )}
+                      </td>
+                      <td className="pt-1 pb-3 flex flex-wrap space-x-2">
+                        {taskCategories.map((category) =>
+                          editTaskId === task.id ? (
+                            <button
+                              key={category.id}
+                              className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                              onClick={() => handleRemoveCategory(category.id)}
+                            >
+                              <span className="category-icon material-symbols-outlined">
+                                {category.icon}
+                              </span>
+                              <span className="category-name">
+                                {category.name}
+                              </span>
+                            </button>
+                          ) : (
+                            <div
+                              key={category.id}
+                              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            >
+                              <span className="material-symbols-outlined">
+                                {category.icon}
+                              </span>
+                              <span>{category.name}</span>
+                            </div>
+                          )
+                        )}
+                        {editTaskId === task.id && (
+                          <CategoryDropdown
+                            selectedCategories={editCategories}
+                            onSelectCategory={handleSelectCategory}
+                          />
+                        )}
+                      </td>
+                      <td className="p-3">
+                        {editTaskId === task.id ? (
+                          <MonthDropdown
+                            selectedDate={editEndDate}
+                            onSelectDate={(date) => setEditEndDate(date)}
+                          />
+                        ) : (
+                          <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
+                            <p>{task.end_date}</p>
+                            <span className="material-symbols-outlined text-white dark:text-gray-900">
+                              calendar_month
+                            </span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-3">
+                        {editTaskId === task.id ? (
+                          <>
+                            <button
+                              className="material-symbols-outlined text-green-600 hover:text-green-800"
+                              onClick={handleApproveClick}
+                            >
+                              check
+                            </button>
+                            <button
+                              className="material-symbols-outlined text-red-600 hover:text-red-800"
+                              onClick={handleCancelClick}
+                            >
+                              close
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="material-symbols-outlined text-gray-400 hover:text-gray-600"
+                              onClick={() => handleEditClick(task)}
+                            >
+                              edit
+                            </button>
+                            <button
+                              className="material-symbols-outlined text-gray-400 hover:text-red-600"
+                              onClick={() => handleDeleteTask(task.id)}
+                            >
+                              delete
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <button
+              className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
+              onClick={handleAddTaskClick}
+            >
+              <span className="material-symbols-outlined mr-1">add</span>
+              Nowe zadanie
+            </button>
           </div>
 
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
-              <tr>
-                <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
-                  Lp
-                </th>
-                <th style={{ width: "48%" }}>Treść zadania</th>
-                <th style={{ width: "27%" }}>Kategoria zadania</th>
-                <th style={{ width: "17%" }}>Data zakończenia</th>
-                <th className="p-3 rounded-tr-lg" style={{ width: "7%" }}>
-                  Edycja
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {tasks.map((task, index) => {
-                const taskCategories = getCategoriesByIds(
-                  editTaskId === task.id ? editCategories : task.categories
-                );
-                return (
-                  <tr key={task.id}>
-                    <td className="p-3">{index + 1}</td>
-                    <td className="p-3">
-                      {editTaskId === task.id ? (
-                        <textarea
-                          className="auto-resize-textarea border-gray-200 dark:border-gray-700"
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
-                          placeholder="Treść zadania"
-                          rows={1}
-                        ></textarea>
-                      ) : (
-                        <textarea
-                          className="auto-resize-textarea border-white dark:border-gray-900"
-                          value={task.content}
-                          rows={1}
-                          readOnly
-                        ></textarea>
-                      )}
-                    </td>
-                    <td className="pt-1 pb-3 flex flex-wrap space-x-2">
-                      {taskCategories.map((category) =>
-                        editTaskId === task.id ? (
-                          <button
-                            key={category.id}
-                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
-                            onClick={() => handleRemoveCategory(category.id)}
-                          >
-                            <span className="category-icon material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span className="category-name">
-                              {category.name}
-                            </span>
-                          </button>
-                        ) : (
-                          <div
-                            key={category.id}
-                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
-                          >
-                            <span className="material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span>{category.name}</span>
-                          </div>
-                        )
-                      )}
-                      {editTaskId === task.id && (
-                        <CategoryDropdown
-                          selectedCategories={editCategories}
-                          onSelectCategory={handleSelectCategory}
-                        />
-                      )}
-                    </td>
-                    <td className="p-3">
-                      {editTaskId === task.id ? (
-                        <MonthDropdown
-                          selectedDate={editEndDate}
-                          onSelectDate={(date) => setEditEndDate(date)}
-                        />
-                      ) : (
-                        <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
-                          <p>{task.end_date}</p>
-                          <span className="material-symbols-outlined text-white dark:text-gray-900">
-                            calendar_month
-                          </span>
-                        </div>
-                      )}
-                    </td>
-                    <td className="p-3">
-                      {editTaskId === task.id ? (
-                        <>
-                          <button
-                            className="material-symbols-outlined text-green-600 hover:text-green-800"
-                            onClick={handleApproveClick}
-                          >
-                            check
-                          </button>
-                          <button
-                            className="material-symbols-outlined text-red-600 hover:text-red-800"
-                            onClick={handleCancelClick}
-                          >
-                            close
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            className="material-symbols-outlined text-gray-400 hover:text-gray-600"
-                            onClick={() => handleEditClick(task)}
-                          >
-                            edit
-                          </button>
-                          <button
-                            className="material-symbols-outlined text-gray-400 hover:text-red-600"
-                            onClick={() => handleDeleteTask(task.id)}
-                          >
-                            delete
-                          </button>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <button
-            className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
-            onClick={handleAddTaskClick}
-          >
-            <span className="material-symbols-outlined mr-1">add</span>
-            Nowe zadanie
-          </button>
-        </div>
-
-        <CommentsSection
-          comments={comments}
-          onAddComment={handleAddComment}
-        />
+          <CommentsSection comments={comments} user={user} trialId={trial.id} />
         </div>
       </main>
     </div>
   );
-}
+};
 
 export default Dashboard;

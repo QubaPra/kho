@@ -35,9 +35,7 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
-  if (isAuthenticated && !user) {
-    return <div>Ładowanie...</div>;
-  }
+ 
 
   return (
     <>
