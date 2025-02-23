@@ -21,3 +21,4 @@ class Task(models.Model):
     categories = models.ManyToManyField(Category, blank=True)
     end_date = models.CharField(max_length=7)  # Format: MM-YYYY
     is_done = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_tasks')
