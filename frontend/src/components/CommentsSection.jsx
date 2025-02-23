@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 
 function CommentsSection({ comments, user, trialId }) {
@@ -14,7 +14,7 @@ function CommentsSection({ comments, user, trialId }) {
       return {
         ...comment,
         created_date: formattedDate,
-        user: comment.user === user.full_name ? "Ty" : comment.full_name,
+        
       };
     });
     setFormattedComments(formatComments);
@@ -25,13 +25,10 @@ function CommentsSection({ comments, user, trialId }) {
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
-        const payload = {
+        const response = await axios.post("/comments/", {
           content: newComment,
           trial: trialId,
-        };
-        console.log("Wysyłany JSON (handleAddComment):", payload);
-        const response = await axios.post("/comments/", payload);
-        console.log("Odpowiedź z API (handleAddComment):", response.data);
+        });
 
         const newCommentData = {
           ...response.data,
@@ -39,11 +36,7 @@ function CommentsSection({ comments, user, trialId }) {
             day: "numeric",
             month: "long",
             year: "numeric",
-          }).format(new Date(response.data.created_date)),
-          user:
-            user && response.data.user === user.full_name
-              ? "Ty"
-              : response.data.user,
+          }).format(new Date(response.data.created_date))
         };
 
         setFormattedComments([...formattedComments, newCommentData]);
@@ -62,6 +55,14 @@ function CommentsSection({ comments, user, trialId }) {
     });
   });
 
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
+    }
+  }, [formattedComments]);
+
   return (
     <div className="space-y-6 mt-12">
       <div className="flex items-center space-x-1.5 text-xl mb-4">
@@ -69,7 +70,7 @@ function CommentsSection({ comments, user, trialId }) {
         <span className="text-xl font-medium">Komentarze</span>
       </div>
   
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="space-y-4 max-h-96 overflow-y-auto" ref={scrollContainerRef}>
         {formattedComments.map((comment, index) => (
           <div key={index} className="space-y-1 w-fit">
             <p className="text-sm text-gray-500 dark:text-gray-400">

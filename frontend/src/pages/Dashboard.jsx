@@ -17,6 +17,7 @@ const Dashboard = ({ user }) => {
         const response = await axios.get("/trials/me");
 
         const trialData = response.data;
+        console.log("Dane próby:", trialData); // Dodany console.log
 
         // Formatowanie dat zadań
         const formattedTasks = trialData.tasks.map((task) => {
@@ -48,7 +49,6 @@ const Dashboard = ({ user }) => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get("/categories");
-
         setCategories(response.data);
       } catch (error) {
         console.error("Błąd podczas pobierania kategorii:", error);
@@ -274,10 +274,12 @@ const Dashboard = ({ user }) => {
               <p className="font-semibold">Stan:</p>
               <span>{trial.status}</span>
             </div>
-            <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
-              <p className="font-semibold">Data zakończenia:</p>
-              <span>{getLatestEndDate(tasks)}</span>
-            </div>
+            {getLatestEndDate(tasks) && (
+              <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+                <p className="font-semibold">Data zakończenia:</p>
+                <span>{getLatestEndDate(tasks)}</span>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
