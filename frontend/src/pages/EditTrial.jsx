@@ -137,6 +137,17 @@ const EditTrial = () => {
     e.preventDefault();
     if (validate()) {
       try {
+        const response = await axios.get("/trials/me");
+        const trial = response.data;
+  
+        if (trial.status === "zaakceptowana przez opiekuna") {
+          const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+          if (!confirmed) {
+            return;
+          }
+          await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+        }
+  
         await axios.patch("/trials/me", {
           email: privEmail,
           mentor_mail: mentorMail,

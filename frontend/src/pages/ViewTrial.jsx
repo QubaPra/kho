@@ -214,7 +214,7 @@ const ViewTrial = ({ user }) => {
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-semibold">
-              {trial.rank} {user.full_name} próba na stopień HO
+              {trial.rank} {trial.user} próba na stopień HO
             </h2>
             <div className="flex space-x-2">
               {user.is_mentor &&

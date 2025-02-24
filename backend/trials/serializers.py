@@ -6,7 +6,7 @@ from comments.serializers import CommentSerializer
 
 class TrialSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = serializers.CharField(source='user.full_name', read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
@@ -30,13 +30,13 @@ class TrialListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_end_date(self, obj):
-        
         tasks = obj.tasks.all()
         if not tasks:
             return None
-        latest_end_date = max(
-            task.end_date for task in tasks if task.end_date
-        )
+        valid_end_dates = [task.end_date for task in tasks if task.end_date]
+        if not valid_end_dates:
+            return None
+        latest_end_date = max(valid_end_dates)
         if latest_end_date:
             month, year = latest_end_date.split('-')
             month_name = months.get(month, '')

@@ -134,7 +134,20 @@ const Dashboard = ({ user, setUser }) => {
     });
   }, [editContent, trial]);
 
-  const handleEditClick = (task) => {
+  const handleEditClick = async (task) => {
+    if (trial.status === "zaakceptowana przez opiekuna") {
+      const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+      if (!confirmed) {
+        return;
+      }
+      try {
+        await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+        setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji statusu próby:", error);
+        return;
+      }
+    }
     setEditTaskId(task.id);
     setEditContent(task.content);
     setEditEndDate(task.end_date);
@@ -162,6 +175,7 @@ const Dashboard = ({ user, setUser }) => {
           end_date: formattedEndDate,
           categories: editCategories,
         };
+        
         const response = await axios.patch(`/tasks/${editTaskId}`, payload);
         setTasks(
           tasks.map((task) =>
@@ -175,6 +189,8 @@ const Dashboard = ({ user, setUser }) => {
               : task
           )
         );
+        
+          
         localStorage.setItem("tasks", JSON.stringify(tasks));
       } catch (error) {
         console.error("Błąd podczas aktualizacji zadania:", error);
