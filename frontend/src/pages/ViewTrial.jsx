@@ -308,7 +308,8 @@ const ViewTrial = ({ user, id: propId }) => {
                     <span className="ml-2">Porzuć próbę</span>
                   </button>
                 </>
-              ) : trial.status == "zaakceptowana przez opiekuna" && user.role == "Administrator"  ? (
+              ) : trial.status == "zaakceptowana przez opiekuna" &&
+                user.role == "Administrator" ? (
                 <>
                   <button
                     onClick={handleApproveTrialCommittee}
@@ -328,7 +329,9 @@ const ViewTrial = ({ user, id: propId }) => {
                     <span className="ml-2">Odrzuć próbę (do poprawy)</span>
                   </button>
                 </>
-              )  :  (user.role == "Administrator" && (trial.status && trial.status.includes('Otwarta'))) ? (
+              ) : user.role == "Administrator" &&
+                trial.status &&
+                trial.status.includes("Otwarta") ? (
                 <button
                   onClick={handleEndTrialCommittee}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -338,7 +341,10 @@ const ViewTrial = ({ user, id: propId }) => {
                   </span>
                   <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
                 </button>
-              ) :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status == "zatwierdzona przez kapitułę (do zamknięcia)")) ? (
+              ) : (user.role == "Członek kapituły" ||
+                  user.role == "Administrator") &&
+                trial.status ==
+                  "zatwierdzona przez kapitułę (do zamknięcia)" ? (
                 <button
                   onClick={handleEndTrial}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -348,7 +354,10 @@ const ViewTrial = ({ user, id: propId }) => {
                   </span>
                   <span className="ml-2">Zmień status na zamknięta</span>
                 </button>
-              ) :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status && trial.status.includes('(do otwarcia)'))) ? (
+              ) : (user.role == "Członek kapituły" ||
+                  user.role == "Administrator") &&
+                trial.status &&
+                trial.status.includes("(do otwarcia)") ? (
                 <button
                   onClick={handleOpenTrial}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -358,11 +367,7 @@ const ViewTrial = ({ user, id: propId }) => {
                   </span>
                   <span className="ml-2">Zmień status na otwarta</span>
                 </button>
-              ): null}   
-              
-              
-              
-              
+              ) : null}
             </div>
           </div>
           <div className="flex space-x-4">
@@ -464,7 +469,11 @@ const ViewTrial = ({ user, id: propId }) => {
             </table>
           </div>
 
-          <CommentsSection comments={comments} trialId={trial.id} status={trial.status || ""} />
+          <CommentsSection
+            comments={comments}
+            trialId={trial.id}
+            status={trial.status || ""}
+          />
         </div>
       </main>
     </div>

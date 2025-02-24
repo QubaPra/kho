@@ -24,6 +24,31 @@ const MentorDashboard = ({user}) => {
     fetchData();
   }, []);
 
+  const formatStatus = (status) => {
+    if (!status) return "";
+    const match = status.match(
+      /^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/
+    );
+    if (match) {
+      const [_, type, orderNumber, orderLink, additionalText] = match;
+      return (
+        <span>
+          {type} rozkazem{" "}
+          <a
+            className="underline hover:text-blue-500 dark:hover:text-blue-400"
+            href={orderLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {orderNumber}
+          </a>
+          {additionalText}
+        </span>
+      );
+    }
+    return status;
+  };
+
   const sortData = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -190,7 +215,7 @@ const MentorDashboard = ({user}) => {
                 <tr key={trial.id}>
                   <td className="p-3">{trial.user}</td>
                   <td className="p-3">{trial.team}</td>
-                  <td className="p-3">{trial.status}</td>
+                  <td className="p-3">{formatStatus(trial.status)}</td>
                   <td className="p-3">{trial.end_date}</td>
                   <td className="p-3">
                     <Link
