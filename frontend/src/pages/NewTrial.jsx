@@ -275,7 +275,7 @@ const NewTrial = ({ user, setUser }) => {
                 type="submit"
                 className="w-full bg-blue-700 text-white mt-2 mb-4 py-2 px-4 rounded-lg hover:bg-blue-800 focus:outline-none "
               >
-                Zarejestruj się
+                Utwórz nową próbę
               </button>
             </div>
           </form>

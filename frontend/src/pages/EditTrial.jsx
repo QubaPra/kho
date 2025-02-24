@@ -142,31 +142,49 @@ const EditTrial = () => {
         const response = await axios.get("/trials/me");
         const trial = response.data;
   
-        if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
-          const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+        if (
+          trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)" &&
+          (trial.status && !trial.status.includes("(edytowano)"))
+        ) {
+          const confirmed = window.confirm(
+            "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
+          );
           if (!confirmed) {
-              return;
+            return;
           }
-      }
-      
-      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
-          try {
-              await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
-              setStatus((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
-          } catch (error) {
-              console.error("Błąd podczas aktualizacji statusu próby:", error);
-              return;
-          }
-      }
-      if (trial.status && !trial.status.includes("(edytowano)")) {
-        try {
-          await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
-          setStatus((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
-        } catch (error) {
-          console.error("Błąd podczas aktualizacji statusu próby:", error);
-          return;
         }
-      }
+  
+        if (
+          trial.status === "zaakceptowana przez opiekuna" ||
+          trial.status === "odrzucona przez kapitułę (do poprawy)"
+        ) {
+          try {
+            await axios.patch("/trials/me", {
+              status: "do akceptacji przez opiekuna",
+            });
+            setTrial((prevTrial) => ({
+              ...prevTrial,
+              status: "do akceptacji przez opiekuna",
+            }));
+          } catch (error) {
+            console.error("Błąd podczas aktualizacji statusu próby:", error);
+            return;
+          }
+        }
+        if ((trial.status && !trial.status.includes("(edytowano)")) && (trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)")) {
+          try {
+            await axios.patch("/trials/me", {
+              status: `${trial.status} (edytowano)`,
+            });
+            setTrial((prevTrial) => ({
+              ...prevTrial,
+              status: `${prevTrial.status} (edytowano)`,
+            }));
+          } catch (error) {
+            console.error("Błąd podczas aktualizacji statusu próby:", error);
+            return;
+          }
+        }
   
         await axios.patch("/trials/me", {
           email: privEmail,

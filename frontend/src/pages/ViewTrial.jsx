@@ -131,6 +131,10 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleApproveTrialMentor = async () => {
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz zatwierdzić tę próbę jako opiekun?"
+    );
+    if (!confirmed) return;
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zaakceptowana przez opiekuna",
@@ -145,6 +149,10 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleApproveTrialCommittee = async () => {
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do otwarcia)?"
+    );
+    if (!confirmed) return;
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zaakceptowana przez kapitułę (do otwarcia)",
@@ -159,6 +167,11 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleRejectTrialCommittee = async () => {
+
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz odrzucić tę próbę jako kapituła?"
+    );
+    if (!confirmed) return;
     try {
       await axios.patch(`/trials/${id}`, {
         status: "odrzucona przez kapitułę (do poprawy)",
@@ -173,29 +186,42 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleOpenTrial = async () => {
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz zmienić status próby na otwarta?"
+    );
+    if (!confirmed) return;
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
       const orderLink = prompt("Podaj link do PDF rozkazu:");
-
+  
       if (!orderNumber || !orderLink) {
         alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
         return;
       }
-
+  
+      let newStatus = `Otwarta rozkazem ${orderNumber} <${orderLink}>`;
+      if (trial.status && trial.status.includes("(edytowano)")) {
+        newStatus += " (edytowano)";
+      }
+  
       await axios.patch(`/trials/${id}`, {
-        status: `Otwarta rozkazem ${orderNumber} <${orderLink}>`
+        status: newStatus
       });
       
       setTrial((prevTrial) => ({
         ...prevTrial,
-        status: `Otwarta rozkazem ${orderNumber} <${orderLink}>`,
+        status: newStatus,
       }));
     } catch (error) {
       console.error("Błąd podczas otwierania próby:", error);
     }
-  }
+  };
 
   const handleEndTrialCommittee = async () => {
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do zamknięcia)?"
+    );
+    if (!confirmed) return;
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zatwierdzona przez kapitułę (do zamknięcia)",
@@ -210,6 +236,10 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleEndTrial = async () => {
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz zmienić status próby na zamknięta?"
+    );
+    if (!confirmed) return;
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
       const orderLink = prompt("Podaj link do PDF rozkazu:");

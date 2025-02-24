@@ -151,8 +151,7 @@ const Dashboard = ({ user, setUser }) => {
       await handleDeleteTask(editTaskId);
     } else {
       if (
-        trial.status === "zaakceptowana przez opiekuna" ||
-        trial.status === "zaakceptowana przez kapitułę (do otwarcia)" ||
+        trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)" &&
         (trial.status && !trial.status.includes("(edytowano)"))
       ) {
         const confirmed = window.confirm(
@@ -164,7 +163,7 @@ const Dashboard = ({ user, setUser }) => {
       }
 
       if (
-        trial.status === "zaakceptowana przez opiekuna" ||
+        (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
         trial.status === "odrzucona przez kapitułę (do poprawy)"
       ) {
         try {
@@ -180,7 +179,7 @@ const Dashboard = ({ user, setUser }) => {
           return;
         }
       }
-      if (trial.status && !trial.status.includes("(edytowano)")) {
+      else if ((trial.status && !trial.status.includes("(edytowano)")) && (trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)")) {
         try {
           await axios.patch("/trials/me", {
             status: `${trial.status} (edytowano)`,
@@ -289,8 +288,7 @@ const Dashboard = ({ user, setUser }) => {
   const handleDeleteTask = async (taskId) => {
     try {
       if (
-        trial.status === "zaakceptowana przez opiekuna" ||
-        trial.status === "zaakceptowana przez kapitułę (do otwarcia)" ||
+        trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)" &&
         (trial.status && !trial.status.includes("(edytowano)"))
       ) {
         const confirmed = window.confirm(
@@ -302,7 +300,7 @@ const Dashboard = ({ user, setUser }) => {
       }
 
       if (
-        trial.status === "zaakceptowana przez opiekuna" ||
+        (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
         trial.status === "odrzucona przez kapitułę (do poprawy)"
       ) {
         try {
@@ -318,7 +316,7 @@ const Dashboard = ({ user, setUser }) => {
           return;
         }
       }
-      if (trial.status && !trial.status.includes("(edytowano)")) {
+      else if ((trial.status && !trial.status.includes("(edytowano)")) && (trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)")) {
         try {
           await axios.patch("/trials/me", {
             status: `${trial.status} (edytowano)`,
@@ -366,7 +364,7 @@ const Dashboard = ({ user, setUser }) => {
     return status;
   };
 
-  if (trial.status && (trial.status.includes('(do otwarcia)') || trial.status.includes('Zamknięta'))) {
+  if (trial.status && (trial.status.includes('(do zamknięcia)') || trial.status.includes('Zamknięta'))) {
     return <ViewTrial id={trial.id} user={user} />;
   }
 
