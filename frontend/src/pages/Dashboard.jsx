@@ -242,6 +242,20 @@ const Dashboard = ({ user, setUser }) => {
     }
   };
 
+  const formatStatus = (status) => {
+    if (!status) return "";
+    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+)>$/);
+    if (match) {
+      const [_, type, orderNumber, orderLink] = match;
+      return (
+        <span>
+          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>
+        </span>
+      );
+    }
+    return status;
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-6">
@@ -251,12 +265,22 @@ const Dashboard = ({ user, setUser }) => {
               {trial.rank} {user.full_name} próba na stopień HO
             </h2>
             <div className="flex space-x-2">
+              {trial.status === "do zaakceptowania przez opiekuna" && (
               <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
                 <span className="material-symbols-outlined">
                   list_alt_check
                 </span>
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
+            )}
+            {trial.status === "zaakceptowana przez opiekuna" && (
+              <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                <span className="material-symbols-outlined">
+                  calendar_add_on
+                </span>
+                <span className="ml-2">Zgłoś się na kapitułę</span>
+              </button>
+            )}
               <Link
                 to="/edycja-proby"
                 className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -273,7 +297,7 @@ const Dashboard = ({ user, setUser }) => {
           <div className="flex space-x-4">
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
               <p className="font-semibold">Stan:</p>
-              <span>{trial.status}</span>
+              <span>{formatStatus(trial.status)}</span>
             </div>
             {getLatestEndDate(tasks) && (
               <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">

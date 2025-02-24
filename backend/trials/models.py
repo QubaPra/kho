@@ -26,5 +26,5 @@ class Trial(models.Model):
     mentor_name = models.CharField(max_length=100, blank=True)
     created_time = models.DateTimeField(auto_now_add=True)
     edited_time = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=100, default='do akceptacji przez opiekuna')
+    status = models.TextField(default='do akceptacji przez opiekuna')
     

@@ -86,36 +86,38 @@ const ViewTrial = ({ user }) => {
   }, [tasks]);
 
   const getLatestEndDate = useCallback((tasks) => {
-      if (tasks.length === 0) return "";
-      const dates = tasks
-        .map((task) => {
-          if (!task.end_date) {
-            return NaN; // Sprawdzenie, czy endDate jest zdefiniowane
-          }
-          const [monthName, year] = task.end_date.split(" ");
-          const month = monthMap[monthName.toLowerCase()];
-          if (!month || !year) {
-            return NaN;
-          }
-          return new Date(`${year}-${month}-01`);
-        })
-        .filter((date) => !isNaN(date));
-      if (dates.length === 0) return "";
-      const latestDate = new Date(Math.max(...dates));
-      return latestDate.toLocaleDateString("pl-PL", {
-        month: "long",
-        year: "numeric",
-      });
-    }, []);
+    if (tasks.length === 0) return "";
+    const dates = tasks
+      .map((task) => {
+        if (!task.end_date) {
+          return NaN; // Sprawdzenie, czy endDate jest zdefiniowane
+        }
+        const [monthName, year] = task.end_date.split(" ");
+        const month = monthMap[monthName.toLowerCase()];
+        if (!month || !year) {
+          return NaN;
+        }
+        return new Date(`${year}-${month}-01`);
+      })
+      .filter((date) => !isNaN(date));
+    if (dates.length === 0) return "";
+    const latestDate = new Date(Math.max(...dates));
+    return latestDate.toLocaleDateString("pl-PL", {
+      month: "long",
+      year: "numeric",
+    });
+  }, []);
 
   const getCategoriesByIds = (ids) => {
     return categories.filter((category) => ids.includes(category.id));
   };
 
   const handleLeaveTrial = async () => {
-    const confirmed = window.confirm("Czy na pewno chcesz przestać być opiekunem tej próby?");
+    const confirmed = window.confirm(
+      "Czy na pewno chcesz przestać być opiekunem tej próby?"
+    );
     if (!confirmed) return;
-  
+
     try {
       await axios.patch(`/trials/${id}`, {
         mentor_mail: "",
@@ -126,36 +128,154 @@ const ViewTrial = ({ user }) => {
       console.error("Błąd podczas porzucania próby:", error);
     }
   };
-  
+
+  const handleApproveTrialMentor = async () => {
+    try {
+      await axios.patch(`/trials/${id}`, {
+        status: "zaakceptowana przez opiekuna",
+      });
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: "zaakceptowana przez opiekuna",
+      }));
+    } catch (error) {
+      console.error("Błąd podczas zatwierdzania próby:", error);
+    }
+  };
+
+  const handleApproveTrialCommittee = async () => {
+    try {
+      await axios.patch(`/trials/${id}`, {
+        status: "zaakceptowana przez kapitułę (do otwarcia)",
+      });
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: "zaakceptowana przez kapitułę (do otwarcia)",
+      }));
+    } catch (error) {
+      console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
+    }
+  };
+
+  const handleRejectTrialCommittee = async () => {
+    try {
+      await axios.patch(`/trials/${id}`, {
+        status: "odrzucona przez kapitułę (do poprawy)",
+      });
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: "odrzucona przez kapitułę (do poprawy)",
+      }));
+    } catch (error) {
+      console.error("Błąd podczas odrzucania próby przez komisję:", error);
+    }
+  };
+
+  const handleOpenTrial = async () => {
+    try {
+      const orderNumber = prompt("Podaj numer rozkazu:");
+      const orderLink = prompt("Podaj link do PDF rozkazu:");
+
+      if (!orderNumber || !orderLink) {
+        alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
+        return;
+      }
+
+      await axios.patch(`/trials/${id}`, {
+        status: `Otwarta rozkazem ${orderNumber} <${orderLink}>`
+      });
+      
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: `Otwarta rozkazem ${orderNumber} <${orderLink}>`,
+      }));
+    } catch (error) {
+      console.error("Błąd podczas otwierania próby:", error);
+    }
+  }
+
+  const formatStatus = (status) => {
+    if (!status) return "";
+    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+)>$/);
+    if (match) {
+      const [_, type, orderNumber, orderLink] = match;
+      return (
+        <span>
+          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>
+        </span>
+      );
+    }
+    return status;
+  };
+
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-semibold">
               {trial.rank} {user.full_name} próba na stopień HO
             </h2>
             <div className="flex space-x-2">
-              <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
-                <span className="material-symbols-outlined">
-                  list_alt_check
-                </span>
-                <span className="ml-2">Zatwierdź próbę</span>
-              </button>
+              {user.is_mentor &&
+              (trial.status == "do akceptacji przez opiekuna" ||
+                trial.status == "odrzucona przez kapitułę (do poprawy)") ? (
+                <>
+                  <button
+                    onClick={handleApproveTrialMentor}
+                    className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                  >
+                    <span className="material-symbols-outlined">
+                      list_alt_check
+                    </span>
+                    <span className="ml-2">Zatwierdź próbę</span>
+                  </button>
 
-              <button onClick={handleLeaveTrial} className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
-                <span className="material-symbols-outlined">
-                  delete
-                </span>
-                <span className="ml-2">Porzuć próbę</span>
-              </button>
+                  <button
+                    onClick={handleLeaveTrial}
+                    className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                    <span className="ml-2">Porzuć próbę</span>
+                  </button>
+                </>
+              ) : trial.status == "zaakceptowana przez opiekuna" ? (
+                <>
+                  <button
+                    onClick={handleApproveTrialCommittee}
+                    className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                  >
+                    <span className="material-symbols-outlined">
+                      list_alt_check
+                    </span>
+                    <span className="ml-2">Zatwierdź próbę (do otwarcia)</span>
+                  </button>
 
+                  <button
+                    onClick={handleRejectTrialCommittee}
+                    className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+                  >
+                    <span className="material-symbols-outlined">cancel</span>
+                    <span className="ml-2">Odrzuć próbę (do poprawy)</span>
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={handleOpenTrial}
+                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                >
+                  <span className="material-symbols-outlined">
+                    assignment_turned_in
+                  </span>
+                  <span className="ml-2">Zmień status na otwarta</span>
+                </button>
+              )}
             </div>
           </div>
           <div className="flex space-x-4">
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
               <p className="font-semibold">Stan:</p>
-              <span>{trial.status}</span>
+              <span>{formatStatus(trial.status)}</span>
             </div>
             {getLatestEndDate(tasks) && (
               <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
