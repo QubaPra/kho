@@ -18,8 +18,9 @@ const monthMap = {
   grudzień: "12",
 };
 
-const ViewTrial = ({ user }) => {
-  const { id } = useParams();
+const ViewTrial = ({ user, id: propId }) => {
+  const { id: paramId } = useParams();
+  const id = propId || paramId;
   const navigate = useNavigate();
 
   const [trial, setTrial] = useState("");
@@ -194,6 +195,44 @@ const ViewTrial = ({ user }) => {
     }
   }
 
+  const handleEndTrialCommittee = async () => {
+    try {
+      await axios.patch(`/trials/${id}`, {
+        status: "zatwierdzona przez kapitułę (do zamknięcia)",
+      });
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: "zatwierdzona przez kapitułę (do zamknięcia)",
+      }));
+    } catch (error) {
+      console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
+    }
+  };
+
+  const handleEndTrial = async () => {
+    try {
+      const orderNumber = prompt("Podaj numer rozkazu:");
+      const orderLink = prompt("Podaj link do PDF rozkazu:");
+
+      if (!orderNumber || !orderLink) {
+        alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
+        return;
+      }
+
+      await axios.patch(`/trials/${id}`, {
+        status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`
+      });
+      
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
+      }));
+    } catch (error) {
+      console.error("Błąd podczas zamykania próby:", error);
+    }
+  }
+
+
   const formatStatus = (status) => {
     if (!status) return "";
     const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
@@ -259,7 +298,27 @@ const ViewTrial = ({ user }) => {
                     <span className="ml-2">Odrzuć próbę (do poprawy)</span>
                   </button>
                 </>
-              ) : (user.role == "Członek kapituły" || user.role == "Administrator" ) && (
+              )  :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status && trial.status.includes('Otwarta'))) ? (
+                <button
+                  onClick={handleEndTrialCommittee}
+                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                >
+                  <span className="material-symbols-outlined">
+                    assignment_turned_in
+                  </span>
+                  <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
+                </button>
+              ) :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status == "zatwierdzona przez kapitułę (do zamknięcia)")) ? (
+                <button
+                  onClick={handleEndTrial}
+                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                >
+                  <span className="material-symbols-outlined">
+                    assignment_turned_in
+                  </span>
+                  <span className="ml-2">Zmień status na zamknięta</span>
+                </button>
+              ) :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status && trial.status.includes('(do otwarcia)'))) ? (
                 <button
                   onClick={handleOpenTrial}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -269,7 +328,11 @@ const ViewTrial = ({ user }) => {
                   </span>
                   <span className="ml-2">Zmień status na otwarta</span>
                 </button>
-              )}
+              ): null}   
+              
+              
+              
+              
             </div>
           </div>
           <div className="flex space-x-4">
@@ -371,7 +434,7 @@ const ViewTrial = ({ user }) => {
             </table>
           </div>
 
-          <CommentsSection comments={comments} trialId={trial.id} />
+          <CommentsSection comments={comments} trialId={trial.id} status={trial.status || ""} />
         </div>
       </main>
     </div>

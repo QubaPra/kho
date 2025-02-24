@@ -4,6 +4,7 @@ import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import ViewTrial from "./ViewTrial";
 
 const monthMap = {
   styczeń: "01",
@@ -135,7 +136,6 @@ const Dashboard = ({ user, setUser }) => {
   }, [editContent, trial]);
 
   const handleEditClick = async (task) => {
-    
     setEditTaskId(task.id);
     setEditContent(task.content);
     setEditEndDate(task.end_date);
@@ -150,32 +150,50 @@ const Dashboard = ({ user, setUser }) => {
     ) {
       await handleDeleteTask(editTaskId);
     } else {
-
-      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
-        const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+      if (
+        trial.status === "zaakceptowana przez opiekuna" ||
+        trial.status === "zaakceptowana przez kapitułę (do otwarcia)" ||
+        (trial.status && !trial.status.includes("(edytowano)"))
+      ) {
+        const confirmed = window.confirm(
+          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
+        );
         if (!confirmed) {
-            return;
+          return;
         }
-    }
-    
-    if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
-        try {
-            await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
-            setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
-        } catch (error) {
-            console.error("Błąd podczas aktualizacji statusu próby:", error);
-            return;
-        }
-    }
-    if (trial.status && !trial.status.includes("(edytowano)")) {
-      try {
-        await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
-        setTrial((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
-      } catch (error) {
-        console.error("Błąd podczas aktualizacji statusu próby:", error);
-        return;
       }
-    }
+
+      if (
+        trial.status === "zaakceptowana przez opiekuna" ||
+        trial.status === "odrzucona przez kapitułę (do poprawy)"
+      ) {
+        try {
+          await axios.patch("/trials/me", {
+            status: "do akceptacji przez opiekuna",
+          });
+          setTrial((prevTrial) => ({
+            ...prevTrial,
+            status: "do akceptacji przez opiekuna",
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      }
+      if (trial.status && !trial.status.includes("(edytowano)")) {
+        try {
+          await axios.patch("/trials/me", {
+            status: `${trial.status} (edytowano)`,
+          });
+          setTrial((prevTrial) => ({
+            ...prevTrial,
+            status: `${prevTrial.status} (edytowano)`,
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      }
 
       try {
         let formattedEndDate = "";
@@ -190,7 +208,7 @@ const Dashboard = ({ user, setUser }) => {
           end_date: formattedEndDate,
           categories: editCategories,
         };
-        
+
         const response = await axios.patch(`/tasks/${editTaskId}`, payload);
         setTasks(
           tasks.map((task) =>
@@ -204,8 +222,7 @@ const Dashboard = ({ user, setUser }) => {
               : task
           )
         );
-        
-          
+
         localStorage.setItem("tasks", JSON.stringify(tasks));
       } catch (error) {
         console.error("Błąd podczas aktualizacji zadania:", error);
@@ -270,34 +287,51 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleDeleteTask = async (taskId) => {
-    
-
     try {
-      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
-        const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+      if (
+        trial.status === "zaakceptowana przez opiekuna" ||
+        trial.status === "zaakceptowana przez kapitułę (do otwarcia)" ||
+        (trial.status && !trial.status.includes("(edytowano)"))
+      ) {
+        const confirmed = window.confirm(
+          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
+        );
         if (!confirmed) {
-            return;
+          return;
         }
-    }
-    
-    if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
-        try {
-            await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
-            setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
-        } catch (error) {
-            console.error("Błąd podczas aktualizacji statusu próby:", error);
-            return;
-        }
-    }
-    if (trial.status && !trial.status.includes("(edytowano)")) {
-      try {
-        await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
-        setTrial((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
-      } catch (error) {
-        console.error("Błąd podczas aktualizacji statusu próby:", error);
-        return;
       }
-    }
+
+      if (
+        trial.status === "zaakceptowana przez opiekuna" ||
+        trial.status === "odrzucona przez kapitułę (do poprawy)"
+      ) {
+        try {
+          await axios.patch("/trials/me", {
+            status: "do akceptacji przez opiekuna",
+          });
+          setTrial((prevTrial) => ({
+            ...prevTrial,
+            status: "do akceptacji przez opiekuna",
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      }
+      if (trial.status && !trial.status.includes("(edytowano)")) {
+        try {
+          await axios.patch("/trials/me", {
+            status: `${trial.status} (edytowano)`,
+          });
+          setTrial((prevTrial) => ({
+            ...prevTrial,
+            status: `${prevTrial.status} (edytowano)`,
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      }
       await axios.delete(`/tasks/${taskId}`);
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
@@ -309,17 +343,32 @@ const Dashboard = ({ user, setUser }) => {
 
   const formatStatus = (status) => {
     if (!status) return "";
-    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
+    const match = status.match(
+      /^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/
+    );
     if (match) {
       const [_, type, orderNumber, orderLink, additionalText] = match;
       return (
         <span>
-          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>{additionalText}
+          {type} rozkazem{" "}
+          <a
+            className="underline hover:text-blue-500 dark:hover:text-blue-400"
+            href={orderLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {orderNumber}
+          </a>
+          {additionalText}
         </span>
       );
     }
     return status;
   };
+
+  if (trial.status && (trial.status.includes('(do otwarcia)') || trial.status.includes('Zamknięta'))) {
+    return <ViewTrial id={trial.id} user={user} />;
+  }
 
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
@@ -331,21 +380,21 @@ const Dashboard = ({ user, setUser }) => {
             </h2>
             <div className="flex space-x-2">
               {trial.status === "do zaakceptowania przez opiekuna" && (
-              <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
-                <span className="material-symbols-outlined">
-                  list_alt_check
-                </span>
-                <span className="ml-2">Zgłoś próbę do opiekuna</span>
-              </button>
-            )}
-            {trial.status === "zaakceptowana przez opiekuna" && (
-              <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
-                <span className="material-symbols-outlined">
-                  calendar_add_on
-                </span>
-                <span className="ml-2">Zgłoś się na kapitułę</span>
-              </button>
-            )}
+                <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                  <span className="material-symbols-outlined">
+                    list_alt_check
+                  </span>
+                  <span className="ml-2">Zgłoś próbę do opiekuna</span>
+                </button>
+              )}
+              {trial.status === "zaakceptowana przez opiekuna" && (
+                <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                  <span className="material-symbols-outlined">
+                    calendar_add_on
+                  </span>
+                  <span className="ml-2">Zgłoś się na kapitułę</span>
+                </button>
+              )}
               <Link
                 to="/edycja-proby"
                 className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
@@ -539,7 +588,7 @@ const Dashboard = ({ user, setUser }) => {
               Nowe zadanie
             </button>
           </div>
-          <CommentsSection comments={comments} trialId={trial.id} />
+          <CommentsSection comments={comments} trialId={trial.id} status={trial.status || ""} />
         </div>
       </main>
     </div>
