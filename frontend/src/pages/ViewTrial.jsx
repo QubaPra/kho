@@ -196,12 +196,12 @@ const ViewTrial = ({ user }) => {
 
   const formatStatus = (status) => {
     if (!status) return "";
-    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+)>$/);
+    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
     if (match) {
-      const [_, type, orderNumber, orderLink] = match;
+      const [_, type, orderNumber, orderLink, additionalText] = match;
       return (
         <span>
-          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>
+          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>{additionalText}
         </span>
       );
     }
@@ -239,7 +239,7 @@ const ViewTrial = ({ user }) => {
                     <span className="ml-2">Porzuć próbę</span>
                   </button>
                 </>
-              ) : trial.status == "zaakceptowana przez opiekuna" ? (
+              ) : trial.status == "zaakceptowana przez opiekuna" && (user.role == "Członek kapituły" || user.role == "Administrator" ) ? (
                 <>
                   <button
                     onClick={handleApproveTrialCommittee}
@@ -259,7 +259,7 @@ const ViewTrial = ({ user }) => {
                     <span className="ml-2">Odrzuć próbę (do poprawy)</span>
                   </button>
                 </>
-              ) : (
+              ) : (user.role == "Członek kapituły" || user.role == "Administrator" ) && (
                 <button
                   onClick={handleOpenTrial}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"

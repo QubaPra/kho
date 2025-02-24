@@ -135,19 +135,7 @@ const Dashboard = ({ user, setUser }) => {
   }, [editContent, trial]);
 
   const handleEditClick = async (task) => {
-    if (trial.status === "zaakceptowana przez opiekuna") {
-      const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
-      if (!confirmed) {
-        return;
-      }
-      try {
-        await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
-        setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
-      } catch (error) {
-        console.error("Błąd podczas aktualizacji statusu próby:", error);
-        return;
-      }
-    }
+    
     setEditTaskId(task.id);
     setEditContent(task.content);
     setEditEndDate(task.end_date);
@@ -162,6 +150,33 @@ const Dashboard = ({ user, setUser }) => {
     ) {
       await handleDeleteTask(editTaskId);
     } else {
+
+      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
+        const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+        if (!confirmed) {
+            return;
+        }
+    }
+    
+    if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
+        try {
+            await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+            setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
+        } catch (error) {
+            console.error("Błąd podczas aktualizacji statusu próby:", error);
+            return;
+        }
+    }
+    if (trial.status && !trial.status.includes("(edytowano)")) {
+      try {
+        await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
+        setTrial((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji statusu próby:", error);
+        return;
+      }
+    }
+
       try {
         let formattedEndDate = "";
         if (editEndDate.trim() !== "") {
@@ -209,7 +224,14 @@ const Dashboard = ({ user, setUser }) => {
       originalTask.end_date.trim() === "" &&
       originalTask.categories.length === 0
     ) {
-      await handleDeleteTask(editTaskId);
+      try {
+        await axios.delete(`/tasks/${editTaskId}`);
+        const updatedTasks = tasks.filter((task) => task.id !== editTaskId);
+        setTasks(updatedTasks);
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      } catch (error) {
+        console.error("Błąd podczas usuwania zadania:", error);
+      }
     }
   };
 
@@ -248,7 +270,34 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleDeleteTask = async (taskId) => {
+    
+
     try {
+      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
+        const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
+        if (!confirmed) {
+            return;
+        }
+    }
+    
+    if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
+        try {
+            await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+            setTrial((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
+        } catch (error) {
+            console.error("Błąd podczas aktualizacji statusu próby:", error);
+            return;
+        }
+    }
+    if (trial.status && !trial.status.includes("(edytowano)")) {
+      try {
+        await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
+        setTrial((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji statusu próby:", error);
+        return;
+      }
+    }
       await axios.delete(`/tasks/${taskId}`);
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
@@ -260,12 +309,12 @@ const Dashboard = ({ user, setUser }) => {
 
   const formatStatus = (status) => {
     if (!status) return "";
-    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+)>$/);
+    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
     if (match) {
-      const [_, type, orderNumber, orderLink] = match;
+      const [_, type, orderNumber, orderLink, additionalText] = match;
       return (
         <span>
-          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>
+          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>{additionalText}
         </span>
       );
     }

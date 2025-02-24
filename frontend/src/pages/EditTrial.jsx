@@ -9,6 +9,7 @@ const EditTrial = () => {
   const [date, setDate] = useState("");
   const [team, setTeam] = useState("");
   const [rank, setRank] = useState("");
+  const [status, setStatus] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ const EditTrial = () => {
         setDate(trial.birth_date);
         setTeam(trial.team);
         setRank(trial.rank);
+        setStatus(trial.status);
       } catch (error) {
         console.error("Błąd podczas pobierania danych próby:", error);
       }
@@ -140,13 +142,31 @@ const EditTrial = () => {
         const response = await axios.get("/trials/me");
         const trial = response.data;
   
-        if (trial.status === "zaakceptowana przez opiekuna") {
+        if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "zaakceptowana przez kapitułę (do otwarcia)" || (trial.status && !trial.status.includes("(edytowano)"))) {
           const confirmed = window.confirm("Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?");
           if (!confirmed) {
-            return;
+              return;
           }
-          await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+      }
+      
+      if (trial.status === "zaakceptowana przez opiekuna" || trial.status === "odrzucona przez kapitułę (do poprawy)") {
+          try {
+              await axios.patch("/trials/me", { status: "do akceptacji przez opiekuna" });
+              setStatus((prevTrial) => ({ ...prevTrial, status: "do akceptacji przez opiekuna" }));
+          } catch (error) {
+              console.error("Błąd podczas aktualizacji statusu próby:", error);
+              return;
+          }
+      }
+      if (trial.status && !trial.status.includes("(edytowano)")) {
+        try {
+          await axios.patch("/trials/me", { status: `${trial.status} (edytowano)` });
+          setStatus((prevTrial) => ({ ...prevTrial, status: `${prevTrial.status} (edytowano)` }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
         }
+      }
   
         await axios.patch("/trials/me", {
           email: privEmail,
