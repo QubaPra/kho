@@ -155,14 +155,14 @@ const EditTrial = () => {
         }
   
         if (
-          trial.status === "zaakceptowana przez opiekuna" ||
+          (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
           trial.status === "odrzucona przez kapitułę (do poprawy)"
         ) {
           try {
             await axios.patch("/trials/me", {
               status: "do akceptacji przez opiekuna",
             });
-            setTrial((prevTrial) => ({
+            setStatus((prevTrial) => ({
               ...prevTrial,
               status: "do akceptacji przez opiekuna",
             }));
@@ -171,12 +171,12 @@ const EditTrial = () => {
             return;
           }
         }
-        if ((trial.status && !trial.status.includes("(edytowano)")) && (trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)")) {
+        else if ((trial.status && !trial.status.includes("(edytowano)")) && (trial.status != "do akceptacji przez opiekuna" && trial.status != "odrzucona przez kapitułę (do poprawy)")) {
           try {
             await axios.patch("/trials/me", {
               status: `${trial.status} (edytowano)`,
             });
-            setTrial((prevTrial) => ({
+            setStatus((prevTrial) => ({
               ...prevTrial,
               status: `${prevTrial.status} (edytowano)`,
             }));

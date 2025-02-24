@@ -308,7 +308,7 @@ const ViewTrial = ({ user, id: propId }) => {
                     <span className="ml-2">Porzuć próbę</span>
                   </button>
                 </>
-              ) : trial.status == "zaakceptowana przez opiekuna" && (user.role == "Członek kapituły" || user.role == "Administrator" ) ? (
+              ) : trial.status == "zaakceptowana przez opiekuna" && user.role == "Administrator"  ? (
                 <>
                   <button
                     onClick={handleApproveTrialCommittee}
@@ -328,7 +328,7 @@ const ViewTrial = ({ user, id: propId }) => {
                     <span className="ml-2">Odrzuć próbę (do poprawy)</span>
                   </button>
                 </>
-              )  :  ((user.role == "Członek kapituły" || user.role == "Administrator" ) && (trial.status && trial.status.includes('Otwarta'))) ? (
+              )  :  (user.role == "Administrator" && (trial.status && trial.status.includes('Otwarta'))) ? (
                 <button
                   onClick={handleEndTrialCommittee}
                   className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
