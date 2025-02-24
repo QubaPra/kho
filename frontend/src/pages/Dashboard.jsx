@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import CategoryDropdown from "../components/CategoryDropdown";
 import CommentsSection from "../components/CommentsSection";
 import MonthDropdown from "../components/MonthDropdown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 const monthMap = {
@@ -20,7 +20,7 @@ const monthMap = {
   grudzień: "12",
 };
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, setUser }) => {
   const [trial, setTrial] = useState(() => {
     const savedTrial = localStorage.getItem("trial");
     return savedTrial ? JSON.parse(savedTrial) : "";
@@ -35,6 +35,7 @@ const Dashboard = ({ user }) => {
   const [editContent, setEditContent] = useState("");
   const [editEndDate, setEditEndDate] = useState("");
   const [editCategories, setEditCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrialData = async () => {
@@ -114,9 +115,10 @@ const Dashboard = ({ user }) => {
     if (confirmed) {
       try {
         await axios.delete("/trials/me");
-        alert("Próba została usunięta.");
         localStorage.removeItem("trial");
         localStorage.removeItem("tasks");
+        setUser((prevUser) => ({ ...prevUser, has_trial: false }));
+        navigate("/nowa-proba");
       } catch (error) {
         console.error("Błąd podczas usuwania próby:", error);
         alert("Wystąpił błąd podczas usuwania próby.");

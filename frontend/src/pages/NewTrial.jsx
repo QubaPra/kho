@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
-const NewTrial = ({ user }) => {
+const NewTrial = ({ user, setUser }) => {
   const [privEmail, setPrivateEmail] = useState("");
   const [mentorMail, setMentorEmail] = useState("");
   const [name, setName] = useState("");
@@ -133,6 +133,7 @@ const NewTrial = ({ user }) => {
           rank: rank,
         });
         console.log("Form submitted successfully:", response.data);
+        setUser((prevUser) => ({ ...prevUser, has_trial: true }));
         navigate("/");
       } catch (error) {
         console.error("Error submitting form:", error);

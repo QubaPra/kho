@@ -1,33 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
 
-const Profil = ({ setIsAuthenticated }) => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+const Profil = ({ user, setIsAuthenticated }) => {
+  const [email, setEmail] = useState(user.login);
+  const [name, setName] = useState(user.full_name);
   const [errors, setErrors] = useState({});
-  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get("/users/me/");
-        const userData = response.data;
-        setEmail(userData.login);
-        setName(userData.full_name);
-        // Nie ustawiamy hasła, ponieważ nie powinno być ono dostępne
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -64,16 +43,6 @@ const Profil = ({ setIsAuthenticated }) => {
       newErrors.name = "Imię i nazwisko są nieprawidłowe";
     } else if (name.length > 100) {
       newErrors.name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
-    }
-
-    if (!password) {
-      newErrors.password = "Hasło jest wymagane";
-    } else if (password.length < 4) {
-      newErrors.password = "Hasło musi mieć minimum 4 znaki";
-    } else if (/\s/.test(password)) {
-      newErrors.password = "Hasło nie może zawierać spacji";
-    } else if (password.length > 100) {
-      newErrors.password = "Hasło nie może być dłuższe niż 100 znaków";
     }
 
     setErrors(newErrors);
@@ -129,13 +98,18 @@ const Profil = ({ setIsAuthenticated }) => {
       try {
         await axios.delete("/users/me/");
         // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
-        localStorage.removeItem("access_token");        
-        // Przekierowanie na stronę rejestracja
-        navigate("/rejestracja");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("trial");
+        localStorage.removeItem("tasks");
+        setIsAuthenticated(false);
       } catch (error) {
         console.error("Error deleting user account:", error);
       }
     }
+  };
+
+  const handlePasswordEditClick = () => {
+    // Logika do wyświetlenia okienka do zmiany hasła
   };
 
   return (
@@ -143,7 +117,7 @@ const Profil = ({ setIsAuthenticated }) => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
           <h2 className="text-2xl font-semibold mb-12 mt-1">Twoje dane</h2>
-          <div style={{ width: "30%" }}>
+          <div style={{ width: "45%" }}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Email (login)
@@ -182,28 +156,15 @@ const Profil = ({ setIsAuthenticated }) => {
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Hasło
+                Rola
               </label>
               <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={handlePasswordChange}
-                onFocus={handlePasswordFocus}
-                onBlur={handlePasswordBlur}
-                disabled={!isEditing}
+                type="text"
+                id="role"
+                name="role"
+                value={user.role}
+                disabled
               />
-              {errors.password && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.password}
-                </p>
-              )}
-              {isCapsLockOn && (
-                <p className="text-yellow-500 dark:text-yellow-600 text-sm">
-                  Capslock jest włączony
-                </p>
-              )}
             </div>
 
             <div className="flex space-x-4">
@@ -223,9 +184,17 @@ const Profil = ({ setIsAuthenticated }) => {
                   className="w-full bg-blue-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
                 >
                   <span className="material-symbols-outlined">edit_square</span>
-                  <span>Edytuj</span>
+                  <span>Edytuj dane</span>
                 </button>
               )}
+              <button
+                type="button"
+                onClick={handlePasswordEditClick}
+                className="w-full bg-yellow-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-800 focus:outline-none"
+              >
+                <span className="material-symbols-outlined">lock</span>
+                <span>Edytuj hasło</span>
+              </button>
               <button
                 type="button"
                 onClick={handleDeleteClick}
