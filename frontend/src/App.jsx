@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
+import MentorDashboard from "./pages/MentorDashboard";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -18,7 +19,7 @@ const App = () => {
     return !!token;
   }); 
 
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -29,7 +30,6 @@ const App = () => {
         console.error('Error fetching user role:', error);
         localStorage.removeItem('access_token');
         setIsAuthenticated(false);
-
       }
     };
 
@@ -38,21 +38,42 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
- 
+  if (isAuthenticated && user === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
       <Navbar setIsAuthenticated={setIsAuthenticated} user={user} isAuthenticated={isAuthenticated} />
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Dashboard user={user}/> : <Navigate to="/logowanie" />} />
-        <Route path="/logowanie" element={<Login setIsAuthenticated={setIsAuthenticated}/>} />
-        <Route path="/rejestracja" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
-        <Route path="/nowa-proba" element={isAuthenticated ? <NewTrial user={user}/> : <Navigate to="/logowanie" />} />
-        <Route path="/edycja-proby" element={isAuthenticated ? <EditTrial user={user}/> : <Navigate to="/logowanie" />} />
-        <Route path="/profil" element={isAuthenticated ? <Profil setIsAuthenticated={setIsAuthenticated}/> : <Navigate to="/logowanie" />} />
-        <Route path="/uzytkownicy" element={isAuthenticated ? <UsersList /> : <Navigate to="/logowanie" />} />
-        <Route path="/proby" element={isAuthenticated ? <TrialList /> : <Navigate to="/logowanie" />} />
-        <Route path="/proba/:id" element={isAuthenticated ? <ViewTrial user={user}/> : <Navigate to="/logowanie" />} />
+        {!isAuthenticated ? (
+          <>
+            <Route path="/logowanie" element={<Login setIsAuthenticated={setIsAuthenticated}/>} />
+            <Route path="/rejestracja" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
+            <Route path="*" element={<Navigate to="/logowanie" />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={
+              user.is_mentor || user.role === "Członek kapituły" || user.role === "Administrator" ? (
+                <MentorDashboard user={user} />
+              ) : user.has_trial ? (
+                <Dashboard user={user} />
+              ) : (
+                <Navigate to="/nowa-proba" />
+              )
+            } />
+            <Route path="/logowanie" element={<Navigate to="/" />} />
+            <Route path="/rejestracja" element={<Navigate to="/" />} />
+            <Route path="/nowa-proba" element={<NewTrial user={user} />} />
+            <Route path="/edycja-proby" element={<EditTrial user={user} />} />
+            <Route path="/profil" element={<Profil setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/uzytkownicy" element={<UsersList />} />
+            <Route path="/proby" element={<TrialList />} />
+            <Route path="/proba/:id" element={<ViewTrial user={user} />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
       </Routes>
     </>
   );

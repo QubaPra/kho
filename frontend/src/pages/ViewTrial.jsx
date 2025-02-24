@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import CommentsSection from "../components/CommentsSection";
 
@@ -20,6 +20,7 @@ const monthMap = {
 
 const ViewTrial = ({ user }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [trial, setTrial] = useState("");
   const [tasks, setTasks] = useState([]);
@@ -110,15 +111,46 @@ const ViewTrial = ({ user }) => {
   const getCategoriesByIds = (ids) => {
     return categories.filter((category) => ids.includes(category.id));
   };
+
+  const handleLeaveTrial = async () => {
+    const confirmed = window.confirm("Czy na pewno chcesz przestać być opiekunem tej próby?");
+    if (!confirmed) return;
+  
+    try {
+      await axios.patch(`/trials/${id}`, {
+        mentor_mail: "",
+        mentor_name: "",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Błąd podczas porzucania próby:", error);
+    }
+  };
   
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-          <div className="flex items-center justify-between mt-1 mb-3">
+        <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-semibold">
               {trial.rank} {user.full_name} próba na stopień HO
             </h2>
+            <div className="flex space-x-2">
+              <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+                <span className="material-symbols-outlined">
+                  list_alt_check
+                </span>
+                <span className="ml-2">Zatwierdź próbę</span>
+              </button>
+
+              <button onClick={handleLeaveTrial} className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
+                <span className="material-symbols-outlined">
+                  delete
+                </span>
+                <span className="ml-2">Porzuć próbę</span>
+              </button>
+
+            </div>
           </div>
           <div className="flex space-x-4">
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">

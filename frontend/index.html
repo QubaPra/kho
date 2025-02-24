@@ -14,11 +14,9 @@
         if (!savedTheme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
           document.documentElement.classList.add('dark');
           localStorage.setItem('theme', 'dark');
-          console.log('0');
         }
         else if (savedTheme === 'dark') {
           document.documentElement.classList.add('dark');
-          console.log('1');
         }
 
       })();

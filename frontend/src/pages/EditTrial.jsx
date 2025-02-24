@@ -13,10 +13,9 @@ const EditTrial = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    
     const fetchTrialData = async () => {
       try {
-        const response = await axios.get("/trials/me"); // Zakładając, że ID próby to 1
+        const response = await axios.get("/trials/me");
         const trial = response.data;
         setPrivateEmail(trial.email);
         setMentorEmail(trial.mentor_mail);
@@ -67,21 +66,23 @@ const EditTrial = () => {
         "Email do kontaktu nie może być dłuższy niż 100 znaków";
     }
 
-    if (!mentorMail) {
-      newErrors.mentorMail = "Email opiekuna jest wymagany";
-    } else if (!emailRegex.test(mentorMail)) {
-      newErrors.mentorMail = "Email opiekuna jest nieprawidłowy";
-    } else if (mentorMail.length > 100) {
-      newErrors.mentorMail =
-        "Email opiekuna nie może być dłuższy niż 100 znaków";
+    if (mentorMail === privEmail) {
+      newErrors.mentorMail = "Email opiekuna nie może być taki sam jak twój";
+    } else if (mentorMail) {
+      if (!emailRegex.test(mentorMail)) {
+        newErrors.mentorMail = "Email opiekuna jest nieprawidłowy";
+      } else if (mentorMail.length > 100) {
+        newErrors.mentorMail =
+          "Email opiekuna nie może być dłuższy niż 100 znaków";
+      }
     }
 
-    if (!name) {
-      newErrors.name = "Imię i nazwisko są wymagane";
-    } else if (!nameRegex.test(name)) {
-      newErrors.name = "Imię i nazwisko są nieprawidłowe";
-    } else if (name.length > 100) {
-      newErrors.name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
+    if (name) {
+      if (!nameRegex.test(name)) {
+        newErrors.name = "Imię i nazwisko są nieprawidłowe";
+      } else if (name.length > 100) {
+        newErrors.name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
+      }
     }
 
     if (!date) {
@@ -293,6 +294,6 @@ const EditTrial = () => {
       </div>
     </div>
   );
-}
+};
 
 export default EditTrial;
