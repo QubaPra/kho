@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
+from rest_framework.views import APIView
 
 User = get_user_model()
 
@@ -54,3 +56,22 @@ class UserMeView(mixins.UpdateModelMixin, generics.RetrieveAPIView):
         user = self.get_object()
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ChangePasswordView(APIView):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if not old_password or not new_password:
+            return Response({"error": "Stare i nowe hasło są wymagane"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if old_password == new_password:
+            return Response({"error": "Nowe hasło nie może być takie samo jak stare hasło"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not check_password(old_password, user.password):
+            return Response({"error": "Stare hasło jest nieprawidłowe"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({"success": "Hasło zostało zmienione"}, status=status.HTTP_200_OK)

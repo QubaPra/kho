@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
+import Modal from "react-modal";
+
+Modal.setAppElement('#root');
 
 const Profil = ({ user, setIsAuthenticated }) => {
   const [email, setEmail] = useState(user.login);
@@ -7,6 +10,10 @@ const Profil = ({ user, setIsAuthenticated }) => {
   const [errors, setErrors] = useState({});
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -49,6 +56,24 @@ const Profil = ({ user, setIsAuthenticated }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const validatePassword = () => {
+    const newErrors = {};
+    if (!currentPassword) {
+      newErrors.currentPassword = "Obecne hasło jest wymagane";
+    }
+    if (!newPassword) {
+      newErrors.newPassword = "Nowe hasło jest wymagane";
+    } else if (newPassword.length < 4) {
+      newErrors.newPassword = "Hasło musi mieć minimum 4 znaki";
+    } else if (/\s/.test(newPassword)) {
+      newErrors.newPassword = "Hasło nie może zawierać spacji";
+    } else if (newPassword.length > 100) {
+      newErrors.newPassword = "Hasło nie może być dłuższe niż 100 znaków";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
@@ -61,8 +86,14 @@ const Profil = ({ user, setIsAuthenticated }) => {
 
   const handlePasswordChange = (e) => {
     const value = e.target.value.replace(/\s/g, ""); // Usuwa spacje
-    setPassword(value);
-    setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+    setNewPassword(value);
+    setErrors((prevErrors) => ({ ...prevErrors, newPassword: "" }));
+  };
+
+  const handleCurrentPasswordChange = (e) => {
+    const value = e.target.value.replace(/\s/g, ""); // Usuwa spacje
+    setCurrentPassword(value);
+    setErrors((prevErrors) => ({ ...prevErrors, currentPassword: "" }));
   };
 
   const handlePasswordFocus = () => {
@@ -109,7 +140,33 @@ const Profil = ({ user, setIsAuthenticated }) => {
   };
 
   const handlePasswordEditClick = () => {
-    // Logika do wyświetlenia okienka do zmiany hasła
+    setIsPasswordModalOpen(true);
+    document.body.classList.add("modal-open");
+  };
+
+  const handlePasswordModalClose = () => {
+    setIsPasswordModalOpen(false);
+    document.body.classList.remove("modal-open");
+    setErrors({});
+    setCurrentPassword("");
+    setNewPassword("");
+  };
+
+  const handlePasswordSave = async () => {
+    if (validatePassword()) {
+      try {
+        const response = await axios.post("/users/me/password/", {
+          old_password: currentPassword,
+          new_password: newPassword,
+        });
+        setIsPasswordModalOpen(false);
+        document.body.classList.remove("modal-open");
+        alert(response.data.success || "Hasło zostało zmienione");
+      } catch (error) {
+        console.error("Error updating password:", error);
+        alert(error.response.data.error || "Wystąpił błąd podczas zmiany hasła");
+      }
+    }
   };
 
   return (
@@ -130,11 +187,13 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onChange={handleEmailChange}
                 disabled={!isEditing}
               />
-              {errors.email && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.email}
-                </p>
-              )}
+              <div className="h-4">
+                {errors.email && (
+                  <p className="text-red-500 dark:text-red-600 text-sm">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -148,11 +207,13 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onChange={handleNameChange}
                 disabled={!isEditing}
               />
-              {errors.name && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.name}
-                </p>
-              )}
+              <div className="h-4">
+                {errors.name && (
+                  <p className="text-red-500 dark:text-red-600 text-sm">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
@@ -207,6 +268,77 @@ const Profil = ({ user, setIsAuthenticated }) => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isPasswordModalOpen}
+        onRequestClose={handlePasswordModalClose}
+        contentLabel="Zmiana hasła"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2 className="text-2xl font-semibold mb-2">Zmiana hasła</h2>
+        <div className="mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Obecne hasło
+          </label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={handleCurrentPasswordChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          <div className="h-4">
+            {errors.currentPassword && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.currentPassword}
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Nowe hasło
+          </label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={handlePasswordChange}
+            className="w-full p-2 border border-gray-300 rounded"
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          <div className="h-4">
+            {errors.newPassword && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.newPassword}
+              </p>
+            )}
+            {isCapsLockOn && (
+              <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+                CapsLock jest włączony
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="flex space-x-4">
+          <button
+            type="button"
+            onClick={handlePasswordSave}
+            className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 focus:outline-none"
+          >
+            Zapisz
+          </button>
+          <button
+            type="button"
+            onClick={handlePasswordModalClose}
+            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+          >
+            Anuluj
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
