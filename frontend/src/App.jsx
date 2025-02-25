@@ -88,10 +88,25 @@ const App = () => {
             <Route
               path="/nowa-proba"
               element={
-                user.has_trial ? <Navigate to="/" /> : <NewTrial setUser={setUser} user={user} />
+                user.has_trial ||
+                user.is_mentor ||
+                user.role === "Członek kapituły" ? (
+                  <Navigate to="/" />
+                ) : (
+                  <NewTrial setUser={setUser} user={user} />
+                )
               }
             />
-            <Route path="/edycja-proby" element={<EditTrial user={user} />} />
+            <Route
+              path="/edycja-proby"
+              element={
+                user.has_trial ? (
+                  <EditTrial user={user} />
+                ) : (
+                  <Navigate to="/nowa-proba" />
+                )
+              }
+            />
             <Route
               path="/profil"
               element={

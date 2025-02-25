@@ -11,7 +11,7 @@ class TrialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trial
-        fields = '__all__'
+        exclude = ['created_time', 'edited_time']
 
 months = {
             '01': 'styczeń', '02': 'luty', '03': 'marzec', '04': 'kwiecień',
@@ -20,14 +20,14 @@ months = {
         }
 
 class TrialListSerializer(serializers.ModelSerializer):
-    tasks = TaskSerializer(many=True, read_only=True)
     user = serializers.CharField(source='user.full_name', read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
     end_date = serializers.SerializerMethodField()
 
     class Meta:
         model = Trial
-        fields = '__all__'
+        fields = [
+            'id', 'user', 'team', 'status', 'end_date'
+        ]
 
     def get_end_date(self, obj):
         tasks = obj.tasks.all()

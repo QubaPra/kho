@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axios";
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [isCapsLockOn, setIsCapsLockOn] = useState(false);
+const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -16,6 +18,7 @@ const Login = ({ setIsAuthenticated }) => {
   }, [navigate]);
 
   useEffect(() => {
+
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
@@ -36,34 +39,62 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ login: email, password }),
+      const response = await axios.post("/login/", {
+        login: email,
+        password: password,
       });
-
-      if (!response.ok) {
-        throw new Error('Nieprawidłowe dane logowania');
-      }
-
-      const data = await response.json();
-
+  
+      const data = response.data;
+  
       // Zapisujemy token w localStorage
       localStorage.setItem('access_token', data.access);
       localStorage.setItem('refresh_token', data.refresh);
-
+  
       // Ustawiamy stan logowania w App.jsx
       setIsAuthenticated(true);
-
+  
       // Przekierowujemy na Dashboard
       navigate('/');
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.error || 'Nieprawidłowe dane logowania');
     }
+  };
+
+  const handlePasswordFocus = () => {
+    setIsPasswordFocused(true);
+  };
+  
+  const handlePasswordBlur = () => {
+    setIsPasswordFocused(false);
+    setIsCapsLockOn(false);
+  };
+
+  useEffect(() => {
+    const handleCapsLock = (e) => {
+      if (isPasswordFocused) {
+        setIsCapsLockOn(e.getModifierState("CapsLock"));
+      }
+    };
+  
+    window.addEventListener("keydown", handleCapsLock);
+    window.addEventListener("keyup", handleCapsLock);
+  
+    return () => {
+      window.removeEventListener("keydown", handleCapsLock);
+      window.removeEventListener("keyup", handleCapsLock);
+    };
+  }, [isPasswordFocused]);
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setError("");
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setError("");
   };
 
   return (
@@ -81,7 +112,7 @@ const Login = ({ setIsAuthenticated }) => {
                 id="email"
                 name="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
               />
             </div>
             <div className="mb-4">
@@ -89,12 +120,19 @@ const Login = ({ setIsAuthenticated }) => {
                 Hasło
               </label>
               <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+  type="password"
+  id="password"
+  name="password"
+  value={password}
+  onChange={handlePasswordChange}
+  onFocus={handlePasswordFocus}
+  onBlur={handlePasswordBlur}
+/>
+{isCapsLockOn && (
+  <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+    CapsLock jest włączony
+  </p>
+)}
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <button className="text-sm text-blue-600 dark:text-blue-700 mb-4 hover:underline ">

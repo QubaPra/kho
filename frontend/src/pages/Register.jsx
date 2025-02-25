@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Dodaj import
-import axios from "axios";
+import axios from "../api/axios";
 
 const Register = ({ setIsAuthenticated }) => { // Dodaj argument
   const [email, setEmail] = useState("");
@@ -117,31 +117,28 @@ useEffect(() => {
     e.preventDefault();
     if (validate()) {
       try {
-        await axios.post("http://localhost:8000/api/register/", {
+        await axios.post("/register/", {
           login: email,
           password: password,
           full_name: name,
         });
         // Automatyczne logowanie po rejestracji
-        const response = await fetch('http://127.0.0.1:8000/api/login/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ login: email, password }),
+        const response = await axios.post('/login/', {
+          login: email,
+          password: password,
         });
   
-        if (!response.ok) {
-          throw new Error('Nieprawidłowe dane logowania');
-        }
-  
-        const data = await response.json();
+        const data = response.data;
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         setIsAuthenticated(true);
         navigate("/"); // Przekierowanie na stronę główną
       } catch (error) {
-        setErrors({ ...errors, form: "Rejestracja nie powiodła się" });
+        if (error.response && error.response.data && error.response.data.error === 'Login już istnieje') {
+          setErrors({ ...errors, form: "Email jest już zajęty" });
+        } else {
+          setErrors({ ...errors, form: "Rejestracja nie powiodła się" });
+        }
       }
     }
   };

@@ -14,8 +14,11 @@ const TrialList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/trials/");
-        setData(response.data);
-        console.log(response.data);
+        const formattedData = response.data.map(trial => ({
+          ...trial,
+          status: formatStatus(trial.status)
+        }));
+        setData(formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,6 +56,20 @@ const TrialList = () => {
     trial.team.toLowerCase().includes(filter.toLowerCase()) ||
     trial.mentor_name.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const formatStatus = (status) => {
+    if (!status) return "";
+    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
+    if (match) {
+      const [_, type, orderNumber, orderLink, additionalText] = match;
+      return (
+        <span>
+          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>{additionalText}
+        </span>
+      );
+    }
+    return status;
+  };
 
   return (
     <div className="bg-gray-100 dark:bg-black min-h-screen">

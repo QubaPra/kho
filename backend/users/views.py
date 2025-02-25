@@ -16,16 +16,33 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
+    def create(self, request, *args, **kwargs):
+        login = request.data.get('login')
+        if User.objects.filter(login=login).exists():
+            return Response({'error': 'Login już istnieje'}, status=status.HTTP_400_BAD_REQUEST)
+        return super().create(request, *args, **kwargs)
+
 class LoginView(generics.GenericAPIView):
     serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
         login = request.data.get('login')
         password = request.data.get('password')
-        user = authenticate(username=login, password=password)
 
+        if not login or not password:
+            return Response({'error': 'Email i hasło są wymagane'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(login=login)
+        except User.DoesNotExist:
+            return Response({'error': 'Email jest niepoprawny lub nie jest zarejestrowany'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not user.check_password(password):
+            return Response({'error': 'Hasło jest nieprawidłowe'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(username=login, password=password)
         if user is None:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Wystąpił błąd podczas logowania'}, status=status.HTTP_400_BAD_REQUEST)
 
         refresh = RefreshToken.for_user(user)
         return Response({

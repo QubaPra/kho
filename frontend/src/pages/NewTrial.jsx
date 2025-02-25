@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import teams from "../data/teams";
 
 const NewTrial = ({ user, setUser }) => {
   const [privEmail, setPrivateEmail] = useState("");
@@ -132,7 +133,6 @@ const NewTrial = ({ user, setUser }) => {
           team: team,
           rank: rank,
         });
-        console.log("Form submitted successfully:", response.data);
         setUser((prevUser) => ({ ...prevUser, has_trial: true }));
         navigate("/");
       } catch (error) {
@@ -190,21 +190,15 @@ const NewTrial = ({ user, setUser }) => {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                  Drużyna
+                Drużyna
                 </label>
                 <select id="team" value={team} onChange={handleTeamChange}>
                   <option value="">Wybierz drużynę</option>
-                  <option value="40 KDH Barykada">40 KDH Barykada</option>
-                  <option value="5 KDH Piorun">5 KDH Piorun</option>
-                  <option value="19 KLDH Ptaki Polskie">
-                    19 KLDH Ptaki Polskie
-                  </option>
-                  <option value="10 KDH Dzieci Słońca">
-                    10 KDH Dzieci Słońca
-                  </option>
-                  <option value="40 KGZ Smocze Bractwo">
-                    40 KGZ Smocze Bractwo
-                  </option>
+                  {teams.map((teamName) => (
+                    <option key={teamName} value={teamName}>
+                      {teamName}
+                    </option>
+                  ))}
                 </select>
                 {errors.team && (
                   <p className="text-red-500 dark:text-red-600 text-sm">
