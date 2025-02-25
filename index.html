@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/4/4b/Lilijka_dzia%C5%82acz.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <title>eKapituła HKK</title>
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        }
+        else if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-B_SzpdXy.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-4Kk8W21O.css">
+  </head>
+  <body>
+    <div id="root"></div>   
+    
+
+  </body>
+</html>
