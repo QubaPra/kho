@@ -1,18 +1,6 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <script>
-      // Redirect all paths to index.html
-      const pathSegments = window.location.pathname.split('/').filter(Boolean);
-      const repoName = 'KHO'; // Replace with your repo name
-      const isInRepo = pathSegments[0] === repoName;
-
-      // Adjust logic based on your repo structure
-      const path = isInRepo ? `/${repoName}/` : '/';
-      window.location.replace(
-        path + '?redirect=' + encodeURIComponent(window.location.pathname)
-      );
-    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/4/4b/Lilijka_dzia%C5%82acz.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
