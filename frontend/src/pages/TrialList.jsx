@@ -76,7 +76,7 @@ const TrialList = () => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
           <h2 className="text-2xl font-semibold mb-12 mt-1">Lista prób</h2>
-          <div className="mb-4 flex w-1/3 items-center">
+          <div className="mb-4 sm:max-w-md flex items-center">
             <input
               type="text"
               placeholder="Filtruj próby..."
@@ -85,6 +85,7 @@ const TrialList = () => {
             />
             <span className="material-symbols-outlined ml-2">search</span>
           </div>
+          <div className="overflow-x-auto sm:overflow-visible">
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
               <tr>
@@ -244,6 +245,7 @@ const TrialList = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

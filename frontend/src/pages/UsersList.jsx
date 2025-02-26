@@ -79,13 +79,13 @@ const UsersList = () => {
   });
 
   return (
-    <div className="bg-gray-100 dark:bg-black min-h-screen">
+    <div className="bg-gray-100 dark:bg-black min-h-screen overflow-y-auto">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
           <h2 className="text-2xl font-semibold mb-12 mt-1">
             Lista użytkowników
           </h2>
-          <div className="mb-4 flex w-1/3 items-center">
+          <div className="mb-4 sm:max-w-md flex items-center">
             <input
               type="text"
               placeholder="Filtruj użytkowników..."
@@ -94,144 +94,146 @@ const UsersList = () => {
             />
             <span className="material-symbols-outlined ml-2">search</span>
           </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
-              <tr>
-                <th className="p-3 rounded-tl-lg w-1/6 cursor-pointer" onClick={() => sortData("full_name")}>
-                  <div className="flex justify-between items-center">
-                    <span>Imię i nazwisko</span>
-                    {sortConfig.key === "full_name" && sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        north
-                      </span>
-                    )}
-                    {sortConfig.key === "full_name" && sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        south
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="w-1/6 cursor-pointer" onClick={() => sortData("login")}>
-                  <div className="flex justify-between items-center">
-                    <span>Email</span>
-                    {sortConfig.key === "login" && sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        north
-                      </span>
-                    )}
-                    {sortConfig.key === "login" && sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        south
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="w-1/6 cursor-pointer" onClick={() => sortData("role")}>
-                  <div className="flex justify-between items-center">
-                    <span>Funkcja</span>
-                    {sortConfig.key === "role" && sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        north
-                      </span>
-                    )}
-                    {sortConfig.key === "role" && sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        south
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="w-1/12 cursor-pointer" onClick={() => sortData("has_trial")}>
-  <div className="flex justify-between items-center">
-    <span>Próba</span>
-    {sortConfig.key === "has_trial" && sortConfig.direction === "ascending" && (
-      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-        north
-      </span>
-    )}
-    {sortConfig.key === "has_trial" && sortConfig.direction === "descending" && (
-      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-        south
-      </span>
-    )}
-  </div>
-</th>
-<th className="w-1/12 cursor-pointer" onClick={() => sortData("is_mentor")}>
-  <div className="flex justify-between items-center">
-    <span>Opiekun</span>
-    {sortConfig.key === "is_mentor" && sortConfig.direction === "ascending" && (
-      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-        north
-      </span>
-    )}
-    {sortConfig.key === "is_mentor" && sortConfig.direction === "descending" && (
-      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-        south
-      </span>
-    )}
-  </div>
-</th>
-                <th className="w-1/6 cursor-pointer" onClick={() => sortData("last_login")}>
-                  <div className="flex justify-between items-center">
-                    <span>Ostatnie logowanie</span>
-                    {sortConfig.key === "last_login" && sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        north
-                      </span>
-                    )}
-                    {sortConfig.key === "last_login" && sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        south
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="p-3 rounded-tr-lg w-1/6 cursor-pointer" onClick={() => sortData("date_joined")}>
-                  <div className="flex justify-between items-center">
-                    <span>Data dołączenia</span>
-                    {sortConfig.key === "date_joined" && sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        north
-                      </span>
-                    )}
-                    {sortConfig.key === "date_joined" && sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
-                        south
-                      </span>
-                    )}
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredData.map((user, index) => (
-                <tr key={user.id}>
-                  <td className="p-3">{user.full_name}</td>
-                  <td className="p-3">{user.login}</td>
-                  <td className="p-3">
-                    <select
-                      id="role"
-                      value={user.role}
-                      onChange={(e) => handleRoleChange(index, e.target.value)}
-                    >
-                      <option value="Kandydat">Kandydat</option>
-                      <option value="Członek kapituły">Członek kapituły</option>
-                      <option value="Administrator">Administrator</option>
-                    </select>
-                  </td>
-                  <td className="p-3">
-                    <input type="checkbox" checked={user.has_trial} disabled />
-                  </td>
-                  <td className="p-3">
-                    <input type="checkbox" checked={user.is_mentor} disabled />
-                  </td>
-                  <td className="p-3">{formatDate(user.last_login)}</td>
-                  <td className="p-3">{formatDate(user.date_joined)}</td>
+          <div className="overflow-x-auto sm:overflow-visible">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+                <tr>
+                  <th className="p-3 rounded-tl-lg w-1/6 cursor-pointer" onClick={() => sortData("full_name")}>
+                    <div className="flex justify-between items-center">
+                      <span>Imię i nazwisko</span>
+                      {sortConfig.key === "full_name" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "full_name" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="w-1/6 cursor-pointer" onClick={() => sortData("login")}>
+                    <div className="flex justify-between items-center">
+                      <span>Email</span>
+                      {sortConfig.key === "login" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "login" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="w-1/6 cursor-pointer" onClick={() => sortData("role")}>
+                    <div className="flex justify-between items-center">
+                      <span>Funkcja</span>
+                      {sortConfig.key === "role" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "role" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="w-1/12 cursor-pointer" onClick={() => sortData("has_trial")}>
+                    <div className="flex justify-between items-center">
+                      <span>Próba</span>
+                      {sortConfig.key === "has_trial" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "has_trial" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="w-1/12 cursor-pointer" onClick={() => sortData("is_mentor")}>
+                    <div className="flex justify-between items-center">
+                      <span>Opiekun</span>
+                      {sortConfig.key === "is_mentor" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "is_mentor" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="w-1/6 cursor-pointer" onClick={() => sortData("last_login")}>
+                    <div className="flex justify-between items-center">
+                      <span>Ostatnie logowanie</span>
+                      {sortConfig.key === "last_login" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "last_login" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                  <th className="p-3 rounded-tr-lg w-1/6 cursor-pointer" onClick={() => sortData("date_joined")}>
+                    <div className="flex justify-between items-center">
+                      <span>Data dołączenia</span>
+                      {sortConfig.key === "date_joined" && sortConfig.direction === "ascending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          north
+                        </span>
+                      )}
+                      {sortConfig.key === "date_joined" && sortConfig.direction === "descending" && (
+                        <span className="material-symbols-outlined" style={{ fontSize: "1rem" }}>
+                          south
+                        </span>
+                      )}
+                    </div>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {filteredData.map((user, index) => (
+                  <tr key={user.id}>
+                    <td className="p-3">{user.full_name}</td>
+                    <td className="p-3">{user.login}</td>
+                    <td className="p-3">
+                      <select
+                        id="role"
+                        value={user.role}
+                        onChange={(e) => handleRoleChange(index, e.target.value)}
+                      >
+                        <option value="Kandydat">Kandydat</option>
+                        <option value="Członek kapituły">Członek kapituły</option>
+                        <option value="Administrator">Administrator</option>
+                      </select>
+                    </td>
+                    <td className="p-3">
+                      <input type="checkbox" checked={user.has_trial} disabled />
+                    </td>
+                    <td className="p-3">
+                      <input type="checkbox" checked={user.is_mentor} disabled />
+                    </td>
+                    <td className="p-3">{formatDate(user.last_login)}</td>
+                    <td className="p-3">{formatDate(user.date_joined)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

@@ -86,7 +86,7 @@ const MentorDashboard = ({user}) => {
           <h2 className="text-2xl font-semibold mb-12 mt-1">
             Lista prób, których jesteś opiekunem
           </h2>
-          <div className="mb-4 flex w-1/3 items-center">
+          <div className="mb-4 flex sm:max-w-md items-center">
             <input
               type="text"
               placeholder="Filtruj próby..."

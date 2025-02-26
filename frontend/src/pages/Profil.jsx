@@ -174,7 +174,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
           <h2 className="text-2xl font-semibold mb-12 mt-1">Twoje dane</h2>
-          <div style={{ width: "45%" }}>
+          <div className="sm:max-w-md">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Email (login)
@@ -228,7 +228,9 @@ const Profil = ({ user, setIsAuthenticated }) => {
               />
             </div>
 
-            <div className="flex space-x-4">
+            
+          </div>
+          <div className="flex space-x-4 max-w-xl sm:flex-row flex-col">
               {isEditing ? (
                 <button
                   type="button"
@@ -265,7 +267,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 <span>Usuń konto</span>
               </button>
             </div>
-          </div>
         </div>
       </div>
 

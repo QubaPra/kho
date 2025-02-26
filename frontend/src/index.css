@@ -5,11 +5,13 @@
 body {
   font-family: 'Rubik', sans-serif;
   @apply dark:text-gray-100 text-gray-800;
+
 }
 
 button {
   cursor: pointer;
 }
+
 
 .modal {
   position: absolute;
@@ -17,11 +19,7 @@ button {
   left: 50%;
   right: auto;
   bottom: auto;
-
   transform: translate(-50%, -50%);
-
-
-
   @apply rounded-lg bg-white p-5;
 }
 
@@ -79,7 +77,7 @@ textarea {
 
 input {
   @apply mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 dark:focus:border-blue-700 sm:text-sm dark:bg-gray-800 dark:text-gray-200;
-  
+
 }
 
 input:disabled {
@@ -88,14 +86,14 @@ input:disabled {
 
 select {
   @apply mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 dark:focus:border-blue-700 sm:text-sm dark:bg-gray-800 dark:text-gray-200;
-  
-  
+
+
   @apply appearance-none bg-no-repeat bg-right;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%231e2939'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
   background-position: right 0.5rem center;
 }
 
-.dark select {  
+.dark select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%23f3f4f6'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
 }
 
