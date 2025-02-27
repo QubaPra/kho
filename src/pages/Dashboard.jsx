@@ -437,9 +437,9 @@ const Dashboard = ({ user, setUser }) => {
             <div>
               <p className="text-sm text-gray-400">Data urodzenia</p>
               <p className="font-medium">
-  {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
-  {Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25))} {getAgeSuffix(Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25)))})
-</p>
+                {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
+                {Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25))} {getAgeSuffix(Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25)))})
+              </p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Drużyna</p>
