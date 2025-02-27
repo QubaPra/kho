@@ -40,5 +40,5 @@ Projekt wykorzystuje następujące technologie:
 3. Uruchom aplikację:
    ```sh
    npm run dev
-# Autorzy
+## Autorzy
 Projekt został stworzony przez zespół z HKKrowodrza dla ZHR.
