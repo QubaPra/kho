@@ -2,7 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://qubapra.github.io/KHO",
+  "homepage": "https://qubapra.github.io/kho",
   "type": "module",
   "scripts": {
     "dev": "vite",
