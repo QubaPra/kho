@@ -167,7 +167,6 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleRejectTrialCommittee = async () => {
-
     const confirmed = window.confirm(
       "Czy na pewno chcesz odrzucić tę próbę jako kapituła?"
     );
@@ -193,21 +192,21 @@ const ViewTrial = ({ user, id: propId }) => {
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
       const orderLink = prompt("Podaj link do PDF rozkazu:");
-  
+
       if (!orderNumber || !orderLink) {
         alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
         return;
       }
-  
+
       let newStatus = `Otwarta rozkazem ${orderNumber} <${orderLink}>`;
       if (trial.status && trial.status.includes("(edytowano)")) {
         newStatus += " (edytowano)";
       }
-  
+
       await axios.patch(`/trials/${id}`, {
-        status: newStatus
+        status: newStatus,
       });
-      
+
       setTrial((prevTrial) => ({
         ...prevTrial,
         status: newStatus,
@@ -250,9 +249,9 @@ const ViewTrial = ({ user, id: propId }) => {
       }
 
       await axios.patch(`/trials/${id}`, {
-        status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`
+        status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
       });
-      
+
       setTrial((prevTrial) => ({
         ...prevTrial,
         status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
@@ -260,21 +259,38 @@ const ViewTrial = ({ user, id: propId }) => {
     } catch (error) {
       console.error("Błąd podczas zamykania próby:", error);
     }
-  }
-
+  };
 
   const formatStatus = (status) => {
     if (!status) return "";
-    const match = status.match(/^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/);
+    const match = status.match(
+      /^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/
+    );
     if (match) {
       const [_, type, orderNumber, orderLink, additionalText] = match;
       return (
         <span>
-          {type} rozkazem <a className="underline hover:text-blue-500 dark:hover:text-blue-400" href={orderLink} target="_blank" rel="noopener noreferrer">{orderNumber}</a>{additionalText}
+          {type} rozkazem{" "}
+          <a
+            className="underline hover:text-blue-500 dark:hover:text-blue-400"
+            href={orderLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {orderNumber}
+          </a>
+          {additionalText}
         </span>
       );
     }
     return status;
+  };
+
+  const getAgeSuffix = (age) => {
+    if (age === 1) return "rok";
+    if (age % 10 >= 2 && age % 10 <= 4 && (age % 100 < 10 || age % 100 >= 20))
+      return "lata";
+    return "lat";
   };
 
   return (
@@ -370,7 +386,7 @@ const ViewTrial = ({ user, id: propId }) => {
               ) : null}
             </div>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
               <p className="font-semibold">Stan:</p>
               <span>{formatStatus(trial.status)}</span>
@@ -383,28 +399,41 @@ const ViewTrial = ({ user, id: propId }) => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="sm:grid flex flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
             <div>
               <p className="text-sm text-gray-400">Email do kontaktu</p>
               <p className="font-medium">{trial.email}</p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-400">Data urodzenia</p>
+              <p className="font-medium">
+                {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
+                {Math.floor(
+                  (new Date() - new Date(trial.birth_date)) /
+                    (1000 * 60 * 60 * 24 * 365.25)
+                )}{" "}
+                {getAgeSuffix(
+                  Math.floor(
+                    (new Date() - new Date(trial.birth_date)) /
+                      (1000 * 60 * 60 * 24 * 365.25)
+                  )
+                )}
+                )
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-400">Drużyna</p>
+              <p className="font-medium">{trial.team}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Email opiekuna</p>
               <p className="font-medium">{trial.mentor_mail}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Data urodzenia</p>
-              <p className="font-medium">
-                {new Date(trial.birth_date).toLocaleDateString("pl-PL")}
-              </p>
-            </div>
-            <div>
               <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
               <p className="font-medium">{trial.mentor_name}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Drużyna</p>
-              <p className="font-medium">{trial.team}</p>
             </div>
           </div>
 
@@ -413,7 +442,7 @@ const ViewTrial = ({ user, id: propId }) => {
               <span className="material-symbols-outlined ">task_alt</span>
               <span className="text-xl font-medium">Zadania</span>
             </div>
-
+            <div className="overflow-x-auto sm:overflow-visible">
             <table className="w-full">
               <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
                 <tr>
@@ -467,6 +496,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
 
           <CommentsSection

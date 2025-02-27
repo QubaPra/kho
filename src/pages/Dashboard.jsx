@@ -366,6 +366,12 @@ const Dashboard = ({ user, setUser }) => {
     return status;
   };
 
+  const getAgeSuffix = (age) => {
+    if (age === 1) return "rok";
+    if (age % 10 >= 2 && age % 10 <= 4 && (age % 100 < 10 || age % 100 >= 20)) return "lata";
+    return "lat";
+  };
+
   if (trial.status && (trial.status.includes('(do zamknięcia)') || trial.status.includes('Zamknięta'))) {
     return <ViewTrial id={trial.id} user={user} />;
   }
@@ -376,11 +382,11 @@ const Dashboard = ({ user, setUser }) => {
     <div className="bg-gray-100 dark:bg-black min-h-screen">
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="sm:flex items-center justify-between mb-2">
             <h2 className="text-2xl font-semibold">
               {trial.rank} {user.full_name} próba na stopień HO
             </h2>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 sm:my-0 mb-6 mt-2">
               {(trial.status === "do akceptacji przez opiekuna" || trial.status ==="odrzucona przez kapitułę (do poprawy)") ? (
                 <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
                   <span className="material-symbols-outlined">
@@ -409,7 +415,7 @@ const Dashboard = ({ user, setUser }) => {
               </button>
             </div>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
             <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
               <p className="font-semibold">Stan:</p>
               <span>{formatStatus(trial.status)}</span>
@@ -422,29 +428,32 @@ const Dashboard = ({ user, setUser }) => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="sm:grid flex flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
             <div>
               <p className="text-sm text-gray-400">Email do kontaktu</p>
               <p className="font-medium">{trial.email}</p>
+            </div>
+            
+            <div>
+              <p className="text-sm text-gray-400">Data urodzenia</p>
+              <p className="font-medium">
+  {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
+  {Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25))} {getAgeSuffix(Math.floor((new Date() - new Date(trial.birth_date)) / (1000 * 60 * 60 * 24 * 365.25)))})
+</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Drużyna</p>
+              <p className="font-medium">{trial.team}</p>
             </div>
             <div>
               <p className="text-sm text-gray-400">Email opiekuna</p>
               <p className="font-medium">{trial.mentor_mail}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-400">Data urodzenia</p>
-              <p className="font-medium">
-                {new Date(trial.birth_date).toLocaleDateString("pl-PL")}
-              </p>
-            </div>
-            <div>
               <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
               <p className="font-medium">{trial.mentor_name}</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Drużyna</p>
-              <p className="font-medium">{trial.team}</p>
-            </div>
+            
           </div>
 
           <div className="mt-12">
@@ -452,7 +461,7 @@ const Dashboard = ({ user, setUser }) => {
               <span className="material-symbols-outlined ">task_alt</span>
               <span className="text-xl font-medium">Zadania</span>
             </div>
-
+            <div className="overflow-x-auto sm:overflow-visible">
             <table className="w-full">
               <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
                 <tr>
@@ -581,6 +590,7 @@ const Dashboard = ({ user, setUser }) => {
                 })}
               </tbody>
             </table>
+            </div>
             <button
               className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
               onClick={handleAddTaskClick}
