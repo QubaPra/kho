@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 const TrialList = () => {
@@ -9,6 +9,7 @@ const TrialList = () => {
     direction: "ascending",
   });
   const [filter, setFilter] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,7 +169,7 @@ const TrialList = () => {
                   </div>
                 </th>
                 <th
-                  className="cursor-pointer w-2/12"
+                  className="cursor-pointer w-3/12"
                   onClick={() => sortData("status")}
                 >
                   <div className="flex justify-between items-center">
@@ -194,7 +195,7 @@ const TrialList = () => {
                   </div>
                 </th>
                 <th
-                  className="cursor-pointer w-2/12"
+                  className="cursor-pointer w-2/12 rounded-tr-lg"
                   onClick={() => sortData("end_date")}
                 >
                   <div className="flex justify-between items-center">
@@ -219,28 +220,17 @@ const TrialList = () => {
                       )}
                   </div>
                 </th>
-                <th
-                  className="p-3 rounded-tr-lg cursor-pointer w-1/12"
-                >
-                  <div className="flex justify-between items-center">
-                    <span>Szczegóły</span>                    
-                  </div>
-                </th>
+                
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredData.map((trial, index) => (
-                <tr key={trial.id}>
+                <tr key={trial.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onClick={() => navigate(`/proba/${trial.id}`)} >
                   <td className="p-3">{trial.user}</td>
                   <td className="p-3">{trial.team}</td>
                   <td className="p-3">{trial.mentor_name}</td>
                   <td className="p-3">{trial.status}</td>
-                  <td className="p-3">{trial.end_date}</td>  
-                  <td className="p-3">
-                    <Link to={`/proba/${trial.id}`} className="material-symbols-outlined text-blue-600 hover:text-blue-800">
-                      info
-                    </Link>
-                  </td>                  
+                  <td className="p-3">{trial.end_date}</td>                   
                 </tr>
               ))}
             </tbody>
