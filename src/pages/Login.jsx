@@ -120,19 +120,19 @@ const [isPasswordFocused, setIsPasswordFocused] = useState(false);
                 Hasło
               </label>
               <input
-  type="password"
-  id="password"
-  name="password"
-  value={password}
-  onChange={handlePasswordChange}
-  onFocus={handlePasswordFocus}
-  onBlur={handlePasswordBlur}
-/>
-{isCapsLockOn && (
-  <p className="text-yellow-500 dark:text-yellow-600 text-sm">
-    CapsLock jest włączony
-  </p>
-)}
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={handlePasswordChange}
+                onFocus={handlePasswordFocus}
+                onBlur={handlePasswordBlur}
+              />
+              {isCapsLockOn && (
+                <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+                  CapsLock jest włączony
+                </p>
+              )}
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <button className="text-sm text-blue-600 dark:text-blue-700 mb-4 hover:underline ">
