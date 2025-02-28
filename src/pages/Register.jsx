@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Dodaj import
 import axios from "../api/axios";
 
-const Register = ({ setIsAuthenticated }) => { // Dodaj argument
+const Register = ({ setIsAuthenticated }) => {
+  // Dodaj argument
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -11,12 +12,11 @@ const Register = ({ setIsAuthenticated }) => { // Dodaj argument
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
       navigate("/"); // Przekierowanie na stronę główną, jeśli użytkownik jest zalogowany
-    }
-    else {
+    } else {
       setIsAuthenticated(false);
     }
   }, [navigate]);
@@ -123,18 +123,22 @@ useEffect(() => {
           full_name: name,
         });
         // Automatyczne logowanie po rejestracji
-        const response = await axios.post('/login/', {
+        const response = await axios.post("/login/", {
           login: email,
           password: password,
         });
-  
+
         const data = response.data;
-        localStorage.setItem('access_token', data.access);
-        localStorage.setItem('refresh_token', data.refresh);
+        localStorage.setItem("access_token", data.access);
+        localStorage.setItem("refresh_token", data.refresh);
         setIsAuthenticated(true);
         navigate("/"); // Przekierowanie na stronę główną
       } catch (error) {
-        if (error.response && error.response.data && error.response.data.error === 'Login już istnieje') {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error === "Login już istnieje"
+        ) {
           setErrors({ ...errors, form: "Email jest już zajęty" });
         } else {
           setErrors({ ...errors, form: "Rejestracja nie powiodła się" });
@@ -144,85 +148,81 @@ useEffect(() => {
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-black min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-          <h2 className="text-2xl font-semibold mb-12 mt-1">Zarejestruj się</h2>
-          <form className="px-6 w-sm" onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Email *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                onChange={handleEmailChange}
-              />
-              {errors.email && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Imię i nazwisko *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={name}
-                onChange={handleNameChange}
-              />
-              {errors.name && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.name}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Hasło *
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={handlePasswordChange}
-                onFocus={handlePasswordFocus}
-                onBlur={handlePasswordBlur}
-              />
-              {errors.password && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
-                  {errors.password}
-                </p>
-              )}
-              {isCapsLockOn && (
-                <p className="text-yellow-500 dark:text-yellow-600 text-sm">
-                  Capslock jest włączony
-                </p>
-              )}
-            </div>
-            {errors.form && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
-                {errors.form}
-              </p>
-            )}
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
-            >
-              Zarejestruj się
-            </button>
-          </form>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
+      <h2 className="text-2xl font-semibold mb-12 mt-1">Zarejestruj się</h2>
+      <form className="px-6 w-sm" onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Email *
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={handleEmailChange}
+          />
+          {errors.email && (
+            <p className="text-red-500 dark:text-red-600 text-sm">
+              {errors.email}
+            </p>
+          )}
         </div>
-      </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Imię i nazwisko *
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            onChange={handleNameChange}
+          />
+          {errors.name && (
+            <p className="text-red-500 dark:text-red-600 text-sm">
+              {errors.name}
+            </p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Hasło *
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={handlePasswordChange}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          {errors.password && (
+            <p className="text-red-500 dark:text-red-600 text-sm">
+              {errors.password}
+            </p>
+          )}
+          {isCapsLockOn && (
+            <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+              Capslock jest włączony
+            </p>
+          )}
+        </div>
+        {errors.form && (
+          <p className="text-red-500 dark:text-red-600 text-sm">
+            {errors.form}
+          </p>
+        )}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
+        >
+          Zarejestruj się
+        </button>
+      </form>
     </div>
   );
-}
+};
 
 export default Register;

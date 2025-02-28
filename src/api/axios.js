@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://quba.pythonanywhere.com/api/',
+  baseURL: 'http://192.168.1.129:8000/api/',
 });
 
 instance.interceptors.request.use(

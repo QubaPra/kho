@@ -142,141 +142,131 @@ const NewTrial = ({ user, setUser }) => {
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-black min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col">
-          <h2 className="text-2xl font-semibold mb-12">
-            Tworzenie nowej próby HO
-          </h2>
-          <form
-            className="flex justify-between"
-            style={{ width: "80%" }}
-            onSubmit={handleSubmit}
-          >
-            <div style={{ width: "45%" }}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                  Email do kontaktu
-                </label>
-                <input
-                  type="email"
-                  id="privEmail"
-                  name="privEmail"
-                  value={privEmail}
-                  onChange={handlePrivateEmailChange}
-                />
-                {errors.privEmail && (
-                  <p className="text-red-500 dark:text-red-600 text-sm">
-                    {errors.privEmail}
-                  </p>
-                )}
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                  Data urodzenia
-                </label>
-                <input
-                  type="date"
-                  id="date"
-                  name="date"
-                  value={date}
-                  onChange={handleDateChange}
-                />
-                {errors.date && (
-                  <p className="text-red-500 dark:text-red-600 text-sm">
-                    {errors.date}
-                  </p>
-                )}
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Drużyna
-                </label>
-                <select id="team" value={team} onChange={handleTeamChange}>
-                  <option value="">Wybierz drużynę</option>
-                  {teams.map((teamName) => (
-                    <option key={teamName} value={teamName}>
-                      {teamName}
-                    </option>
-                  ))}
-                </select>
-                {errors.team && (
-                  <p className="text-red-500 dark:text-red-600 text-sm">
-                    {errors.team}
-                  </p>
-                )}
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                  Stopień
-                </label>
-                <select id="rank" value={rank} onChange={handleRankChange}>
-                  <option value="">Wybierz stopień</option>
-                  <option value="mł.">mł.</option>
-                  <option value="wyw.">wyw.</option>
-                  <option value="ćw.">ćw.</option>
-                </select>
-                {errors.rank && (
-                  <p className="text-red-500 dark:text-red-600 text-sm">
-                    {errors.rank}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div
-              style={{ width: "45%" }}
-              className="flex flex-col justify-between"
-            >
-              <div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                    Email opiekuna
-                  </label>
-                  <input
-                    type="email"
-                    id="mentorEmail"
-                    name="mentorEmail"
-                    value={mentorMail}
-                    onChange={handleMentorEmailChange}
-                  />
-                  {errors.mentorMail && (
-                    <p className="text-red-500 dark:text-red-600 text-sm">
-                      {errors.mentorMail}
-                    </p>
-                  )}
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                    Imię i nazwisko opiekuna
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={name}
-                    onChange={handleNameChange}
-                  />
-                  {errors.name && (
-                    <p className="text-red-500 dark:text-red-600 text-sm">
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-700 text-white mt-2 mb-4 py-2 px-4 rounded-lg hover:bg-blue-800 focus:outline-none "
-              >
-                Utwórz nową próbę
-              </button>
-            </div>
-          </form>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col">
+      <h2 className="text-2xl font-semibold mb-12">Tworzenie nowej próby HO</h2>
+      <form
+        className="flex sm:flex-row flex-col justify-between sm:max-w-4xl"
+        onSubmit={handleSubmit}
+      >
+        <div className="sm:w-5/12">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Email do kontaktu
+            </label>
+            <input
+              type="email"
+              id="privEmail"
+              name="privEmail"
+              value={privEmail}
+              onChange={handlePrivateEmailChange}
+            />
+            {errors.privEmail && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.privEmail}
+              </p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Data urodzenia
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={date}
+              onChange={handleDateChange}
+            />
+            {errors.date && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.date}
+              </p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Drużyna
+            </label>
+            <select id="team" value={team} onChange={handleTeamChange}>
+              <option value="">Wybierz drużynę</option>
+              {teams.map((teamName) => (
+                <option key={teamName} value={teamName}>
+                  {teamName}
+                </option>
+              ))}
+            </select>
+            {errors.team && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.team}
+              </p>
+            )}
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Stopień
+            </label>
+            <select id="rank" value={rank} onChange={handleRankChange}>
+              <option value="">Wybierz stopień</option>
+              <option value="mł.">mł.</option>
+              <option value="wyw.">wyw.</option>
+              <option value="ćw.">ćw.</option>
+            </select>
+            {errors.rank && (
+              <p className="text-red-500 dark:text-red-600 text-sm">
+                {errors.rank}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+
+        <div className="flex flex-col sm:w-5/12 justify-between">
+          <div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Email opiekuna
+              </label>
+              <input
+                type="email"
+                id="mentorEmail"
+                name="mentorEmail"
+                value={mentorMail}
+                onChange={handleMentorEmailChange}
+              />
+              {errors.mentorMail && (
+                <p className="text-red-500 dark:text-red-600 text-sm">
+                  {errors.mentorMail}
+                </p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Imię i nazwisko opiekuna
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={name}
+                onChange={handleNameChange}
+              />
+              {errors.name && (
+                <p className="text-red-500 dark:text-red-600 text-sm">
+                  {errors.name}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-700 text-white mt-2 mb-4 py-2 px-4 rounded-lg hover:bg-blue-800 focus:outline-none "
+          >
+            Utwórz nową próbę
+          </button>
+        </div>
+      </form>
     </div>
   );
-}
+};
 
 export default NewTrial;

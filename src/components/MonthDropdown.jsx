@@ -8,13 +8,48 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
   const dropdownRef = useRef(null);
 
   const currentYear = new Date().getFullYear();
-  const years = [currentYear, currentYear + 1, currentYear + 2, currentYear + 3];
-  const months = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"];
-  const shortMonths = ["sty", "lut", "mar", "kwi", "maj", "cze", "lip", "sie", "wrz", "paź", "lis", "gru"];
+  const years = [
+    currentYear,
+    currentYear + 1,
+    currentYear + 2,
+    currentYear + 3,
+  ];
+  const months = [
+    "styczeń",
+    "luty",
+    "marzec",
+    "kwiecień",
+    "maj",
+    "czerwiec",
+    "lipiec",
+    "sierpień",
+    "wrzesień",
+    "październik",
+    "listopad",
+    "grudzień",
+  ];
+  const shortMonths = [
+    "sty",
+    "lut",
+    "mar",
+    "kwi",
+    "maj",
+    "cze",
+    "lip",
+    "sie",
+    "wrz",
+    "paź",
+    "lis",
+    "gru",
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpen && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        isOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
         setDate(prevDate); // Przywróć poprzednią datę
         setIsYearSelection(false); // Resetuj wybór roku

@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 
-function CategoryDropdown({ selectedCategories, onSelectCategory, categories }) {
+function CategoryDropdown({
+  selectedCategories,
+  onSelectCategory,
+  categories,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 

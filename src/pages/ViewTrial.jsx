@@ -294,218 +294,213 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-black min-h-screen">
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-2xl font-semibold">
-              {trial.rank} {trial.user} próba na stopień HO
-            </h2>
-            <div className="flex space-x-2">
-              {user.is_mentor &&
-              (trial.status == "do akceptacji przez opiekuna" ||
-                trial.status == "odrzucona przez kapitułę (do poprawy)") ? (
-                <>
-                  <button
-                    onClick={handleApproveTrialMentor}
-                    className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                  >
-                    <span className="material-symbols-outlined">
-                      list_alt_check
-                    </span>
-                    <span className="ml-2">Zatwierdź próbę</span>
-                  </button>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-2xl font-semibold">
+          {trial.rank} {trial.user} próba na stopień HO
+        </h2>
+        <div className="flex space-x-2">
+          {user.is_mentor &&
+          (trial.status == "do akceptacji przez opiekuna" ||
+            trial.status == "odrzucona przez kapitułę (do poprawy)") ? (
+            <>
+              <button
+                onClick={handleApproveTrialMentor}
+                className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              >
+                <span className="material-symbols-outlined">
+                  list_alt_check
+                </span>
+                <span className="ml-2">Zatwierdź próbę</span>
+              </button>
 
-                  <button
-                    onClick={handleLeaveTrial}
-                    className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                    <span className="ml-2">Porzuć próbę</span>
-                  </button>
-                </>
-              ) : trial.status == "zaakceptowana przez opiekuna" &&
-                user.role == "Administrator" ? (
-                <>
-                  <button
-                    onClick={handleApproveTrialCommittee}
-                    className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                  >
-                    <span className="material-symbols-outlined">
-                      list_alt_check
-                    </span>
-                    <span className="ml-2">Zatwierdź próbę (do otwarcia)</span>
-                  </button>
+              <button
+                onClick={handleLeaveTrial}
+                className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+              >
+                <span className="material-symbols-outlined">delete</span>
+                <span className="ml-2">Porzuć próbę</span>
+              </button>
+            </>
+          ) : trial.status == "zaakceptowana przez opiekuna" &&
+            user.role == "Administrator" ? (
+            <>
+              <button
+                onClick={handleApproveTrialCommittee}
+                className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              >
+                <span className="material-symbols-outlined">
+                  list_alt_check
+                </span>
+                <span className="ml-2">Zatwierdź próbę (do otwarcia)</span>
+              </button>
 
-                  <button
-                    onClick={handleRejectTrialCommittee}
-                    className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
-                  >
-                    <span className="material-symbols-outlined">cancel</span>
-                    <span className="ml-2">Odrzuć próbę (do poprawy)</span>
-                  </button>
-                </>
-              ) : user.role == "Administrator" &&
-                trial.status &&
-                trial.status.includes("Otwarta") ? (
-                <button
-                  onClick={handleEndTrialCommittee}
-                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                >
-                  <span className="material-symbols-outlined">
-                    assignment_turned_in
-                  </span>
-                  <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
-                </button>
-              ) : (user.role == "Członek kapituły" ||
-                  user.role == "Administrator") &&
-                trial.status ==
-                  "zatwierdzona przez kapitułę (do zamknięcia)" ? (
-                <button
-                  onClick={handleEndTrial}
-                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                >
-                  <span className="material-symbols-outlined">
-                    assignment_turned_in
-                  </span>
-                  <span className="ml-2">Zmień status na zamknięta</span>
-                </button>
-              ) : (user.role == "Członek kapituły" ||
-                  user.role == "Administrator") &&
-                trial.status &&
-                trial.status.includes("(do otwarcia)") ? (
-                <button
-                  onClick={handleOpenTrial}
-                  className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
-                >
-                  <span className="material-symbols-outlined">
-                    assignment_turned_in
-                  </span>
-                  <span className="ml-2">Zmień status na otwarta</span>
-                </button>
-              ) : null}
-            </div>
-          </div>
-          <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
-            <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
-              <p className="font-semibold">Stan:</p>
-              <span>{formatStatus(trial.status)}</span>
-            </div>
-            {getLatestEndDate(tasks) && (
-              <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
-                <p className="font-semibold">Data zakończenia:</p>
-                <span>{getLatestEndDate(tasks)}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="sm:grid flex sm:grid-cols-2 flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
-            <div>
-              <p className="text-sm text-gray-400">Email do kontaktu</p>
-              <p className="font-medium">{trial.email}</p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-400">Data urodzenia</p>
-              <p className="font-medium">
-                {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
-                {Math.floor(
-                  (new Date() - new Date(trial.birth_date)) /
-                    (1000 * 60 * 60 * 24 * 365.25)
-                )}{" "}
-                {getAgeSuffix(
-                  Math.floor(
-                    (new Date() - new Date(trial.birth_date)) /
-                      (1000 * 60 * 60 * 24 * 365.25)
-                  )
-                )}
-                )
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-gray-400">Drużyna</p>
-              <p className="font-medium">{trial.team}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Email opiekuna</p>
-              <p className="font-medium">{trial.mentor_mail}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
-              <p className="font-medium">{trial.mentor_name}</p>
-            </div>
-          </div>
-
-          <div className="mt-12">
-            <div className="flex items-center space-x-1.5 text-xl mb-4">
-              <span className="material-symbols-outlined ">task_alt</span>
-              <span className="text-xl font-medium">Zadania</span>
-            </div>
-            <div className="overflow-x-auto sm:overflow-visible">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
-                <tr>
-                  <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
-                    Lp
-                  </th>
-                  <th style={{ width: "55%" }}>Treść zadania</th>
-                  <th style={{ width: "27%" }}>Kategoria zadania</th>
-                  <th className="p-3 rounded-tr-lg" style={{ width: "17%" }}>
-                    Data zakończenia
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {tasks.map((task, index) => {
-                  const taskCategories = getCategoriesByIds(task.categories);
-                  return (
-                    <tr key={task.id}>
-                      <td className="p-3">{index + 1}</td>
-                      <td className="p-3">
-                        <textarea
-                          className="auto-resize-textarea border-white dark:border-gray-900"
-                          value={task.content}
-                          rows={1}
-                          readOnly
-                        ></textarea>
-                      </td>
-                      <td className="pt-1 pb-3 flex flex-wrap space-x-2">
-                        {taskCategories.map((category) => (
-                          <div
-                            key={category.id}
-                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
-                          >
-                            <span className="material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span>{category.name}</span>
-                          </div>
-                        ))}
-                      </td>
-                      <td className="p-3">
-                        <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
-                          <p>{task.end_date}</p>
-                          <span className="material-symbols-outlined text-white dark:text-gray-900">
-                            calendar_month
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            </div>
-          </div>
-
-          <CommentsSection
-            comments={comments}
-            trialId={trial.id}
-            status={trial.status || ""}
-          />
+              <button
+                onClick={handleRejectTrialCommittee}
+                className="flex items-center bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+              >
+                <span className="material-symbols-outlined">cancel</span>
+                <span className="ml-2">Odrzuć próbę (do poprawy)</span>
+              </button>
+            </>
+          ) : user.role == "Administrator" &&
+            trial.status &&
+            trial.status.includes("Otwarta") ? (
+            <button
+              onClick={handleEndTrialCommittee}
+              className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+            >
+              <span className="material-symbols-outlined">
+                assignment_turned_in
+              </span>
+              <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
+            </button>
+          ) : (user.role == "Członek kapituły" ||
+              user.role == "Administrator") &&
+            trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
+            <button
+              onClick={handleEndTrial}
+              className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+            >
+              <span className="material-symbols-outlined">
+                assignment_turned_in
+              </span>
+              <span className="ml-2">Zmień status na zamknięta</span>
+            </button>
+          ) : (user.role == "Członek kapituły" ||
+              user.role == "Administrator") &&
+            trial.status &&
+            trial.status.includes("(do otwarcia)") ? (
+            <button
+              onClick={handleOpenTrial}
+              className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+            >
+              <span className="material-symbols-outlined">
+                assignment_turned_in
+              </span>
+              <span className="ml-2">Zmień status na otwarta</span>
+            </button>
+          ) : null}
         </div>
-      </main>
+      </div>
+      <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
+        <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+          <p className="font-semibold">Stan:</p>
+          <span>{formatStatus(trial.status)}</span>
+        </div>
+        {getLatestEndDate(tasks) && (
+          <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+            <p className="font-semibold">Data zakończenia:</p>
+            <span>{getLatestEndDate(tasks)}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="sm:grid flex sm:grid-cols-2 flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
+        <div>
+          <p className="text-sm text-gray-400">Email do kontaktu</p>
+          <p className="font-medium">{trial.email}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-400">Data urodzenia</p>
+          <p className="font-medium">
+            {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
+            {Math.floor(
+              (new Date() - new Date(trial.birth_date)) /
+                (1000 * 60 * 60 * 24 * 365.25)
+            )}{" "}
+            {getAgeSuffix(
+              Math.floor(
+                (new Date() - new Date(trial.birth_date)) /
+                  (1000 * 60 * 60 * 24 * 365.25)
+              )
+            )}
+            )
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-400">Drużyna</p>
+          <p className="font-medium">{trial.team}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-400">Email opiekuna</p>
+          <p className="font-medium">{trial.mentor_mail}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
+          <p className="font-medium">{trial.mentor_name}</p>
+        </div>
+      </div>
+
+      <div className="mt-12">
+        <div className="flex items-center space-x-1.5 text-xl mb-4">
+          <span className="material-symbols-outlined ">task_alt</span>
+          <span className="text-xl font-medium">Zadania</span>
+        </div>
+        <div className="overflow-x-auto sm:overflow-visible">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+              <tr>
+                <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
+                  Lp
+                </th>
+                <th style={{ width: "55%" }}>Treść zadania</th>
+                <th style={{ width: "27%" }}>Kategoria zadania</th>
+                <th className="p-3 rounded-tr-lg" style={{ width: "17%" }}>
+                  Data zakończenia
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              {tasks.map((task, index) => {
+                const taskCategories = getCategoriesByIds(task.categories);
+                return (
+                  <tr key={task.id}>
+                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3">
+                      <textarea
+                        className="auto-resize-textarea border-white dark:border-gray-900"
+                        value={task.content}
+                        rows={1}
+                        readOnly
+                      ></textarea>
+                    </td>
+                    <td className="pt-1 pb-3 flex flex-wrap space-x-2">
+                      {taskCategories.map((category) => (
+                        <div
+                          key={category.id}
+                          className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                        >
+                          <span className="material-symbols-outlined">
+                            {category.icon}
+                          </span>
+                          <span>{category.name}</span>
+                        </div>
+                      ))}
+                    </td>
+                    <td className="p-3">
+                      <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
+                        <p>{task.end_date}</p>
+                        <span className="material-symbols-outlined text-white dark:text-gray-900">
+                          calendar_month
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <CommentsSection
+        comments={comments}
+        trialId={trial.id}
+        status={trial.status || ""}
+      />
     </div>
   );
 };

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
-  const [isDarkMode, setIsDarkMode] = useState("theme" in localStorage ? localStorage.getItem("theme") === "dark" : false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    "theme" in localStorage ? localStorage.getItem("theme") === "dark" : false
+  );
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -22,13 +24,13 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   const handleLogout = () => {
     // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
     localStorage.removeItem("access_token");
-    localStorage.removeItem("trial")
-    localStorage.removeItem("tasks")
+    localStorage.removeItem("trial");
+    localStorage.removeItem("tasks");
     setIsAuthenticated(false);
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link to="/" className="text-xl font-semibold dark:text-gray-100">
@@ -37,15 +39,23 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
         </div>
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center space-x-6 text-center">
           {isAuthenticated && user?.role === "Administrator" && (
-            <Link to="/uzytkownicy" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
+            <Link
+              to="/uzytkownicy"
+              className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600"
+            >
               Użytkownicy
             </Link>
           )}
-          {isAuthenticated && (user?.role === "Administrator" || user?.role === "Członek kapituły") && (
-            <Link to="/proby" className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600">
-              Wszystkie próby
-            </Link>
-          )}
+          {isAuthenticated &&
+            (user?.role === "Administrator" ||
+              user?.role === "Członek kapituły") && (
+              <Link
+                to="/proby"
+                className="text-sm font-medium hover:text-blue-800 dark:hover:text-blue-600"
+              >
+                Wszystkie próby
+              </Link>
+            )}
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -56,7 +66,10 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
           </button>
           {isAuthenticated ? (
             <>
-              <Link to="/profil" className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg">
+              <Link
+                to="/profil"
+                className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 p-2 rounded-lg"
+              >
                 person
               </Link>
               <button
@@ -68,11 +81,17 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             </>
           ) : (
             <>
-              <Link to="/rejestracja" className="flex items-center space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 p-2 rounded-lg">
+              <Link
+                to="/rejestracja"
+                className="flex items-center space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 p-2 rounded-lg"
+              >
                 <span className="material-symbols-outlined">person_add</span>
                 <span>Rejestracja</span>
               </Link>
-              <Link to="/logowanie" className="flex items-center space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded-lg">
+              <Link
+                to="/logowanie"
+                className="flex items-center space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 p-2 rounded-lg"
+              >
                 <span className="material-symbols-outlined">login</span>
                 <span>Logowanie</span>
               </Link>
@@ -82,6 +101,6 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
       </div>
     </header>
   );
-}
+};
 
 export default Navbar;
