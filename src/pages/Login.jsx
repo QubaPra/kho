@@ -97,11 +97,11 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-      <h2 className="text-2xl font-semibold mb-12 mt-1">Zaloguj się</h2>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-center">
+      <h2 className="mb-12 mt-1">Zaloguj się</h2>
       <form className="px-6 w-sm" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Email
           </label>
           <input
@@ -113,7 +113,7 @@ const Login = ({ setIsAuthenticated }) => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Hasło
           </label>
           <input
@@ -126,13 +126,13 @@ const Login = ({ setIsAuthenticated }) => {
             onBlur={handlePasswordBlur}
           />
           {isCapsLockOn && (
-            <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+            <p className="text-yellow-500 dark:text-yellow-600 sm:text-sm text-xs">
               CapsLock jest włączony
             </p>
           )}
         </div>
         {error && <p className="text-red-500">{error}</p>}
-        <button className="text-sm text-blue-600 dark:text-blue-700 mb-4 hover:underline ">
+        <button className="sm:text-sm text-xs text-blue-600 dark:text-blue-700 mb-4 hover:underline ">
           Zapomniałem danych logowania
         </button>
         <button

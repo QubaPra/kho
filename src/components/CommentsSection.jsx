@@ -63,10 +63,10 @@ function CommentsSection({ comments, trialId, status }) {
   }, [formattedComments]);
 
   return (
-    <div className="space-y-6 mt-12">
-      <div className="flex items-center space-x-1.5 text-xl mb-4">
+    <div className="space-y-6 sm:mt-12 mt-8">
+      <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
         <span className="material-symbols-outlined ">chat</span>
-        <span className="text-xl font-medium">Komentarze</span>
+        <span className="sm:text-xl text-lg font-medium">Komentarze</span>
       </div>
 
       <div
@@ -75,7 +75,7 @@ function CommentsSection({ comments, trialId, status }) {
       >
         {formattedComments.map((comment, index) => (
           <div key={index} className="space-y-1 w-fit max-w-11/12">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="sm:text-sm text-xs text-gray-500 dark:text-gray-400">
               {comment.created_date}
             </p>
             <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">

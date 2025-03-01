@@ -148,11 +148,11 @@ const Register = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-center">
-      <h2 className="text-2xl font-semibold mb-12 mt-1">Zarejestruj się</h2>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-center">
+      <h2 className="mb-12 mt-1">Zarejestruj się</h2>
       <form className="px-6 w-sm" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Email *
           </label>
           <input
@@ -163,13 +163,13 @@ const Register = ({ setIsAuthenticated }) => {
             onChange={handleEmailChange}
           />
           {errors.email && (
-            <p className="text-red-500 dark:text-red-600 text-sm">
+            <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
               {errors.email}
             </p>
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Imię i nazwisko *
           </label>
           <input
@@ -180,13 +180,13 @@ const Register = ({ setIsAuthenticated }) => {
             onChange={handleNameChange}
           />
           {errors.name && (
-            <p className="text-red-500 dark:text-red-600 text-sm">
+            <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
               {errors.name}
             </p>
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Hasło *
           </label>
           <input
@@ -199,18 +199,18 @@ const Register = ({ setIsAuthenticated }) => {
             onBlur={handlePasswordBlur}
           />
           {errors.password && (
-            <p className="text-red-500 dark:text-red-600 text-sm">
+            <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
               {errors.password}
             </p>
           )}
           {isCapsLockOn && (
-            <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+            <p className="text-yellow-500 dark:text-yellow-600 sm:text-sm text-xs">
               Capslock jest włączony
             </p>
           )}
         </div>
         {errors.form && (
-          <p className="text-red-500 dark:text-red-600 text-sm">
+          <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
             {errors.form}
           </p>
         )}

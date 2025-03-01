@@ -51,7 +51,7 @@ function CategoryDropdown({
           {availableCategories.map((category) => (
             <button
               key={category.id}
-              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1  rounded-full text-sm w-fit  flex  items-center space-x-1`}
+              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1  rounded-full sm:text-sm text-xs w-fit  flex  items-center space-x-1`}
               onClick={() => handleCategoryClick(category)}
             >
               <span className="material-symbols-outlined">{category.icon}</span>

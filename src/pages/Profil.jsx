@@ -173,11 +173,11 @@ const Profil = ({ user, setIsAuthenticated }) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
-        <h2 className="text-2xl font-semibold mb-12 mt-1">Twoje dane</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
+        <h2 className="mb-12 mt-1">Twoje dane</h2>
         <div className="sm:max-w-md">
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Email (login)
             </label>
             <input
@@ -190,14 +190,14 @@ const Profil = ({ user, setIsAuthenticated }) => {
             />
             <div className="h-4">
               {errors.email && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
+                <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                   {errors.email}
                 </p>
               )}
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Imię i nazwisko
             </label>
             <input
@@ -210,14 +210,14 @@ const Profil = ({ user, setIsAuthenticated }) => {
             />
             <div className="h-4">
               {errors.name && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
+                <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                   {errors.name}
                 </p>
               )}
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Rola
             </label>
             <input
@@ -272,12 +272,13 @@ const Profil = ({ user, setIsAuthenticated }) => {
         isOpen={isPasswordModalOpen}
         onRequestClose={handlePasswordModalClose}
         contentLabel="Zmiana hasła"
-        className="modal"
+        className="modal sm:w-fit w-4/5"
         overlayClassName="overlay"
+        
       >
         <h2 className="text-2xl font-semibold mb-2">Zmiana hasła</h2>
         <div className="mb-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Obecne hasło
           </label>
           <input
@@ -290,14 +291,14 @@ const Profil = ({ user, setIsAuthenticated }) => {
           />
           <div className="h-4">
             {errors.currentPassword && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.currentPassword}
               </p>
             )}
           </div>
         </div>
         <div className="mb-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Nowe hasło
           </label>
           <input
@@ -310,12 +311,12 @@ const Profil = ({ user, setIsAuthenticated }) => {
           />
           <div className="h-4">
             {errors.newPassword && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.newPassword}
               </p>
             )}
             {isCapsLockOn && (
-              <p className="text-yellow-500 dark:text-yellow-600 text-sm">
+              <p className="text-yellow-500 dark:text-yellow-600 sm:text-sm text-xs">
                 CapsLock jest włączony
               </p>
             )}

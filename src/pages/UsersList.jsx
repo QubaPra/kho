@@ -77,8 +77,8 @@ const UsersList = () => {
   });
 
   return (
-    <div className="bg-white overflow-y-auto dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
-      <h2 className="text-2xl font-semibold mb-12 mt-1">Lista użytkowników</h2>
+    <div className="bg-white overflow-y-auto dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
+      <h2 className="mb-12 mt-1">Lista użytkowników</h2>
       <div className="mb-4 sm:max-w-md flex items-center">
         <input
           type="text"
@@ -90,7 +90,7 @@ const UsersList = () => {
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+          <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
             <tr>
               <th
                 className="p-3 rounded-tl-lg w-1/6 cursor-pointer"

@@ -142,15 +142,15 @@ const NewTrial = ({ user, setUser }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col">
-      <h2 className="text-2xl font-semibold mb-12">Tworzenie nowej próby HO</h2>
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col">
+      <h2 className="mb-12">Tworzenie nowej próby HO</h2>
       <form
         className="flex sm:flex-row flex-col justify-between sm:max-w-4xl"
         onSubmit={handleSubmit}
       >
         <div className="sm:w-5/12">
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Email do kontaktu
             </label>
             <input
@@ -161,13 +161,13 @@ const NewTrial = ({ user, setUser }) => {
               onChange={handlePrivateEmailChange}
             />
             {errors.privEmail && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.privEmail}
               </p>
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Data urodzenia
             </label>
             <input
@@ -178,13 +178,13 @@ const NewTrial = ({ user, setUser }) => {
               onChange={handleDateChange}
             />
             {errors.date && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.date}
               </p>
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Drużyna
             </label>
             <select id="team" value={team} onChange={handleTeamChange}>
@@ -196,13 +196,13 @@ const NewTrial = ({ user, setUser }) => {
               ))}
             </select>
             {errors.team && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.team}
               </p>
             )}
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Stopień
             </label>
             <select id="rank" value={rank} onChange={handleRankChange}>
@@ -212,7 +212,7 @@ const NewTrial = ({ user, setUser }) => {
               <option value="ćw.">ćw.</option>
             </select>
             {errors.rank && (
-              <p className="text-red-500 dark:text-red-600 text-sm">
+              <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                 {errors.rank}
               </p>
             )}
@@ -222,7 +222,7 @@ const NewTrial = ({ user, setUser }) => {
         <div className="flex flex-col sm:w-5/12 justify-between">
           <div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
                 Email opiekuna
               </label>
               <input
@@ -233,13 +233,13 @@ const NewTrial = ({ user, setUser }) => {
                 onChange={handleMentorEmailChange}
               />
               {errors.mentorMail && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
+                <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                   {errors.mentorMail}
                 </p>
               )}
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
                 Imię i nazwisko opiekuna
               </label>
               <input
@@ -250,7 +250,7 @@ const NewTrial = ({ user, setUser }) => {
                 onChange={handleNameChange}
               />
               {errors.name && (
-                <p className="text-red-500 dark:text-red-600 text-sm">
+                <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
                   {errors.name}
                 </p>
               )}

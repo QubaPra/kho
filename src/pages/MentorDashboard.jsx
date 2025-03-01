@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
 const MentorDashboard = ({ user }) => {
@@ -9,6 +9,7 @@ const MentorDashboard = ({ user }) => {
     direction: "ascending",
   });
   const [filter, setFilter] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,8 +81,8 @@ const MentorDashboard = ({ user }) => {
   );
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6 w-full flex flex-col items-left">
-      <h2 className="text-2xl font-semibold mb-12 mt-1">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
+      <h2 className="sm:mb-12 mb-8 mt-1">
         Lista prób, których jesteś opiekunem
       </h2>
       <div className="mb-4 flex sm:max-w-md items-center">
@@ -93,8 +94,9 @@ const MentorDashboard = ({ user }) => {
         />
         <span className="material-symbols-outlined ml-2">search</span>
       </div>
+      <div className="overflow-x-auto sm:overflow-visible">
       <table className="w-full">
-        <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+        <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
           <tr>
             <th
               className="p-3 rounded-tl-lg cursor-pointer w-2/12"
@@ -149,7 +151,7 @@ const MentorDashboard = ({ user }) => {
               </div>
             </th>
             <th
-              className="cursor-pointer w-2/12"
+              className="cursor-pointer w-3/12"
               onClick={() => sortData("status")}
             >
               <div className="flex justify-between items-center">
@@ -175,7 +177,7 @@ const MentorDashboard = ({ user }) => {
               </div>
             </th>
             <th
-              className="cursor-pointer w-2/12"
+              className="cursor-pointer w-2/12 p-3 rounded-tr-lg"
               onClick={() => sortData("end_date")}
             >
               <div className="flex justify-between items-center">
@@ -200,32 +202,26 @@ const MentorDashboard = ({ user }) => {
                   )}
               </div>
             </th>
-            <th className="p-3 rounded-tr-lg cursor-pointer w-1/12">
-              <div className="flex justify-between items-center">
-                <span>Szczegóły</span>
-              </div>
-            </th>
+            
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
           {filteredData.map((trial, index) => (
-            <tr key={trial.id}>
+            <tr
+            key={trial.id}
+            className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onClick={() => navigate(`/proba/${trial.id}`)}
+          >
               <td className="p-3">{trial.user}</td>
               <td className="p-3">{trial.team}</td>
               <td className="p-3">{formatStatus(trial.status)}</td>
               <td className="p-3">{trial.end_date}</td>
-              <td className="p-3">
-                <Link
-                  to={`/proba/${trial.id}`}
-                  className="material-symbols-outlined text-blue-600 hover:text-blue-800"
-                >
-                  info
-                </Link>
-              </td>
+              
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

@@ -394,20 +394,20 @@ const Dashboard = ({ user, setUser }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-6 mb-6">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6">
       <div className="sm:flex items-center justify-between mb-2">
-        <h2 className="text-2xl font-semibold">
+        <h2>
           {trial.rank} {user.full_name} próba na stopień HO
         </h2>
-        <div className="flex space-x-2 sm:my-0 mb-6 mt-2">
+        <div className="flex space-x-2 sm:my-0 mb-2 mt-2">
           {trial.status === "do akceptacji przez opiekuna" ||
           trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
-            <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+            <button className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
               <span className="material-symbols-outlined">list_alt_check</span>
               <span className="ml-2">Zgłoś próbę do opiekuna</span>
             </button>
           ) : (
-            <button className="flex items-center bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+            <button className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
               <span className="material-symbols-outlined">calendar_add_on</span>
               <span className="ml-2">Zgłoś się na kapitułę</span>
             </button>
@@ -415,24 +415,24 @@ const Dashboard = ({ user, setUser }) => {
 
           <Link
             to="/edycja-proby"
-            className="material-symbols-outlined bg-gray-200 p-2 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+            className="material-symbols-outlined bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
           >
             edit_square
           </Link>
           <button onClick={handleDeleteTrial}>
-            <span className="material-symbols-outlined bg-red-300 p-2 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
+            <span className="material-symbols-outlined bg-red-300 sm:p-2 p-1.5 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
               delete
             </span>
           </button>
         </div>
       </div>
       <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
-        <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+        <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1">
           <p className="font-semibold">Stan:</p>
           <span>{formatStatus(trial.status)}</span>
         </div>
         {getLatestEndDate(tasks) && (
-          <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full text-sm w-fit flex items-center space-x-1">
+          <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1">
             <p className="font-semibold">Data zakończenia:</p>
             <span>{getLatestEndDate(tasks)}</span>
           </div>
@@ -441,12 +441,12 @@ const Dashboard = ({ user, setUser }) => {
 
       <div className="sm:grid flex flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
         <div>
-          <p className="text-sm text-gray-400">Email do kontaktu</p>
+          <p className="sm:text-sm text-xs text-gray-400">Email do kontaktu</p>
           <p className="font-medium">{trial.email}</p>
         </div>
 
         <div>
-          <p className="text-sm text-gray-400">Data urodzenia</p>
+          <p className="sm:text-sm text-xs text-gray-400">Data urodzenia</p>
           <p className="font-medium">
             {new Date(trial.birth_date).toLocaleDateString("pl-PL")} (
             {Math.floor(
@@ -463,27 +463,27 @@ const Dashboard = ({ user, setUser }) => {
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-400">Drużyna</p>
+          <p className="sm:text-sm text-xs text-gray-400">Drużyna</p>
           <p className="font-medium">{trial.team}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-400">Email opiekuna</p>
+          <p className="sm:text-sm text-xs text-gray-400">Email opiekuna</p>
           <p className="font-medium">{trial.mentor_mail}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-400">Imię i nazwisko opiekuna</p>
+          <p className="sm:text-sm text-xs text-gray-400">Imię i nazwisko opiekuna</p>
           <p className="font-medium">{trial.mentor_name}</p>
         </div>
       </div>
 
-      <div className="mt-12">
-        <div className="flex items-center space-x-1.5 text-xl mb-4">
+      <div className="sm:mt-12 mt-8">
+        <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
           <span className="material-symbols-outlined ">task_alt</span>
-          <span className="text-xl font-medium">Zadania</span>
+          <span className="sm:text-xl text-lg font-medium">Zadania</span>
         </div>
         <div className="overflow-x-auto sm:overflow-visible">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 text-left text-sm rounded-t-2xl">
+            <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
               <tr>
                 <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
                   Lp
@@ -527,7 +527,7 @@ const Dashboard = ({ user, setUser }) => {
                         editTaskId === task.id ? (
                           <button
                             key={category.id}
-                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                             onClick={() => handleRemoveCategory(category.id)}
                           >
                             <span className="category-icon material-symbols-outlined">
@@ -540,7 +540,7 @@ const Dashboard = ({ user, setUser }) => {
                         ) : (
                           <div
                             key={category.id}
-                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full text-sm w-fit flex items-center space-x-1`}
+                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                           >
                             <span className="material-symbols-outlined">
                               {category.icon}
