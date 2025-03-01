@@ -439,7 +439,7 @@ const Dashboard = ({ user, setUser }) => {
         )}
       </div>
 
-      <div className="sm:grid flex flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
+      <div className="sm:grid flex sm:grid-cols-2 flex-col sm:grid-flow-col sm:grid-rows-3 gap-4 mt-6">
         <div>
           <p className="sm:text-sm text-xs text-gray-400">Email do kontaktu</p>
           <p className="font-medium">{trial.email}</p>

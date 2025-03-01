@@ -41,7 +41,7 @@ function CategoryDropdown({
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className="bg-gray-200 dark:bg-gray-700 px-3 py-1 mt-2 rounded-full w-fit flex items-center"
+        className="bg-gray-200 dark:bg-gray-700 px-3 py-1 mt-2 rounded-full w-fit flex items-center hover:bg-gray-300 dark:hover:bg-gray-800"
         onClick={toggleDropdown}
       >
         <span className="material-symbols-outlined">add</span>
@@ -51,7 +51,7 @@ function CategoryDropdown({
           {availableCategories.map((category) => (
             <button
               key={category.id}
-              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1  rounded-full sm:text-sm text-xs w-fit  flex  items-center space-x-1`}
+              className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1 dark:hover:opacity-80 hover:opacity-80`}
               onClick={() => handleCategoryClick(category)}
             >
               <span className="material-symbols-outlined">{category.icon}</span>

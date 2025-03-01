@@ -73,6 +73,9 @@ textarea {
   opacity: 0;
 }
 
+
+
+
 .category-button:hover::after {
   content: 'close';
   font-family: 'Material Symbols Outlined';

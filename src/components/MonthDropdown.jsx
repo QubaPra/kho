@@ -90,7 +90,7 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={handleButtonClick}
-        className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-2 flex items-center justify-between"
+        className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-2 flex items-center justify-between "
       >
         <p>{date}</p>
         <span className="material-symbols-outlined">calendar_month</span>
@@ -103,7 +103,7 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
                 <button
                   key={year}
                   onClick={() => handleYearClick(year)}
-                  className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg"
+                  className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   {year}
                 </button>
@@ -115,7 +115,7 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
                 <button
                   key={shortMonth}
                   onClick={() => handleMonthClick(shortMonth, months[index])}
-                  className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg"
+                  className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   {shortMonth}
                 </button>
