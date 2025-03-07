@@ -316,7 +316,7 @@ const ViewTrial = ({ user, id: propId }) => {
 
               <button
                 onClick={handleLeaveTrial}
-                className="flex items-center bg-red-300 sm:p-2 p-1.5 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+                className="flex items-center bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 text-white dark:hover:bg-red-800"
               >
                 <span className="material-symbols-outlined">delete</span>
                 <span className="ml-2">Porzuć próbę</span>

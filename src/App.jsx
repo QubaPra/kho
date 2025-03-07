@@ -55,7 +55,7 @@ const App = () => {
         isAuthenticated={isAuthenticated}
       />
 
-      <main className="sm:mt-16 mt-12 bg-gray-100 dark:bg-black min-h-screen">
+      <main className="sm:mt-16 mt-12  min-h-screen">
         <div className="max-w-7xl mx-auto px-2 py-4 sm:px-4 sm:py-6">
           <Routes>
             {!isAuthenticated ? (

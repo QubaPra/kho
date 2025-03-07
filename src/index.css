@@ -4,9 +4,19 @@
 
 body {
   font-family: 'Rubik', sans-serif;
-  @apply dark:text-gray-100 text-gray-800;
+  @apply dark:text-gray-100 text-gray-800 bg-gray-100 dark:bg-black;
   @apply sm:text-base text-sm;
+  background-image: url('./public/backgroundLight.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
 }
+
+.dark body {
+  background-image: url('./public/backgroundDark.svg');
+}
+
 
 h2 {
   @apply sm:text-2xl text-xl font-semibold;
@@ -187,4 +197,6 @@ input[type="checkbox"]:checked:before {
   text-align: center;
   line-height: 1.25rem; /* Adjust this value to center the checkmark */
 }
+
+
 

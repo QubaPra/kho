@@ -420,7 +420,7 @@ const Dashboard = ({ user, setUser }) => {
             edit_square
           </Link>
           <button onClick={handleDeleteTrial}>
-            <span className="material-symbols-outlined bg-red-300 sm:p-2 p-1.5 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800">
+            <span className="material-symbols-outlined bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white">
               delete
             </span>
           </button>
