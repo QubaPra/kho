@@ -300,7 +300,16 @@ const ViewTrial = ({ user, id: propId }) => {
           {trial.rank} {trial.user} próba na stopień HO
         </h2>
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2">
-          {user.is_mentor &&
+        {trial.report && user.login===trial.mentor_mail && !trial.status?.includes("Zamknięta")? (
+            <button className="button-approve" onClick={() => window.open(trial.report, '_blank')}>
+              <span className="material-symbols-outlined">Summarize</span>
+              <span className="ml-2">Zobacz raport</span>
+            </button>
+          ) : (trial.report) && <button className="button-approve" onClick={() => window.open(trial.report+"/preview", '_blank')}>
+          <span className="material-symbols-outlined">Summarize</span>
+          <span className="ml-2">Zobacz raport</span>
+        </button>}
+          {user.login===trial.mentor_mail &&
           (trial.status == "do akceptacji przez opiekuna" ||
             trial.status == "odrzucona przez kapitułę (do poprawy)") ? (
             <>
@@ -346,15 +355,16 @@ const ViewTrial = ({ user, id: propId }) => {
           ) : user.role == "Administrator" &&
             trial.status &&
             trial.status.includes("Otwarta") ? (
-            <button
-              onClick={handleEndTrialCommittee}
-              className="button-approve"
-            >
-              <span className="material-symbols-outlined">
-                assignment_turned_in
-              </span>
-              <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
-            </button>
+
+              <button
+                    onClick={handleEndTrialCommittee}
+                    className="button-approve"
+                  >
+                      <span className="material-symbols-outlined">
+                        assignment_turned_in
+                      </span>
+                      <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
+                    </button>
           ) : (user.role == "Członek kapituły" ||
               user.role == "Administrator") &&
             trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
