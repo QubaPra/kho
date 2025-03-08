@@ -385,6 +385,24 @@ const Dashboard = ({ user, setUser }) => {
     return "lat";
   };
 
+  const handleAddReportClick = async () => {
+    try {
+      const response = await axios.get(`/trials/${trial.id}/report`);
+      const reportUrl = response.data.message;
+      localStorage.setItem("trial", JSON.stringify({ ...trial, report: reportUrl }));
+      setTrial((prevTrial) => ({
+        ...prevTrial,
+        report: reportUrl,
+      }));
+      window.open(reportUrl, "_blank");
+    } catch (error) {
+      console.error("Błąd podczas generowania raportu:", error);
+    }    
+    console.log(JSON.parse(localStorage.getItem("trial")).report);
+  };
+
+  
+
   if (
     trial.status &&
     (trial.status.includes("(do zamknięcia)") ||
@@ -413,15 +431,15 @@ const Dashboard = ({ user, setUser }) => {
             </button>
           )}
 
-          {trial.status.includes("Otwarta") && trial.report ? (
-            <button className="button-approve">
-              <span className="material-symbols-outlined">add</span>
+          {trial.status?.includes("Otwarta") && trial.report ? (
+            <button className="button-approve" onClick={() => window.open(trial.report, '_blank')}>
+              <span className="material-symbols-outlined">Summarize</span>
               <span className="ml-2">Edytuj raport</span>
             </button>
-          ) : (<button className="button-approve">
-          <span className="material-symbols-outlined">add</span>
-          <span className="ml-2">Dodaj raport</span>
-        </button>)}
+          ) : trial.status?.includes("Otwarta") && (<button className="button-approve" onClick={handleAddReportClick}>
+            <span className="material-symbols-outlined">add</span>
+            <span className="ml-2">Dodaj raport</span>
+          </button>)}
 
           <Link
             to="/edycja-proby"

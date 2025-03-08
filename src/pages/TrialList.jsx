@@ -109,8 +109,8 @@ const TrialList = () => {
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         north
                       </span>
@@ -118,7 +118,7 @@ const TrialList = () => {
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
+                        className="material-symbols-outlined !text-base"
                         style={{ fontSize: "1rem" }}
                       >
                         south
@@ -135,8 +135,8 @@ const TrialList = () => {
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         north
                       </span>
@@ -144,8 +144,8 @@ const TrialList = () => {
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         south
                       </span>
@@ -161,8 +161,8 @@ const TrialList = () => {
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         north
                       </span>
@@ -170,8 +170,8 @@ const TrialList = () => {
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         south
                       </span>
@@ -187,8 +187,8 @@ const TrialList = () => {
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         north
                       </span>
@@ -196,8 +196,8 @@ const TrialList = () => {
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         south
                       </span>
@@ -213,8 +213,8 @@ const TrialList = () => {
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         north
                       </span>
@@ -222,8 +222,8 @@ const TrialList = () => {
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
+                        className="material-symbols-outlined !text-base"
+                        
                       >
                         south
                       </span>
