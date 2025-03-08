@@ -195,8 +195,25 @@ input[type="checkbox"]:checked:before {
   color: white;
   display: block;
   text-align: center;
-  line-height: 1.25rem; /* Adjust this value to center the checkmark */
+  line-height: 1.25rem;
 }
 
+.button-approve {
+  @apply flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800;
+}
 
+.button-reject {
+  @apply flex items-center bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 text-white dark:hover:bg-red-800;
+}
 
+table {
+  @apply w-full;
+}
+
+thead {
+  @apply bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl;
+}
+
+tbody {
+  @apply divide-y divide-gray-200 dark:divide-gray-700;
+}

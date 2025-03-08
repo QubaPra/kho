@@ -316,7 +316,7 @@ const ViewTrial = ({ user, id: propId }) => {
 
               <button
                 onClick={handleLeaveTrial}
-                className="flex items-center bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 text-white dark:hover:bg-red-800"
+                className="button-reject"
               >
                 <span className="material-symbols-outlined">delete</span>
                 <span className="ml-2">Porzuć próbę</span>
@@ -327,7 +327,7 @@ const ViewTrial = ({ user, id: propId }) => {
             <>
               <button
                 onClick={handleApproveTrialCommittee}
-                className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                className="button-approve"
               >
                 <span className="material-symbols-outlined">
                   list_alt_check
@@ -337,7 +337,7 @@ const ViewTrial = ({ user, id: propId }) => {
 
               <button
                 onClick={handleRejectTrialCommittee}
-                className="flex items-center bg-red-300 sm:p-2 p-1.5 rounded-lg hover:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800"
+                className="button-reject"
               >
                 <span className="material-symbols-outlined">cancel</span>
                 <span className="ml-2">Odrzuć próbę (do poprawy)</span>
@@ -348,7 +348,7 @@ const ViewTrial = ({ user, id: propId }) => {
             trial.status.includes("Otwarta") ? (
             <button
               onClick={handleEndTrialCommittee}
-              className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              className="button-approve"
             >
               <span className="material-symbols-outlined">
                 assignment_turned_in
@@ -360,7 +360,7 @@ const ViewTrial = ({ user, id: propId }) => {
             trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
             <button
               onClick={handleEndTrial}
-              className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              className="button-approve"
             >
               <span className="material-symbols-outlined">
                 assignment_turned_in
@@ -373,7 +373,7 @@ const ViewTrial = ({ user, id: propId }) => {
             trial.status.includes("(do otwarcia)") ? (
             <button
               onClick={handleOpenTrial}
-              className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+              className="button-approve"
             >
               <span className="material-symbols-outlined">
                 assignment_turned_in
@@ -440,8 +440,8 @@ const ViewTrial = ({ user, id: propId }) => {
           <span className="sm:text-xl text-lg font-medium">Zadania</span>
         </div>
         <div className="overflow-x-auto sm:overflow-visible">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
+          <table>
+            <thead >
               <tr>
                 <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
                   Lp
@@ -453,7 +453,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody>
               {tasks.map((task, index) => {
                 const taskCategories = getCategoriesByIds(task.categories);
                 return (
@@ -471,7 +471,7 @@ const ViewTrial = ({ user, id: propId }) => {
                       {taskCategories.map((category) => (
                         <div
                           key={category.id}
-                          className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
+                          className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} text-center px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                         >
                           <span className="material-symbols-outlined">
                             {category.icon}

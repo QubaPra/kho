@@ -402,25 +402,35 @@ const Dashboard = ({ user, setUser }) => {
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2">
           {trial.status === "do akceptacji przez opiekuna" ||
           trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
-            <button className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+            <button className="button-approve">
               <span className="material-symbols-outlined">list_alt_check</span>
               <span className="ml-2">Zgłoś próbę do opiekuna</span>
             </button>
           ) : (
-            <button className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800">
+            <button className="button-approve">
               <span className="material-symbols-outlined">calendar_add_on</span>
               <span className="ml-2">Zgłoś się na kapitułę</span>
             </button>
           )}
 
+          {trial.status.includes("Otwarta") && trial.report ? (
+            <button className="button-approve">
+              <span className="material-symbols-outlined">add</span>
+              <span className="ml-2">Edytuj raport</span>
+            </button>
+          ) : (<button className="button-approve">
+          <span className="material-symbols-outlined">add</span>
+          <span className="ml-2">Dodaj raport</span>
+        </button>)}
+
           <Link
             to="/edycja-proby"
-            className="material-symbols-outlined bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+            className="material-symbols-outlined button-approve"
           >
             edit_square
           </Link>
           <button onClick={handleDeleteTrial}>
-            <span className="material-symbols-outlined bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 text-white">
+            <span className="material-symbols-outlined button-reject">
               delete
             </span>
           </button>
@@ -482,8 +492,8 @@ const Dashboard = ({ user, setUser }) => {
           <span className="sm:text-xl text-lg font-medium">Zadania</span>
         </div>
         <div className="overflow-x-auto sm:overflow-visible">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
+          <table>
+            <thead >
               <tr>
                 <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
                   Lp
@@ -496,7 +506,7 @@ const Dashboard = ({ user, setUser }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody>
               {tasks.map((task, index) => {
                 const taskCategories = getCategoriesByIds(
                   editTaskId === task.id ? editCategories : task.categories
@@ -540,7 +550,7 @@ const Dashboard = ({ user, setUser }) => {
                         ) : (
                           <div
                             key={category.id}
-                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
+                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} text-center px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                           >
                             <span className="material-symbols-outlined">
                               {category.icon}

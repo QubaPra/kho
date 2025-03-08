@@ -73,7 +73,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                 person
               </Link>
               <button
-                className="material-symbols-outlined sm:p-2 p-1.5 rounded-lg text-white bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+                className="material-symbols-outlined button-reject"
                 onClick={handleLogout}
               >
                 logout

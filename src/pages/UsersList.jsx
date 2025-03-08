@@ -89,8 +89,8 @@ const UsersList = () => {
         <span className="material-symbols-outlined ml-2">search</span>
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
-        <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
+        <table>
+          <thead >
             <tr>
               <th
                 className="p-3 rounded-tl-lg w-1/6 cursor-pointer"
@@ -276,7 +276,7 @@ const UsersList = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody>
             {filteredData.map((user, index) => (
               <tr key={user.id}>
                 <td className="p-3">{user.full_name}</td>

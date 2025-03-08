@@ -95,8 +95,8 @@ const MentorDashboard = ({ user }) => {
         <span className="material-symbols-outlined ml-2">search</span>
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
-      <table className="w-full">
-        <thead className="bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl">
+      <table>
+        <thead>
           <tr>
             <th
               className="p-3 rounded-tl-lg cursor-pointer w-2/12"
@@ -205,8 +205,8 @@ const MentorDashboard = ({ user }) => {
             
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-          {filteredData.map((trial, index) => (
+        <tbody>
+          {filteredData.map((trial) => (
             <tr
             key={trial.id}
             className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
