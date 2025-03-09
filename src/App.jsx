@@ -16,6 +16,7 @@ import Profil from "./pages/Profil";
 import UsersList from "./pages/UsersList";
 import TrialList from "./pages/TrialList";
 import ViewTrial from "./pages/ViewTrial";
+import Footer from "./components/Footer";
 import axios from "./api/axios";
 
 const App = () => {
@@ -128,6 +129,8 @@ const App = () => {
           </Routes>
         </div>
       </main>
+
+      <Footer />
     </>
   );
 };

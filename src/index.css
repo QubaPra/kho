@@ -10,7 +10,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
 }
 
 .dark body {
@@ -127,9 +126,6 @@ select::-ms-expand {
   @apply cursor-pointer;
   
 }
-
-
-
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
