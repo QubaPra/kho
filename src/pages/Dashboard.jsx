@@ -389,7 +389,10 @@ const Dashboard = ({ user, setUser }) => {
     try {
       const response = await axios.get(`/trials/${trial.id}/report`);
       const reportUrl = response.data.message;
-      localStorage.setItem("trial", JSON.stringify({ ...trial, report: reportUrl }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, report: reportUrl })
+      );
       setTrial((prevTrial) => ({
         ...prevTrial,
         report: reportUrl,
@@ -397,11 +400,9 @@ const Dashboard = ({ user, setUser }) => {
       window.open(reportUrl, "_blank");
     } catch (error) {
       console.error("Błąd podczas generowania raportu:", error);
-    }    
+    }
     console.log(JSON.parse(localStorage.getItem("trial")).report);
   };
-
-  
 
   if (
     trial.status &&
@@ -432,14 +433,21 @@ const Dashboard = ({ user, setUser }) => {
           )}
 
           {trial.status?.includes("Otwarta") && trial.report ? (
-            <button className="button-approve" onClick={() => window.open(trial.report, '_blank')}>
+            <button
+              className="button-approve"
+              onClick={() => window.open(trial.report, "_blank")}
+            >
               <span className="material-symbols-outlined">Summarize</span>
               <span className="ml-2">Edytuj raport</span>
             </button>
-          ) : trial.status?.includes("Otwarta") && (<button className="button-approve" onClick={handleAddReportClick}>
-            <span className="material-symbols-outlined">add</span>
-            <span className="ml-2">Dodaj raport</span>
-          </button>)}
+          ) : (
+            trial.status?.includes("Otwarta") && (
+              <button className="button-approve" onClick={handleAddReportClick}>
+                <span className="material-symbols-outlined">add</span>
+                <span className="ml-2">Dodaj raport</span>
+              </button>
+            )
+          )}
 
           <Link
             to="/edycja-proby"
@@ -499,7 +507,9 @@ const Dashboard = ({ user, setUser }) => {
           <p className="font-medium">{trial.mentor_mail}</p>
         </div>
         <div>
-          <p className="sm:text-sm text-xs text-gray-400">Imię i nazwisko opiekuna</p>
+          <p className="sm:text-sm text-xs text-gray-400">
+            Imię i nazwisko opiekuna
+          </p>
           <p className="font-medium">{trial.mentor_name}</p>
         </div>
       </div>
@@ -509,98 +519,39 @@ const Dashboard = ({ user, setUser }) => {
           <span className="material-symbols-outlined ">task_alt</span>
           <span className="sm:text-xl text-lg font-medium">Zadania</span>
         </div>
-        <div className="overflow-x-auto sm:overflow-visible">
-          <table>
-            <thead >
-              <tr>
-                <th className="p-3 rounded-tl-lg" style={{ width: "1%" }}>
-                  Lp
-                </th>
-                <th style={{ width: "48%" }}>Treść zadania</th>
-                <th style={{ width: "27%" }}>Kategoria zadania</th>
-                <th style={{ width: "17%" }}>Data zakończenia</th>
-                <th className="p-3 rounded-tr-lg" style={{ width: "7%" }}>
-                  Edycja
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks.map((task, index) => {
-                const taskCategories = getCategoriesByIds(
-                  editTaskId === task.id ? editCategories : task.categories
-                );
-                return (
-                  <tr key={task.id}>
-                    <td className="p-3">{index + 1}</td>
-                    <td className="p-3">
-                      {editTaskId === task.id ? (
-                        <textarea
-                          className="auto-resize-textarea border-gray-200 dark:border-gray-700"
-                          value={editContent}
-                          onChange={(e) => setEditContent(e.target.value)}
-                          placeholder="Treść zadania"
-                          rows={1}
-                        ></textarea>
-                      ) : (
-                        <textarea
-                          className="auto-resize-textarea border-white dark:border-gray-900"
-                          value={task.content}
-                          rows={1}
-                          readOnly
-                        ></textarea>
-                      )}
-                    </td>
-                    <td className="pt-1 pb-3 flex flex-wrap space-x-2">
-                      {taskCategories.map((category) =>
-                        editTaskId === task.id ? (
-                          <button
-                            key={category.id}
-                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
-                            onClick={() => handleRemoveCategory(category.id)}
-                          >
-                            <span className="category-icon material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span className="category-name">
-                              {category.name}
-                            </span>
-                          </button>
-                        ) : (
-                          <div
-                            key={category.id}
-                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} text-center px-3 py-1 mt-2 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
-                          >
-                            <span className="material-symbols-outlined">
-                              {category.icon}
-                            </span>
-                            <span>{category.name}</span>
-                          </div>
-                        )
-                      )}
-                      {editTaskId === task.id && (
-                        <CategoryDropdown
-                          selectedCategories={editCategories}
-                          onSelectCategory={handleSelectCategory}
-                          categories={categories}
-                        />
-                      )}
-                    </td>
-                    <td className="p-3">
+        <div className="space-y-4">
+          {tasks.map((task, index) => {
+            const taskCategories = getCategoriesByIds(
+              editTaskId === task.id ? editCategories : task.categories
+            );
+            return (
+              <div
+                key={task.id}
+                className="flex sm:flex-row flex-col sm:space-x-2 sm:space-y-0 space-y-2"
+              >
+                <div className="bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  {index + 1}
+                </div>
+                <div className="bg-white w-full dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <div className="flex justify-between items-center mb-2">
+                    <span>
                       {editTaskId === task.id ? (
                         <MonthDropdown
                           selectedDate={editEndDate}
                           onSelectDate={(date) => setEditEndDate(date)}
                         />
                       ) : (
-                        <div className="w-full rounded-lg border border-white dark:border-gray-900 p-2 flex items-center justify-between">
-                          <p>{task.end_date}</p>
-                          <span className="material-symbols-outlined text-white dark:text-gray-900">
+                        <div className="w-full rounded-lg border border-white dark:border-gray-800 p-2 flex items-center space-x-1 justify-between ">
+                          <span className="material-symbols-outlined ">
                             calendar_month
                           </span>
+                          <p className={!task.end_date ? "opacity-50" : ""}>
+                            {task.end_date || "Data zakończenia"}
+                          </p>
                         </div>
                       )}
-                    </td>
-                    <td className="p-3">
+                    </span>
+                    <div className="flex space-x-2 mr-2">
                       {editTaskId === task.id ? (
                         <>
                           <button
@@ -632,20 +583,76 @@ const Dashboard = ({ user, setUser }) => {
                           </button>
                         </>
                       )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </div>
+                  </div>
+                  <div>
+                    {editTaskId === task.id ? (
+                      <textarea
+                        className="auto-resize-textarea border-gray-200 dark:border-gray-700 w-full"
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        placeholder="Treść zadania"
+                        rows={1}
+                      ></textarea>
+                    ) : (
+                      <textarea
+                        className="auto-resize-textarea border-white dark:border-gray-800 w-full"
+                        value={task.content}
+                        rows={1}
+                        placeholder="Treść zadania"
+                        readOnly
+                      ></textarea>
+                    )}
+                  </div>
+                  <div className="flex justify-between items-center px-2">
+                    <div className="flex flex-wrap space-x-2">
+                      {taskCategories.map((category) =>
+                        editTaskId === task.id ? (
+                          <button
+                            key={category.id}
+                            className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 my-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
+                            onClick={() => handleRemoveCategory(category.id)}
+                          >
+                            <span className="category-icon material-symbols-outlined">
+                              {category.icon}
+                            </span>
+                            <span className="category-name">
+                              {category.name}
+                            </span>
+                          </button>
+                        ) : (
+                          <div
+                            key={category.id}
+                            className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} text-center px-3 py-1 my-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
+                          >
+                            <span className="material-symbols-outlined">
+                              {category.icon}
+                            </span>
+                            <span>{category.name}</span>
+                          </div>
+                        )
+                      )}
+                      {editTaskId === task.id && (
+                        <CategoryDropdown
+                          selectedCategories={editCategories}
+                          onSelectCategory={handleSelectCategory}
+                          categories={categories}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          <button
+            className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
+            onClick={handleAddTaskClick}
+          >
+            <span className="material-symbols-outlined mr-1">add</span>
+            Nowe zadanie
+          </button>
         </div>
-        <button
-          className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
-          onClick={handleAddTaskClick}
-        >
-          <span className="material-symbols-outlined mr-1">add</span>
-          Nowe zadanie
-        </button>
       </div>
       <CommentsSection
         comments={comments}
