@@ -46,11 +46,19 @@ function CommentsSection({ comments, trialId, status }) {
   };
 
   useEffect(() => {
-    const textareas = document.querySelectorAll(".auto-resize-textarea");
-    textareas.forEach((textarea) => {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    });
+    const resizeTextareas = () => {
+      const textareas = document.querySelectorAll(".auto-resize-textarea");
+      textareas.forEach((textarea) => {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      });
+      
+    };
+  
+    resizeTextareas();
+  
+    window.addEventListener("resize", resizeTextareas);    
+    return () => window.removeEventListener("resize", resizeTextareas);
   }, [newComment]);
 
   const scrollContainerRef = useRef(null);

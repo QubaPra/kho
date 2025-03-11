@@ -30,7 +30,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-sm dark:shadow-black">
+    <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link to="/" className="sm:text-xl text-lg font-semibold dark:text-gray-100">

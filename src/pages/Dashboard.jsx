@@ -156,11 +156,12 @@ const Dashboard = ({ user, setUser }) => {
         ...prevTrial,
         report: reportUrl,
       }));
+      
       window.open(reportUrl, "_blank");
     } catch (error) {
       console.error("Błąd podczas generowania raportu:", error);
     }
-    console.log(JSON.parse(localStorage.getItem("trial")).report);
+    
   };
 
   if (
@@ -177,13 +178,14 @@ const Dashboard = ({ user, setUser }) => {
         <h2>
           {trial.rank} {user.full_name} próba na stopień HO
         </h2>
-        <div className="flex space-x-2 sm:my-0 mb-2 mt-2">
+        <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
           {trial.status === "do akceptacji przez opiekuna" ||
-          trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
+          trial.status === "odrzucona przez kapitułę (do poprawy)" ? ( 
+            trial.mentor_mail && (
             <button className="button-approve">
               <span className="material-symbols-outlined">list_alt_check</span>
               <span className="ml-2">Zgłoś próbę do opiekuna</span>
-            </button>
+            </button>)
           ) : (
             <button className="button-approve">
               <span className="material-symbols-outlined">calendar_add_on</span>
@@ -214,8 +216,8 @@ const Dashboard = ({ user, setUser }) => {
           >
             edit_square
           </Link>
-          <button onClick={handleDeleteTrial}>
-            <span className="material-symbols-outlined button-reject">
+          <button onClick={handleDeleteTrial} className="button-reject">
+            <span className="material-symbols-outlined">
               delete
             </span>
           </button>
@@ -273,7 +275,7 @@ const Dashboard = ({ user, setUser }) => {
         </div>
       </div>
 
-      <TasksSection trial={trial} tasks={tasks} setTasks={setTasks} />
+      <TasksSection trial={trial} tasks={tasks} setTrial={setTrial} setTasks={setTasks} />
 
       <CommentsSection
         comments={comments}

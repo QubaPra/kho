@@ -25,10 +25,60 @@ const EditTrial = () => {
 
   const handleSubmit = async (formData) => {
     try {
+      const response = await axios.get("/trials/me");
+      const trial = response.data;
+  
+      if (
+        trial.status !== "do akceptacji przez opiekuna" && 
+        trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
+        (trial.status && !trial.status.includes("(edytowano)"))
+      ) {
+        const confirmed = window.confirm(
+          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
+        );
+        if (!confirmed) {
+          return;
+        }
+      }
+  
+      if (
+        (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
+        trial.status === "odrzucona przez kapitułę (do poprawy)"
+      ) {
+        try {
+          await axios.patch("/trials/me", {
+            status: "do akceptacji przez opiekuna",
+          });
+          setInitialData((prevTrial) => ({
+            ...prevTrial,
+            status: "do akceptacji przez opiekuna",
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      } else if (
+        (trial.status && !trial.status.includes("(edytowano)")) && 
+        (trial.status !== "do akceptacji przez opiekuna" && trial.status !== "odrzucona przez kapitułę (do poprawy)")
+      ) {
+        try {
+          await axios.patch("/trials/me", {
+            status: `${trial.status} (edytowano)`,
+          });
+          setInitialData((prevTrial) => ({
+            ...prevTrial,
+            status: `${prevTrial.status} (edytowano)`,
+          }));
+        } catch (error) {
+          console.error("Błąd podczas aktualizacji statusu próby:", error);
+          return;
+        }
+      }
+  
       await axios.patch("/trials/me", formData);
       navigate("/");
     } catch (error) {
-      console.error("Error updating trial:", error);
+      console.error("Błąd podczas aktualizacji próby:", error);
     }
   };
 

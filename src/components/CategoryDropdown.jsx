@@ -41,7 +41,7 @@ function CategoryDropdown({
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className="bg-gray-200 dark:bg-gray-600 px-3 py-1  mt-1 rounded-full w-fit flex items-center hover:bg-gray-300 dark:hover:bg-gray-700"
+        className="bg-gray-200 dark:bg-gray-600 px-3 py-1  my-1 rounded-full w-fit flex items-center hover:bg-gray-300 dark:hover:bg-gray-700"
         onClick={toggleDropdown}
       >
         

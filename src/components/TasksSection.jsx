@@ -18,7 +18,7 @@ const monthMap = {
   grudzień: "12",
 };
 
-const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
+const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   const [editTaskId, setEditTaskId] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [editEndDate, setEditEndDate] = useState("");
@@ -34,16 +34,24 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
         console.error("Błąd podczas pobierania kategorii:", error);
       }
     };
-  
+
     fetchCategories();
   }, []);
 
   useEffect(() => {
-    const textareas = document.querySelectorAll(".auto-resize-textarea");
-    textareas.forEach((textarea) => {
-      textarea.style.height = "auto";
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    });
+    const resizeTextareas = () => {
+      const textareas = document.querySelectorAll(".auto-resize-textarea");
+      textareas.forEach((textarea) => {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      });
+      
+    };
+  
+    resizeTextareas();
+  
+    window.addEventListener("resize", resizeTextareas);    
+    return () => window.removeEventListener("resize", resizeTextareas);
   }, [editContent, editTaskId, tasks]);
 
   const handleEditClick = (task) => {
@@ -60,58 +68,7 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
       editCategories.length === 0
     ) {
       await handleDeleteTask(editTaskId);
-    } else {
-      if (
-        trial.status != "do akceptacji przez opiekuna" &&
-        trial.status != "odrzucona przez kapitułę (do poprawy)" &&
-        trial.status &&
-        !trial.status.includes("(edytowano)")
-      ) {
-        const confirmed = window.confirm(
-          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
-        );
-        if (!confirmed) {
-          return;
-        }
-      }
-
-      if (
-        (trial.status &&
-          trial.status.includes("zaakceptowana przez opiekuna")) ||
-        trial.status === "odrzucona przez kapitułę (do poprawy)"
-      ) {
-        try {
-          await axios.patch("/trials/me", {
-            status: "do akceptacji przez opiekuna",
-          });
-          setTrial((prevTrial) => ({
-            ...prevTrial,
-            status: "do akceptacji przez opiekuna",
-          }));
-        } catch (error) {
-          console.error("Błąd podczas aktualizacji statusu próby:", error);
-          return;
-        }
-      } else if (
-        trial.status &&
-        !trial.status.includes("(edytowano)") &&
-        trial.status != "do akceptacji przez opiekuna" &&
-        trial.status != "odrzucona przez kapitułę (do poprawy)"
-      ) {
-        try {
-          await axios.patch("/trials/me", {
-            status: `${trial.status} (edytowano)`,
-          });
-          setTrial((prevTrial) => ({
-            ...prevTrial,
-            status: `${prevTrial.status} (edytowano)`,
-          }));
-        } catch (error) {
-          console.error("Błąd podczas aktualizacji statusu próby:", error);
-          return;
-        }
-      }
-
+    } else if (await confirmEditApprovedTrial(trial)) {
       try {
         let formattedEndDate = "";
         if (editEndDate.trim() !== "") {
@@ -144,13 +101,11 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
       } catch (error) {
         console.error("Błąd podczas aktualizacji zadania:", error);
       }
+      setEditTaskId(null);
     }
-    setEditTaskId(null);
   };
 
   const handleCancelClick = async () => {
-    setEditTaskId(null);
-
     const originalTask = tasks.find((task) => task.id === editTaskId);
 
     if (
@@ -167,6 +122,7 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
         console.error("Błąd podczas usuwania zadania:", error);
       }
     }
+    setEditTaskId(null);
   };
 
   const handleSelectCategory = (category) => {
@@ -183,6 +139,9 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
   );
 
   const handleAddTaskClick = async () => {
+    if (!(await confirmEditApprovedTrial(trial))) {
+      return;
+    }
     try {
       const payload = {
         content: "",
@@ -203,58 +162,73 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
     }
   };
 
-  const handleDeleteTask = async (taskId) => {
-    try {
-      if (
-        trial.status != "do akceptacji przez opiekuna" &&
-        trial.status != "odrzucona przez kapitułę (do poprawy)" &&
-        trial.status &&
-        !trial.status.includes("(edytowano)")
-      ) {
-        const confirmed = window.confirm(
-          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
-        );
-        if (!confirmed) {
-          return;
-        }
+  const confirmEditApprovedTrial = async (trial) => {
+    if (
+      trial.status != "do akceptacji przez opiekuna" &&
+      trial.status != "odrzucona przez kapitułę (do poprawy)" &&
+      trial.status &&
+      !trial.status.includes("(edytowano)")
+    ) {
+      const confirmed = window.confirm(
+        "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
+      );
+      if (!confirmed) {
+        return false;
       }
+    }
 
-      if (
-        (trial.status &&
-          trial.status.includes("zaakceptowana przez opiekuna")) ||
-        trial.status === "odrzucona przez kapitułę (do poprawy)"
-      ) {
-        try {
-          await axios.patch("/trials/me", {
-            status: "do akceptacji przez opiekuna",
-          });
-          setTrial((prevTrial) => ({
-            ...prevTrial,
-            status: "do akceptacji przez opiekuna",
-          }));
-        } catch (error) {
-          console.error("Błąd podczas aktualizacji statusu próby:", error);
-          return;
-        }
-      } else if (
-        trial.status &&
-        !trial.status.includes("(edytowano)") &&
-        trial.status != "do akceptacji przez opiekuna" &&
-        trial.status != "odrzucona przez kapitułę (do poprawy)"
-      ) {
-        try {
-          await axios.patch("/trials/me", {
-            status: `${trial.status} (edytowano)`,
-          });
-          setTrial((prevTrial) => ({
-            ...prevTrial,
-            status: `${prevTrial.status} (edytowano)`,
-          }));
-        } catch (error) {
-          console.error("Błąd podczas aktualizacji statusu próby:", error);
-          return;
-        }
+    if (
+      (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
+      trial.status === "odrzucona przez kapitułę (do poprawy)"
+    ) {
+      try {
+        await axios.patch("/trials/me", {
+          status: "do akceptacji przez opiekuna",
+        });
+        setTrial((prevTrial) => ({
+          ...prevTrial,
+          status: "do akceptacji przez opiekuna",
+        }));
+        localStorage.setItem(
+          "trial",
+          JSON.stringify({ ...trial, status: "do akceptacji przez opiekuna" })
+        );
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji statusu próby:", error);
+        return false;
       }
+    } else if (
+      trial.status &&
+      !trial.status.includes("(edytowano)") &&
+      trial.status != "do akceptacji przez opiekuna" &&
+      trial.status != "odrzucona przez kapitułę (do poprawy)"
+    ) {
+      try {
+        await axios.patch("/trials/me", {
+          status: `${trial.status} (edytowano)`,
+        });
+        setTrial((prevTrial) => ({
+          ...prevTrial,
+          status: `${prevTrial.status} (edytowano)`,
+        }));
+        localStorage.setItem(
+          "trial",
+          JSON.stringify({ ...trial, status: `${trial.status} (edytowano)` })
+        );
+      } catch (error) {
+        console.error("Błąd podczas aktualizacji statusu próby:", error);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    if (!(await confirmEditApprovedTrial(trial))) {
+      return;
+    }
+    try {
       await axios.delete(`/tasks/${taskId}`);
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
@@ -303,39 +277,40 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
                     )}
                   </span>
                   {!isView ? (
-                  <div className="flex space-x-2 mr-2">
-                    {editTaskId === task.id ? (
-                      <>
-                        <button
-                          className="material-symbols-outlined text-green-600 hover:text-green-800"
-                          onClick={handleApproveClick}
-                        >
-                          check
-                        </button>
-                        <button
-                          className="material-symbols-outlined text-red-600 hover:text-red-800"
-                          onClick={handleCancelClick}
-                        >
-                          close
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="material-symbols-outlined text-gray-400 hover:text-gray-600"
-                          onClick={() => handleEditClick(task)}
-                        >
-                          edit
-                        </button>
-                        <button
-                          className="material-symbols-outlined text-gray-400 hover:text-red-600"
-                          onClick={() => handleDeleteTask(task.id)}
-                        >
-                          delete
-                        </button>
-                      </>
-                    )}
-                  </div>): null}
+                    <div className="flex space-x-2 mr-2">
+                      {editTaskId === task.id ? (
+                        <>
+                          <button
+                            className="material-symbols-outlined text-green-600 hover:text-green-800"
+                            onClick={handleApproveClick}
+                          >
+                            check
+                          </button>
+                          <button
+                            className="material-symbols-outlined text-red-600 hover:text-red-800"
+                            onClick={handleCancelClick}
+                          >
+                            close
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="material-symbols-outlined text-gray-400 hover:text-gray-600"
+                            onClick={() => handleEditClick(task)}
+                          >
+                            edit
+                          </button>
+                          <button
+                            className="material-symbols-outlined text-gray-400 hover:text-red-600"
+                            onClick={() => handleDeleteTask(task.id)}
+                          >
+                            delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
                 <div>
                   {editTaskId === task.id ? (
@@ -345,7 +320,7 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
                       onChange={(e) => setEditContent(e.target.value)}
                       placeholder="Treść zadania"
                       rows={1}
-                    ></textarea>
+                    />
                   ) : (
                     <textarea
                       className="auto-resize-textarea border-white dark:border-gray-800 w-full"
@@ -353,7 +328,7 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
                       rows={1}
                       placeholder="Treść zadania"
                       readOnly
-                    ></textarea>
+                    />
                   )}
                 </div>
                 <div className="flex justify-between items-center px-2">
@@ -395,13 +370,15 @@ const TasksSection = ({ trial, tasks, setTasks, isView=false}) => {
             </div>
           );
         })}
-        <button
-          className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
-          onClick={handleAddTaskClick}
-        >
-          <span className="material-symbols-outlined mr-1">add</span>
-          Nowe zadanie
-        </button>
+        {isView ? null : (
+          <button
+            className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
+            onClick={handleAddTaskClick}
+          >
+            <span className="material-symbols-outlined mr-1">add</span>
+            Nowe zadanie
+          </button>
+        )}
       </div>
     </div>
   );

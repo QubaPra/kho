@@ -136,6 +136,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: "zaakceptowana przez opiekuna",
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: "zaakceptowana przez opiekuna" })
+      );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby:", error);
     }
@@ -154,6 +158,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: "zaakceptowana przez kapitułę (do otwarcia)",
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: "zaakceptowana przez kapitułę (do otwarcia)" })
+      );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
     }
@@ -172,6 +180,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: "odrzucona przez kapitułę (do poprawy)",
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: "odrzucona przez kapitułę (do poprawy)" })
+      );
     } catch (error) {
       console.error("Błąd podczas odrzucania próby przez komisję:", error);
     }
@@ -204,6 +216,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: newStatus,
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: newStatus })
+      );
     } catch (error) {
       console.error("Błąd podczas otwierania próby:", error);
     }
@@ -222,6 +238,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: "zatwierdzona przez kapitułę (do zamknięcia)",
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: "zatwierdzona przez kapitułę (do zamknięcia)" })
+      );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
     }
@@ -249,6 +269,10 @@ const ViewTrial = ({ user, id: propId }) => {
         ...prevTrial,
         status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
       }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>` })
+      );
     } catch (error) {
       console.error("Błąd podczas zamykania próby:", error);
     }
@@ -292,7 +316,7 @@ const ViewTrial = ({ user, id: propId }) => {
         <h2>
           {trial.rank} {trial.user} próba na stopień HO
         </h2>
-        <div className="flex space-x-2 sm:my-0 mb-2 mt-2">
+        <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
         {trial.report && user.login===trial.mentor_mail && !trial.status?.includes("Zamknięta")? (
             <button className="button-approve" onClick={() => window.open(trial.report, '_blank')}>
               <span className="material-symbols-outlined">Summarize</span>
@@ -383,7 +407,7 @@ const ViewTrial = ({ user, id: propId }) => {
               </span>
               <span className="ml-2">Zmień status na otwarta</span>
             </button>
-          ) : null}
+          ) : <div className="sm:py-5"></div>}
         </div>
       </div>
       <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
@@ -437,7 +461,7 @@ const ViewTrial = ({ user, id: propId }) => {
         </div>
       </div>
 
-      <TasksSection trial={trial} tasks={tasks} setTasks={setTasks} isView={true} />
+      <TasksSection trial={trial} tasks={tasks} setTrial={setTrial} setTasks={setTasks} isView={true} />
 
       <CommentsSection
         comments={comments}
