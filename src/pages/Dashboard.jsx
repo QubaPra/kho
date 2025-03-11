@@ -156,7 +156,7 @@ const Dashboard = ({ user, setUser }) => {
         ...prevTrial,
         report: reportUrl,
       }));
-      
+
       window.open(reportUrl, "_blank");
     } catch (error) {
       console.error("Błąd podczas generowania raportu:", error);
@@ -224,7 +224,7 @@ const Dashboard = ({ user, setUser }) => {
         </div>
       </div>
       <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
-        <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1">
+        <div className="bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 px-3 py-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1 ">
           <p className="font-semibold">Stan:</p>
           <span>{formatStatus(trial.status)}</span>
         </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
+import resizeTextareas from "../utils/resizeTextareas";
 
 function CommentsSection({ comments, trialId, status }) {
   const [formattedComments, setFormattedComments] = useState([]);
@@ -46,18 +47,8 @@ function CommentsSection({ comments, trialId, status }) {
   };
 
   useEffect(() => {
-    const resizeTextareas = () => {
-      const textareas = document.querySelectorAll(".auto-resize-textarea");
-      textareas.forEach((textarea) => {
-        textarea.style.height = "auto";
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      });
-      
-    };
-  
     resizeTextareas();
-  
-    window.addEventListener("resize", resizeTextareas);    
+    window.addEventListener("resize", resizeTextareas);
     return () => window.removeEventListener("resize", resizeTextareas);
   }, [newComment]);
 

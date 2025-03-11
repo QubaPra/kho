@@ -105,7 +105,7 @@ input[type="date"] {
 input[type="text"]:disabled,
 input[type="email"]:disabled,
 input[type="password"]:disabled {
-  @apply bg-white shadow-none dark:bg-gray-900;
+  @apply bg-white shadow-none dark:bg-gray-900 ;
 }
 
 select {

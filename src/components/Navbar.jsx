@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   const [isDarkMode, setIsDarkMode] = useState(
     "theme" in localStorage ? localStorage.getItem("theme") === "dark" : false
   );
+  const location = useLocation();
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -30,76 +31,106 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Link to="/" className="sm:text-xl text-lg font-semibold dark:text-gray-100">
-            eKapituła HO
-          </Link>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center space-x-6 text-center">
-          {isAuthenticated && user?.role === "Administrator" && (
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 sm:shadow-sm dark:shadow-black ${( !isAuthenticated ||
+          !(user?.role === "Administrator" || user?.role === "Członek kapituły")) ? "shadow-sm " : ""
+        } z-50`}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
             <Link
-              to="/uzytkownicy"
-              className="sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600"
+              to="/"
+              className="sm:text-xl text-lg font-semibold dark:text-gray-100"
             >
-              Użytkownicy
+              eKapituła HO
             </Link>
-          )}
-          {isAuthenticated &&
-            (user?.role === "Administrator" ||
-              user?.role === "Członek kapituły") && (
+          </div>
+          <div className="max-w-7xl mx-auto px-4 py-2 sm:flex  items-center space-x-6 text-center hidden">
+            {isAuthenticated && user?.role === "Administrator" && (
               <Link
-                to="/proby"
-                className="sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600"
+                to="/uzytkownicy"
+                className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/uzytkownicy" ? "!font-bold" : ""}`}
               >
-                Wszystkie próby
+                Użytkownicy
               </Link>
             )}
+            {isAuthenticated &&
+              (user?.role === "Administrator" ||
+                user?.role === "Członek kapituły") && (
+                <Link
+                  to="/proby"
+                  className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/proby" ? "!font-bold" : ""}`}
+                >
+                  Wszystkie próby
+                </Link>
+              )}
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              className="material-symbols-outlined bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 sm:p-2 p-1.5 rounded-lg"
+              onClick={toggleDarkMode}
+            >
+              {isDarkMode ? "light_mode" : "dark_mode"}
+            </button>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/profil"
+                  className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 sm:p-2 p-1.5 rounded-lg"
+                >
+                  person
+                </Link>
+                <button
+                  className="material-symbols-outlined button-reject"
+                  onClick={handleLogout}
+                >
+                  logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/rejestracja"
+                  className="flex items-center sm:space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 sm:p-2 p-1.5  rounded-lg"
+                >
+                  <span className="material-symbols-outlined">person_add</span>
+                  <span className="sm:block hidden">Rejestracja</span>
+                </Link>
+                <Link
+                  to="/logowanie"
+                  className="flex items-center sm:space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 sm:p-2 p-1.5 rounded-lg"
+                >
+                  <span className="material-symbols-outlined">login</span>
+                  <span className="sm:block hidden">Logowanie</span>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <button
-            className="material-symbols-outlined bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 sm:p-2 p-1.5 rounded-lg"
-            onClick={toggleDarkMode}
+      </header>
+      <div className={`sticky top-0 pt-8 mt-6 -mb-14  mx-auto px-4 py-2 sm:hidden ${( !isAuthenticated ||
+        !(user?.role === "Administrator" || user?.role === "Członek kapituły") )? "hidden" : "flex"}  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-40`}>
+        {isAuthenticated && user?.role === "Administrator" && (
+          <Link
+            to="/uzytkownicy"
+            className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/uzytkownicy" ? "!font-bold" : ""}`}
           >
-            {isDarkMode ? "light_mode" : "dark_mode"}
-          </button>
-          {isAuthenticated ? (
-            <>
-              <Link
-                to="/profil"
-                className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 sm:p-2 p-1.5 rounded-lg"
-              >
-                person
-              </Link>
-              <button
-                className="material-symbols-outlined button-reject"
-                onClick={handleLogout}
-              >
-                logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/rejestracja"
-                className="flex items-center space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 sm:p-2 p-1.5 rounded-lg"
-              >
-                <span className="material-symbols-outlined">person_add</span>
-                <span>Rejestracja</span>
-              </Link>
-              <Link
-                to="/logowanie"
-                className="flex items-center space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 sm:p-2 p-1.5 rounded-lg"
-              >
-                <span className="material-symbols-outlined">login</span>
-                <span>Logowanie</span>
-              </Link>
-            </>
+            Użytkownicy
+          </Link>
+        )}
+        {isAuthenticated &&
+          (user?.role === "Administrator" ||
+            user?.role === "Członek kapituły") && (
+            <Link
+              to="/proby"
+              className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/proby" ? "!font-bold" : ""}`}
+            >
+              Wszystkie próby
+            </Link>
           )}
-        </div>
       </div>
-    </header>
+    </>
   );
 };
 

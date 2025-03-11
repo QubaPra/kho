@@ -99,7 +99,7 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-center">
       <h2 className="mb-12 mt-1">Zaloguj się</h2>
-      <form className="px-6 w-sm" onSubmit={handleSubmit}>
+      <form className="sm:px-6 px-0 w-sm max-w-full" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
             Email

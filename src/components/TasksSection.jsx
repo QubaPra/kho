@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import CategoryDropdown from "./CategoryDropdown";
 import MonthDropdown from "./MonthDropdown";
 import axios from "../api/axios";
+import resizeTextareas from "../utils/resizeTextareas";
 
 const monthMap = {
   styczeń: "01",
@@ -39,18 +40,8 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   }, []);
 
   useEffect(() => {
-    const resizeTextareas = () => {
-      const textareas = document.querySelectorAll(".auto-resize-textarea");
-      textareas.forEach((textarea) => {
-        textarea.style.height = "auto";
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      });
-      
-    };
-  
     resizeTextareas();
-  
-    window.addEventListener("resize", resizeTextareas);    
+    window.addEventListener("resize", resizeTextareas);
     return () => window.removeEventListener("resize", resizeTextareas);
   }, [editContent, editTaskId, tasks]);
 
@@ -303,7 +294,11 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           </button>
                           <button
                             className="material-symbols-outlined text-gray-400 hover:text-red-600"
-                            onClick={() => handleDeleteTask(task.id)}
+                            onClick={() => {
+                              if (window.confirm("Czy na pewno chcesz usunąć to zadanie?")) {
+                                handleDeleteTask(task.id);
+                              }
+                            }}
                           >
                             delete
                           </button>

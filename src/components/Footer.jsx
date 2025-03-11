@@ -4,7 +4,7 @@ import fleurDeLis from "../public/fleur-de-lis.svg";
 
 const Footer = () => {
   return (
-    <footer className="sm:text-sm text-xs text-gray-700 dark:text-gray-200 py-2  bg-white dark:bg-gray-900 shadow-sm dark:shadow-black">
+    <footer className="sm:text-sm text-xs text-gray-700 dark:text-gray-200 py-2  bg-white dark:bg-gray-900 shadow-[0_0_5px_rgba(0,0,0,0.1)]">
       <div className="max-w-7xl mx-auto sm:px-4 px-4 flex flex-col sm:flex-row justify-between ">
         <div className="flex sm:space-x-5  justify-between items-center">
           <a
