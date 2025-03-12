@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import ViewTrial from "./ViewTrial";
 import TasksSection from "../components/TasksSection";
+import { confirm } from "../components/ConfirmationModal";
 
 const monthMap = {
   styczeń: "01",
@@ -97,8 +98,10 @@ const Dashboard = ({ user, setUser }) => {
   }, []);
 
   const handleDeleteTrial = async () => {
-    const confirmed = window.confirm("Czy na pewno chcesz usunąć tę próbę?");
-    if (confirmed) {
+    if (await confirm({
+      message: "Czy na pewno chcesz usunąć tę próbę?",
+      isDanger: true
+    })) {
       try {
         await axios.delete("/trials/me");
         localStorage.removeItem("trial");

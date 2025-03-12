@@ -3,6 +3,7 @@ import CategoryDropdown from "./CategoryDropdown";
 import MonthDropdown from "./MonthDropdown";
 import axios from "../api/axios";
 import resizeTextareas from "../utils/resizeTextareas";
+import { confirm } from "../components/ConfirmationModal";
 
 const monthMap = {
   styczeń: "01",
@@ -160,10 +161,13 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       trial.status &&
       !trial.status.includes("(edytowano)")
     ) {
-      const confirmed = window.confirm(
-        "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
-      );
-      if (!confirmed) {
+      if (
+        !(await confirm({
+          
+          message: "Edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?",
+          isDanger: true
+        }))
+      ) {
         return false;
       }
     }
@@ -294,8 +298,15 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           </button>
                           <button
                             className="material-symbols-outlined text-gray-400 hover:text-red-600"
-                            onClick={() => {
-                              if (window.confirm("Czy na pewno chcesz usunąć to zadanie?")) {
+                            onClick={async () => {
+                              if (
+                                await confirm({
+                                  
+                                  message:
+                                    "Czy na pewno chcesz usunąć to zadanie?",
+                                    isDanger: true
+                                })
+                              ) {
                                 handleDeleteTask(task.id);
                               }
                             }}

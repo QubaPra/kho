@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import CommentsSection from "../components/CommentsSection";
 import TasksSection from "../components/TasksSection";
+import { confirm } from '../components/ConfirmationModal';
 
 const monthMap = {
   styczeń: "01",
@@ -27,7 +28,6 @@ const ViewTrial = ({ user, id: propId }) => {
   const [trial, setTrial] = useState("");
   const [tasks, setTasks] = useState([]);
   const [comments, setComments] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchTrialData = async () => {
@@ -66,17 +66,9 @@ const ViewTrial = ({ user, id: propId }) => {
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get("/categories");
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Błąd podczas pobierania kategorii:", error);
-      }
-    };
+  
 
     fetchTrialData();
-    fetchCategories();
   }, []);  
 
   const getLatestEndDate = useCallback((tasks) => {
@@ -102,15 +94,14 @@ const ViewTrial = ({ user, id: propId }) => {
     });
   }, []);
 
-  const getCategoriesByIds = (ids) => {
-    return categories.filter((category) => ids.includes(category.id));
-  };
 
   const handleLeaveTrial = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz przestać być opiekunem tej próby?"
-    );
-    if (!confirmed) return;
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz przestać być opiekunem tej próby?",
+      isDanger: true
+    });
+    if (!result) return;
 
     try {
       await axios.patch(`/trials/${id}`, {
@@ -124,10 +115,11 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleApproveTrialMentor = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz zatwierdzić tę próbę jako opiekun?"
-    );
-    if (!confirmed) return;
+    const result = await confirm({
+      message: "Czy na pewno chcesz usunąć próbę?",
+      isDanger: true
+    });
+    if (!result) return;
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zaakceptowana przez opiekuna",
@@ -146,10 +138,12 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleApproveTrialCommittee = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do otwarcia)?"
-    );
-    if (!confirmed) return;
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do otwarcia)?"
+    });
+    if (!result) return;
+
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zaakceptowana przez kapitułę (do otwarcia)",
@@ -168,10 +162,15 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleRejectTrialCommittee = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz odrzucić tę próbę jako kapituła?"
-    );
-    if (!confirmed) return;
+
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz odrzucić tę próbę jako kapituła?",
+      isDanger: true
+    });
+    if (!result) return;
+
+
     try {
       await axios.patch(`/trials/${id}`, {
         status: "odrzucona przez kapitułę (do poprawy)",
@@ -190,10 +189,12 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleOpenTrial = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz zmienić status próby na otwarta?"
-    );
-    if (!confirmed) return;
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz zmienić status próby na otwarta?"
+    });
+    if (!result) return;
+
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
       const orderLink = prompt("Podaj link do PDF rozkazu:");
@@ -226,10 +227,12 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleEndTrialCommittee = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do zamknięcia)?"
-    );
-    if (!confirmed) return;
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do zamknięcia)?"
+    });
+    if (!result) return;
+
     try {
       await axios.patch(`/trials/${id}`, {
         status: "zatwierdzona przez kapitułę (do zamknięcia)",
@@ -248,10 +251,13 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleEndTrial = async () => {
-    const confirmed = window.confirm(
-      "Czy na pewno chcesz zmienić status próby na zamknięta?"
-    );
-    if (!confirmed) return;
+
+    const result = await confirm({
+      message: "Czy na pewno chcesz zmienić status próby na zamknięta?"
+    });
+    if (!result) return;
+
+
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
       const orderLink = prompt("Podaj link do PDF rozkazu:");

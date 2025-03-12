@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TrialForm from "../components/TrialForm";
 import axios from "../api/axios";
+import { confirm } from "../components/ConfirmationModal";
 
 const EditTrial = () => {
   const [initialData, setInitialData] = useState(() => {
@@ -33,12 +34,13 @@ const EditTrial = () => {
         trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
         (trial.status && !trial.status.includes("(edytowano)"))
       ) {
-        const confirmed = window.confirm(
-          "Uwaga edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?"
-        );
-        if (!confirmed) {
-          return;
-        }
+        
+
+        const result = await confirm({
+              message: "Edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?",
+              isDanger: true
+            });
+            if (!result) return;
       }
   
       if (

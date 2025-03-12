@@ -18,6 +18,7 @@ import TrialList from "./pages/TrialList";
 import ViewTrial from "./pages/ViewTrial";
 import Footer from "./components/Footer";
 import axios from "./api/axios";
+import { ConfirmationProvider } from "./components/ConfirmationModal";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -49,7 +50,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <ConfirmationProvider>
       <Navbar
         setIsAuthenticated={setIsAuthenticated}
         user={user}
@@ -131,7 +132,7 @@ const App = () => {
       </main>
 
       <Footer />
-    </>
+      </ConfirmationProvider>
   );
 };
 

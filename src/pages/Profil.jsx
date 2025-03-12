@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import Modal from "react-modal";
+import { confirm } from "../components/ConfirmationModal";
 
 Modal.setAppElement("#root");
 
@@ -14,7 +15,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -125,15 +125,21 @@ const Profil = ({ user, setIsAuthenticated }) => {
   };
 
   const handleDeleteClick = async () => {
-    try {
-      await axios.delete("/users/me/");
-      // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("trial");
-      localStorage.removeItem("tasks");
-      setIsAuthenticated(false);
-    } catch (error) {
-      console.error("Error deleting user account:", error);
+    const result = await confirm({
+      message: "Czy na pewno chcesz usunąć swoje konto?",
+      isDanger: true
+    });
+    if (result) {
+      try {
+        await axios.delete("/users/me/");
+        // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("trial");
+        localStorage.removeItem("tasks");
+        setIsAuthenticated(false);
+      } catch (error) {
+        console.error("Error deleting user account:", error);
+      }
     }
   };
 
@@ -150,22 +156,15 @@ const Profil = ({ user, setIsAuthenticated }) => {
     setNewPassword("");
   };
 
-  const handleDeleteModalOpen = () => {
-    setIsDeleteModalOpen(true);
-    document.body.classList.add("modal-open");
-  };
   
-  const handleDeleteModalClose = () => {
-    setIsDeleteModalOpen(false);
-    document.body.classList.remove("modal-open");
-  };
+
+  
 
   const cancelEdit = () => {
     setEmail(user.login);
     setName(user.full_name);
     setIsEditing(false);
   };
-  
 
   const handlePasswordSave = async () => {
     if (validatePassword()) {
@@ -247,31 +246,23 @@ const Profil = ({ user, setIsAuthenticated }) => {
         <div className="flex space-x-4 max-w-xl sm:flex-row flex-col ">
           {isEditing ? (
             <>
-            <button
-              type="button"
-              onClick={handleSaveClick}
-              className="w-full  mt-2  justify-center space-x-1 button-save"
-            >
-              <span className="material-symbols-outlined">check</span>
-              <span>Zapisz</span>
-            </button>
-            <button
-              type="button"
-              onClick={cancelEdit}
-              className="w-full  mt-2  justify-center space-x-1 button-reject"
-            >
-              <span className="material-symbols-outlined">close</span>
-              <span>Anuluj</span>
-            </button>
-            <div
-              
-              
-              className="w-full  mt-2 sm:p-2 p-1.5 sm:block hidden"
-            />
-
-
-
-
+              <button
+                type="button"
+                onClick={handleSaveClick}
+                className="w-full  mt-2  justify-center space-x-1 button-save"
+              >
+                <span className="material-symbols-outlined">check</span>
+                <span>Zapisz</span>
+              </button>
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="w-full  mt-2  justify-center space-x-1 button-reject"
+              >
+                <span className="material-symbols-outlined">close</span>
+                <span>Anuluj</span>
+              </button>
+              <div className="w-full  mt-2 sm:p-2 p-1.5 sm:block hidden" />
             </>
           ) : (
             <>
@@ -293,7 +284,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
               </button>
               <button
                 type="button"
-                onClick={handleDeleteModalOpen}
+                onClick={handleDeleteClick}
                 className="w-full  mt-2  justify-center space-x-1 button-reject"
               >
                 <span className="material-symbols-outlined">delete</span>
@@ -361,49 +352,20 @@ const Profil = ({ user, setIsAuthenticated }) => {
           <button
             type="button"
             onClick={handlePasswordSave}
-            className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 focus:outline-none"
+            className="w-full button-save"
           >
             Zapisz
           </button>
           <button
             type="button"
             onClick={handlePasswordModalClose}
-            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+            className="w-full flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 content-center justify-center"
           >
             Anuluj
           </button>
         </div>
       </Modal>
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onRequestClose={handleDeleteModalClose}
-        contentLabel="Usuń konto"
-        className="modal sm:w-fit w-4/5"
-        overlayClassName="overlay"
-      >
-        <h2 className="text-2xl font-semibold mb-2">
-          Czy na pewno chcesz usunąć to konto?
-        </h2>
-        <p className="mb-4">
-          Dostaniesz potwierdzenie usunięcia konta na maila.
-        </p>
-        <div className="flex space-x-4">
-          <button
-            type="button"
-            onClick={handleDeleteClick}
-            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
-          >
-            Tak
-          </button>
-          <button
-            type="button"
-            onClick={handleDeleteModalClose}
-            className="w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 focus:outline-none"
-          >
-            Anuluj
-          </button>
-        </div>
-      </Modal>
+      
     </>
   );
 };

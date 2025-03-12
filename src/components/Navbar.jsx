@@ -35,7 +35,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
       <header
         className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 sm:shadow-sm dark:shadow-black ${( !isAuthenticated ||
           !(user?.role === "Administrator" || user?.role === "Członek kapituły")) ? "shadow-sm " : ""
-        } z-50`}
+        } z-40`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -110,7 +110,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
         </div>
       </header>
       <div className={`sticky top-0 pt-8 mt-6 -mb-14  mx-auto px-4 py-2 sm:hidden ${( !isAuthenticated ||
-        !(user?.role === "Administrator" || user?.role === "Członek kapituły") )? "hidden" : "flex"}  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-40`}>
+        !(user?.role === "Administrator" || user?.role === "Członek kapituły") )? "hidden" : "flex"}  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-30`}>
         {isAuthenticated && user?.role === "Administrator" && (
           <Link
             to="/uzytkownicy"
