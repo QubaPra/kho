@@ -202,6 +202,21 @@ input[type="checkbox"]:checked:before {
   @apply flex items-center bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 text-white dark:hover:bg-red-800 content-center;
 }
 
+.button-orange {
+  @apply flex items-center bg-yellow-600 sm:p-2 p-1.5 rounded-lg hover:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-800 text-white  content-center;
+}
+
+.button-blue {
+  @apply flex items-center bg-blue-600 sm:p-2 p-1.5 rounded-lg hover:bg-blue-700 dark:bg-blue-700 text-white dark:hover:bg-blue-800 content-center;
+}
+
+.button-save {
+  @apply flex items-center bg-green-600 sm:p-2 p-1.5 rounded-lg hover:bg-green-700 dark:bg-green-700 text-white dark:hover:bg-green-800 content-center;
+}
+
+
+
+
 table {
   @apply w-full;
 }

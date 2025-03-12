@@ -14,6 +14,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     const handleCapsLock = (e) => {
@@ -124,18 +125,15 @@ const Profil = ({ user, setIsAuthenticated }) => {
   };
 
   const handleDeleteClick = async () => {
-    const confirmed = window.confirm("Czy na pewno chcesz usunąć swoje konto?");
-    if (confirmed) {
-      try {
-        await axios.delete("/users/me/");
-        // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("trial");
-        localStorage.removeItem("tasks");
-        setIsAuthenticated(false);
-      } catch (error) {
-        console.error("Error deleting user account:", error);
-      }
+    try {
+      await axios.delete("/users/me/");
+      // Wylogowanie użytkownika (np. usunięcie tokenu z localStorage)
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("trial");
+      localStorage.removeItem("tasks");
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Error deleting user account:", error);
     }
   };
 
@@ -151,6 +149,23 @@ const Profil = ({ user, setIsAuthenticated }) => {
     setCurrentPassword("");
     setNewPassword("");
   };
+
+  const handleDeleteModalOpen = () => {
+    setIsDeleteModalOpen(true);
+    document.body.classList.add("modal-open");
+  };
+  
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalOpen(false);
+    document.body.classList.remove("modal-open");
+  };
+
+  const cancelEdit = () => {
+    setEmail(user.login);
+    setName(user.full_name);
+    setIsEditing(false);
+  };
+  
 
   const handlePasswordSave = async () => {
     if (validatePassword()) {
@@ -217,54 +232,75 @@ const Profil = ({ user, setIsAuthenticated }) => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
+            <label className="block sm:text-sm text-xs font-medium  text-gray-700 dark:text-gray-200">
               Rola
             </label>
             <input
               type="text"
               id="role"
               name="role"
-              value={user.role}
+              value={user.is_mentor ? "Opiekun" : user.role}
               disabled
             />
           </div>
         </div>
-        <div className="flex space-x-4 max-w-xl sm:flex-row flex-col">
+        <div className="flex space-x-4 max-w-xl sm:flex-row flex-col ">
           {isEditing ? (
+            <>
             <button
               type="button"
               onClick={handleSaveClick}
-              className="w-full bg-green-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 focus:outline-none"
+              className="w-full  mt-2  justify-center space-x-1 button-save"
             >
               <span className="material-symbols-outlined">check</span>
               <span>Zapisz</span>
             </button>
-          ) : (
             <button
               type="button"
-              onClick={handleEditClick}
-              className="w-full bg-blue-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none"
+              onClick={cancelEdit}
+              className="w-full  mt-2  justify-center space-x-1 button-reject"
             >
-              <span className="material-symbols-outlined">edit_square</span>
-              <span>Edytuj dane</span>
+              <span className="material-symbols-outlined">close</span>
+              <span>Anuluj</span>
             </button>
+            <div
+              
+              
+              className="w-full  mt-2 sm:p-2 p-1.5 sm:block hidden"
+            />
+
+
+
+
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={handleEditClick}
+                className="w-full  mt-2  justify-center space-x-1 button-blue"
+              >
+                <span className="material-symbols-outlined">edit_square</span>
+                <span>Edytuj dane</span>
+              </button>
+              <button
+                type="button"
+                onClick={handlePasswordEditClick}
+                className="w-full  mt-2  justify-center space-x-1 button-orange"
+              >
+                <span className="material-symbols-outlined">lock</span>
+                <span>Edytuj hasło</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteModalOpen}
+                className="w-full  mt-2  justify-center space-x-1 button-reject"
+              >
+                <span className="material-symbols-outlined">delete</span>
+                <span>Usuń konto</span>
+              </button>
+            </>
           )}
-          <button
-            type="button"
-            onClick={handlePasswordEditClick}
-            className="w-full bg-yellow-600 text-white mt-2 py-2 px-4 flex justify-center space-x-1 rounded-lg hover:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-800 focus:outline-none"
-          >
-            <span className="material-symbols-outlined">lock</span>
-            <span>Edytuj hasło</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleDeleteClick}
-            className="w-full text-white mt-2 py-2 px-4 rounded-lg flex justify-center space-x-1 bg-red-500 hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
-          >
-            <span className="material-symbols-outlined">delete</span>
-            <span>Usuń konto</span>
-          </button>
         </div>
       </div>
 
@@ -274,7 +310,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
         contentLabel="Zmiana hasła"
         className="modal sm:w-fit w-4/5"
         overlayClassName="overlay"
-        
       >
         <h2 className="text-2xl font-semibold mb-2">Zmiana hasła</h2>
         <div className="mb-2">
@@ -334,6 +369,36 @@ const Profil = ({ user, setIsAuthenticated }) => {
             type="button"
             onClick={handlePasswordModalClose}
             className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+          >
+            Anuluj
+          </button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onRequestClose={handleDeleteModalClose}
+        contentLabel="Usuń konto"
+        className="modal sm:w-fit w-4/5"
+        overlayClassName="overlay"
+      >
+        <h2 className="text-2xl font-semibold mb-2">
+          Czy na pewno chcesz usunąć to konto?
+        </h2>
+        <p className="mb-4">
+          Dostaniesz potwierdzenie usunięcia konta na maila.
+        </p>
+        <div className="flex space-x-4">
+          <button
+            type="button"
+            onClick={handleDeleteClick}
+            className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none"
+          >
+            Tak
+          </button>
+          <button
+            type="button"
+            onClick={handleDeleteModalClose}
+            className="w-full bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800 focus:outline-none"
           >
             Anuluj
           </button>

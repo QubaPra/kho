@@ -77,7 +77,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <>
                 <Link
                   to="/profil"
-                  className="material-symbols-outlined text-white bg-green-500 hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800 sm:p-2 p-1.5 rounded-lg"
+                  className="material-symbols-outlined button-save"
                 >
                   person
                 </Link>
@@ -92,14 +92,14 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <>
                 <Link
                   to="/rejestracja"
-                  className="flex items-center sm:space-x-1 text-white bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-700 dark:hover:bg-yellow-800 sm:p-2 p-1.5  rounded-lg"
+                  className="button-orange sm:space-x-1 "
                 >
                   <span className="material-symbols-outlined">person_add</span>
                   <span className="sm:block hidden">Rejestracja</span>
                 </Link>
                 <Link
                   to="/logowanie"
-                  className="flex items-center sm:space-x-1 text-white bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800 sm:p-2 p-1.5 rounded-lg"
+                  className=" sm:space-x-1 button-blue"
                 >
                   <span className="material-symbols-outlined">login</span>
                   <span className="sm:block hidden">Logowanie</span>

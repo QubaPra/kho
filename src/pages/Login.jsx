@@ -137,7 +137,7 @@ const Login = ({ setIsAuthenticated }) => {
         </button>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white mt-2 py-2 px-4 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none "
+          className="w-full mt-2 button-blue justify-center"
         >
           Zaloguj się
         </button>

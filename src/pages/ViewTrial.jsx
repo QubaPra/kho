@@ -332,7 +332,7 @@ const ViewTrial = ({ user, id: propId }) => {
             <>
               <button
                 onClick={handleApproveTrialMentor}
-                className="flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
+                className="flex items-center button-approve"
               >
                 <span className="material-symbols-outlined">
                   list_alt_check
