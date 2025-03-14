@@ -28,23 +28,23 @@ const EditTrial = () => {
     try {
       const response = await axios.get("/trials/me");
       const trial = response.data;
-  
-      if (
-        trial.status !== "do akceptacji przez opiekuna" && 
-        trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
-        (trial.status && !trial.status.includes("(edytowano)"))
-      ) {
-        
 
-        const result = await confirm({
-              message: "Edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?",
-              isDanger: true
-            });
-            if (!result) return;
-      }
-  
       if (
-        (trial.status && trial.status.includes("zaakceptowana przez opiekuna")) ||
+        trial.status !== "do akceptacji przez opiekuna" &&
+        trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
+        trial.status &&
+        !trial.status.includes("(edytowano)")
+      ) {
+        const result = await confirm({
+          message: "Edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?",
+          isDanger: true,
+        });
+        if (!result) return;
+      }
+
+      if (
+        (trial.status &&
+          trial.status.includes("zaakceptowana przez opiekuna")) ||
         trial.status === "odrzucona przez kapitułę (do poprawy)"
       ) {
         try {
@@ -60,8 +60,10 @@ const EditTrial = () => {
           return;
         }
       } else if (
-        (trial.status && !trial.status.includes("(edytowano)")) && 
-        (trial.status !== "do akceptacji przez opiekuna" && trial.status !== "odrzucona przez kapitułę (do poprawy)")
+        trial.status &&
+        !trial.status.includes("(edytowano)") &&
+        trial.status !== "do akceptacji przez opiekuna" &&
+        trial.status !== "odrzucona przez kapitułę (do poprawy)"
       ) {
         try {
           await axios.patch("/trials/me", {
@@ -76,7 +78,7 @@ const EditTrial = () => {
           return;
         }
       }
-  
+
       await axios.patch("/trials/me", formData);
       navigate("/");
     } catch (error) {

@@ -163,9 +163,8 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
     ) {
       if (
         !(await confirm({
-          
           message: "Edytujesz zatwierdzoną próbę. Czy chcesz kontynuować?",
-          isDanger: true
+          isDanger: true,
         }))
       ) {
         return false;
@@ -301,10 +300,9 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             onClick={async () => {
                               if (
                                 await confirm({
-                                  
                                   message:
                                     "Czy na pewno chcesz usunąć to zadanie?",
-                                    isDanger: true
+                                  isDanger: true,
                                 })
                               ) {
                                 handleDeleteTask(task.id);

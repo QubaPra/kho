@@ -15,7 +15,7 @@ const TrialForm = ({
     team: initialData.team || "",
     rank: initialData.rank || "",
   });
-  
+
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -26,13 +26,13 @@ const TrialForm = ({
     };
 
     const inputs = ["date", "privEmail", "mentorEmail"];
-    inputs.forEach(id => {
+    inputs.forEach((id) => {
       const input = document.getElementById(id);
       if (input) input.addEventListener("keydown", handleKeyDown);
     });
 
     return () => {
-      inputs.forEach(id => {
+      inputs.forEach((id) => {
         const input = document.getElementById(id);
         if (input) input.removeEventListener("keydown", handleKeyDown);
       });
@@ -61,7 +61,8 @@ const TrialForm = ({
       if (!emailRegex.test(formData.mentor_mail)) {
         newErrors.mentor_mail = "Email opiekuna jest nieprawidłowy";
       } else if (formData.mentor_mail.length > 100) {
-        newErrors.mentor_mail = "Email opiekuna nie może być dłuższy niż 100 znaków";
+        newErrors.mentor_mail =
+          "Email opiekuna nie może być dłuższy niż 100 znaków";
       }
     }
 
@@ -70,7 +71,8 @@ const TrialForm = ({
       if (!nameRegex.test(formData.mentor_name)) {
         newErrors.mentor_name = "Imię i nazwisko są nieprawidłowe";
       } else if (formData.mentor_name.length > 100) {
-        newErrors.mentor_name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
+        newErrors.mentor_name =
+          "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
       }
     }
 
@@ -78,7 +80,8 @@ const TrialForm = ({
     if (!formData.birth_date) {
       newErrors.birth_date = "Data urodzenia jest wymagana";
     } else if (formData.birth_date >= today) {
-      newErrors.birth_date = "Data urodzenia musi być wcześniejsza niż dzisiejsza";
+      newErrors.birth_date =
+        "Data urodzenia musi być wcześniejsza niż dzisiejsza";
     }
 
     // Team validation
@@ -96,11 +99,11 @@ const TrialForm = ({
   };
 
   const handleInputChange = (field) => (e) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      [field]: e.target.value 
+    setFormData((prev) => ({
+      ...prev,
+      [field]: e.target.value,
     }));
-    setErrors(prev => ({ ...prev, [field]: "" }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
   const handleSubmit = (e) => {

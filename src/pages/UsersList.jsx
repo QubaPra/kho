@@ -90,7 +90,7 @@ const UsersList = () => {
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
-          <thead >
+          <thead>
             <tr>
               <th
                 className="p-3 rounded-tl-lg w-1/6 cursor-pointer"

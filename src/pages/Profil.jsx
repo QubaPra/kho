@@ -1,3 +1,4 @@
+// Pr
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import Modal from "react-modal";
@@ -127,7 +128,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
   const handleDeleteClick = async () => {
     const result = await confirm({
       message: "Czy na pewno chcesz usunąć swoje konto?",
-      isDanger: true
+      isDanger: true,
     });
     if (result) {
       try {
@@ -155,10 +156,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
     setCurrentPassword("");
     setNewPassword("");
   };
-
-  
-
-  
 
   const cancelEdit = () => {
     setEmail(user.login);
@@ -365,7 +362,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
           </button>
         </div>
       </Modal>
-      
     </>
   );
 };

@@ -93,11 +93,10 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
         placeholder="Data zakończenia"
         className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-2 flex space-x-1 items-center justify-between "
       >
-        
         <span className="material-symbols-outlined">calendar_month</span>
         <p className={!date ? "opacity-50" : ""}>
-                            {date || "Data zakończenia"}
-                          </p>
+          {date || "Data zakończenia"}
+        </p>
       </button>
       {isOpen && (
         <div className="absolute z-10 mt-2 w-full min-w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">

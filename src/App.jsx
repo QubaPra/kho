@@ -132,7 +132,7 @@ const App = () => {
       </main>
 
       <Footer />
-      </ConfirmationProvider>
+    </ConfirmationProvider>
   );
 };
 

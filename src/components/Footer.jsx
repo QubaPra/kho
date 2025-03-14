@@ -13,7 +13,11 @@ const Footer = () => {
             rel="noopener noreferrer"
             className="order-2 sm:order-1"
           >
-            <img src={fleurDeLis} alt="Fleur-de-lis" className="sm:w-16 sm:h-16 w-12 h-12 " />
+            <img
+              src={fleurDeLis}
+              alt="Fleur-de-lis"
+              className="sm:w-16 sm:h-16 w-12 h-12 "
+            />
           </a>
           <div className="flex flex-col  order-1 sm:order-2">
             <div className="flex items-center space-x-2 mb-1">

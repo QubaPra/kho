@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import CommentsSection from "../components/CommentsSection";
 import TasksSection from "../components/TasksSection";
-import { confirm } from '../components/ConfirmationModal';
+import { confirm } from "../components/ConfirmationModal";
 
 const monthMap = {
   styczeń: "01",
@@ -66,10 +66,8 @@ const ViewTrial = ({ user, id: propId }) => {
       }
     };
 
-  
-
     fetchTrialData();
-  }, []);  
+  }, []);
 
   const getLatestEndDate = useCallback((tasks) => {
     if (tasks.length === 0) return "";
@@ -94,12 +92,10 @@ const ViewTrial = ({ user, id: propId }) => {
     });
   }, []);
 
-
   const handleLeaveTrial = async () => {
-
     const result = await confirm({
       message: "Czy na pewno chcesz przestać być opiekunem tej próby?",
-      isDanger: true
+      isDanger: true,
     });
     if (!result) return;
 
@@ -117,7 +113,7 @@ const ViewTrial = ({ user, id: propId }) => {
   const handleApproveTrialMentor = async () => {
     const result = await confirm({
       message: "Czy na pewno chcesz usunąć próbę?",
-      isDanger: true
+      isDanger: true,
     });
     if (!result) return;
     try {
@@ -138,9 +134,9 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleApproveTrialCommittee = async () => {
-
     const result = await confirm({
-      message: "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do otwarcia)?"
+      message:
+        "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do otwarcia)?",
     });
     if (!result) return;
 
@@ -154,7 +150,10 @@ const ViewTrial = ({ user, id: propId }) => {
       }));
       localStorage.setItem(
         "trial",
-        JSON.stringify({ ...trial, status: "zaakceptowana przez kapitułę (do otwarcia)" })
+        JSON.stringify({
+          ...trial,
+          status: "zaakceptowana przez kapitułę (do otwarcia)",
+        })
       );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
@@ -162,14 +161,11 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleRejectTrialCommittee = async () => {
-
-
     const result = await confirm({
       message: "Czy na pewno chcesz odrzucić tę próbę jako kapituła?",
-      isDanger: true
+      isDanger: true,
     });
     if (!result) return;
-
 
     try {
       await axios.patch(`/trials/${id}`, {
@@ -181,7 +177,10 @@ const ViewTrial = ({ user, id: propId }) => {
       }));
       localStorage.setItem(
         "trial",
-        JSON.stringify({ ...trial, status: "odrzucona przez kapitułę (do poprawy)" })
+        JSON.stringify({
+          ...trial,
+          status: "odrzucona przez kapitułę (do poprawy)",
+        })
       );
     } catch (error) {
       console.error("Błąd podczas odrzucania próby przez komisję:", error);
@@ -189,9 +188,8 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleOpenTrial = async () => {
-
     const result = await confirm({
-      message: "Czy na pewno chcesz zmienić status próby na otwarta?"
+      message: "Czy na pewno chcesz zmienić status próby na otwarta?",
     });
     if (!result) return;
 
@@ -227,9 +225,9 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleEndTrialCommittee = async () => {
-
     const result = await confirm({
-      message: "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do zamknięcia)?"
+      message:
+        "Czy na pewno chcesz zaakceptować tę próbę jako kapituła (do zamknięcia)?",
     });
     if (!result) return;
 
@@ -243,7 +241,10 @@ const ViewTrial = ({ user, id: propId }) => {
       }));
       localStorage.setItem(
         "trial",
-        JSON.stringify({ ...trial, status: "zatwierdzona przez kapitułę (do zamknięcia)" })
+        JSON.stringify({
+          ...trial,
+          status: "zatwierdzona przez kapitułę (do zamknięcia)",
+        })
       );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
@@ -251,12 +252,10 @@ const ViewTrial = ({ user, id: propId }) => {
   };
 
   const handleEndTrial = async () => {
-
     const result = await confirm({
-      message: "Czy na pewno chcesz zmienić status próby na zamknięta?"
+      message: "Czy na pewno chcesz zmienić status próby na zamknięta?",
     });
     if (!result) return;
-
 
     try {
       const orderNumber = prompt("Podaj numer rozkazu:");
@@ -277,7 +276,10 @@ const ViewTrial = ({ user, id: propId }) => {
       }));
       localStorage.setItem(
         "trial",
-        JSON.stringify({ ...trial, status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>` })
+        JSON.stringify({
+          ...trial,
+          status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
+        })
       );
     } catch (error) {
       console.error("Błąd podczas zamykania próby:", error);
@@ -323,16 +325,28 @@ const ViewTrial = ({ user, id: propId }) => {
           {trial.rank} {trial.user} próba na stopień HO
         </h2>
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
-        {trial.report && user.login===trial.mentor_mail && !trial.status?.includes("Zamknięta")? (
-            <button className="button-approve" onClick={() => window.open(trial.report, '_blank')}>
+          {trial.report &&
+          user.login === trial.mentor_mail &&
+          !trial.status?.includes("Zamknięta") ? (
+            <button
+              className="button-approve"
+              onClick={() => window.open(trial.report, "_blank")}
+            >
               <span className="material-symbols-outlined">Summarize</span>
               <span className="ml-2">Zobacz raport</span>
             </button>
-          ) : (trial.report) && <button className="button-approve" onClick={() => window.open(trial.report+"/preview", '_blank')}>
-          <span className="material-symbols-outlined">Summarize</span>
-          <span className="ml-2">Zobacz raport</span>
-        </button>}
-          {user.login===trial.mentor_mail &&
+          ) : (
+            trial.report && (
+              <button
+                className="button-approve"
+                onClick={() => window.open(trial.report + "/preview", "_blank")}
+              >
+                <span className="material-symbols-outlined">Summarize</span>
+                <span className="ml-2">Zobacz raport</span>
+              </button>
+            )
+          )}
+          {user.login === trial.mentor_mail &&
           (trial.status == "do akceptacji przez opiekuna" ||
             trial.status == "odrzucona przez kapitułę (do poprawy)") ? (
             <>
@@ -346,10 +360,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 <span className="ml-2">Zatwierdź próbę</span>
               </button>
 
-              <button
-                onClick={handleLeaveTrial}
-                className="button-reject"
-              >
+              <button onClick={handleLeaveTrial} className="button-reject">
                 <span className="material-symbols-outlined">delete</span>
                 <span className="ml-2">Porzuć próbę</span>
               </button>
@@ -378,23 +389,19 @@ const ViewTrial = ({ user, id: propId }) => {
           ) : user.role == "Administrator" &&
             trial.status &&
             trial.status.includes("Otwarta") ? (
-
-              <button
-                    onClick={handleEndTrialCommittee}
-                    className="button-approve"
-                  >
-                      <span className="material-symbols-outlined">
-                        assignment_turned_in
-                      </span>
-                      <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
-                    </button>
+            <button
+              onClick={handleEndTrialCommittee}
+              className="button-approve"
+            >
+              <span className="material-symbols-outlined">
+                assignment_turned_in
+              </span>
+              <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
+            </button>
           ) : (user.role == "Członek kapituły" ||
               user.role == "Administrator") &&
             trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
-            <button
-              onClick={handleEndTrial}
-              className="button-approve"
-            >
+            <button onClick={handleEndTrial} className="button-approve">
               <span className="material-symbols-outlined">
                 assignment_turned_in
               </span>
@@ -404,16 +411,15 @@ const ViewTrial = ({ user, id: propId }) => {
               user.role == "Administrator") &&
             trial.status &&
             trial.status.includes("(do otwarcia)") ? (
-            <button
-              onClick={handleOpenTrial}
-              className="button-approve"
-            >
+            <button onClick={handleOpenTrial} className="button-approve">
               <span className="material-symbols-outlined">
                 assignment_turned_in
               </span>
               <span className="ml-2">Zmień status na otwarta</span>
             </button>
-          ) : <div className="sm:py-5"></div>}
+          ) : (
+            <div className="sm:py-5"></div>
+          )}
         </div>
       </div>
       <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">
@@ -462,12 +468,20 @@ const ViewTrial = ({ user, id: propId }) => {
           <p className="font-medium">{trial.mentor_mail}</p>
         </div>
         <div>
-          <p className="sm:text-sm text-xs text-gray-400">Imię i nazwisko opiekuna</p>
+          <p className="sm:text-sm text-xs text-gray-400">
+            Imię i nazwisko opiekuna
+          </p>
           <p className="font-medium">{trial.mentor_name}</p>
         </div>
       </div>
 
-      <TasksSection trial={trial} tasks={tasks} setTrial={setTrial} setTasks={setTasks} isView={true} />
+      <TasksSection
+        trial={trial}
+        tasks={tasks}
+        setTrial={setTrial}
+        setTasks={setTasks}
+        isView={true}
+      />
 
       <CommentsSection
         comments={comments}

@@ -44,8 +44,6 @@ function CategoryDropdown({
         className="bg-gray-200 dark:bg-gray-600 px-3 py-1  my-1 rounded-full w-fit flex items-center hover:bg-gray-300 dark:hover:bg-gray-700"
         onClick={toggleDropdown}
       >
-        
-        
         <span className="material-symbols-outlined">add</span>
         {availableCategories.length > 11 && (
           <span className="ml-1 sm:text-sm text-xs">Dodaj kategorię</span>

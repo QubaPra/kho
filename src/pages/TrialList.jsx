@@ -108,10 +108,7 @@ const TrialList = () => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
@@ -134,19 +131,13 @@ const TrialList = () => {
                   <span>Drużyna</span>
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -160,19 +151,13 @@ const TrialList = () => {
                   <span>Opiekun</span>
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -186,19 +171,13 @@ const TrialList = () => {
                   <span>Stan próby</span>
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -212,19 +191,13 @@ const TrialList = () => {
                   <span>Data zakończenia</span>
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        
-                      >
+                      <span className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}

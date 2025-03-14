@@ -98,10 +98,12 @@ const Dashboard = ({ user, setUser }) => {
   }, []);
 
   const handleDeleteTrial = async () => {
-    if (await confirm({
-      message: "Czy na pewno chcesz usunąć tę próbę?",
-      isDanger: true
-    })) {
+    if (
+      await confirm({
+        message: "Czy na pewno chcesz usunąć tę próbę?",
+        isDanger: true,
+      })
+    ) {
       try {
         await axios.delete("/trials/me");
         localStorage.removeItem("trial");
@@ -164,7 +166,6 @@ const Dashboard = ({ user, setUser }) => {
     } catch (error) {
       console.error("Błąd podczas generowania raportu:", error);
     }
-    
   };
 
   if (
@@ -183,12 +184,15 @@ const Dashboard = ({ user, setUser }) => {
         </h2>
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
           {trial.status === "do akceptacji przez opiekuna" ||
-          trial.status === "odrzucona przez kapitułę (do poprawy)" ? ( 
+          trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
             trial.mentor_mail && (
-            <button className="button-approve">
-              <span className="material-symbols-outlined">list_alt_check</span>
-              <span className="ml-2">Zgłoś próbę do opiekuna</span>
-            </button>)
+              <button className="button-approve">
+                <span className="material-symbols-outlined">
+                  list_alt_check
+                </span>
+                <span className="ml-2">Zgłoś próbę do opiekuna</span>
+              </button>
+            )
           ) : (
             <button className="button-approve">
               <span className="material-symbols-outlined">calendar_add_on</span>
@@ -213,19 +217,13 @@ const Dashboard = ({ user, setUser }) => {
             )
           )}
 
-          <Link
-            to="/edycja-proby"
-            
-          >
+          <Link to="/edycja-proby">
             <button className="material-symbols-outlined button-approve">
-            edit_square
+              edit_square
             </button>
-            
           </Link>
           <button onClick={handleDeleteTrial} className="button-reject">
-            <span className="material-symbols-outlined">
-              delete
-            </span>
+            <span className="material-symbols-outlined">delete</span>
           </button>
         </div>
       </div>
@@ -281,7 +279,12 @@ const Dashboard = ({ user, setUser }) => {
         </div>
       </div>
 
-      <TasksSection trial={trial} tasks={tasks} setTrial={setTrial} setTasks={setTasks} />
+      <TasksSection
+        trial={trial}
+        tasks={tasks}
+        setTrial={setTrial}
+        setTasks={setTasks}
+      />
 
       <CommentsSection
         comments={comments}

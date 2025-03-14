@@ -1,37 +1,40 @@
 // components/ConfirmationModal.jsx
-import { useState, useCallback, useEffect } from 'react';
-import Modal from 'react-modal';
+import { useState, useCallback, useEffect } from "react";
+import Modal from "react-modal";
 
 let globalConfirm = null;
 
 export const ConfirmationProvider = ({ children }) => {
   const [state, setState] = useState({
     isOpen: false,
-    title: '',
-    message: '',
-    isDanger: false,  // Dodano domyślną wartość isDanger
+    title: "",
+    message: "",
+    isDanger: false, // Dodano domyślną wartość isDanger
     resolve: () => {},
   });
 
-  const confirm = useCallback(({ title = 'Uwaga!', message, isDanger = false }) => {
-    return new Promise((resolve) => {
-      setState({
-        isOpen: true,
-        title,
-        message,
-        isDanger,  // Przekazanie wartości isDanger do stanu
-        resolve,
+  const confirm = useCallback(
+    ({ title = "Uwaga!", message, isDanger = false }) => {
+      return new Promise((resolve) => {
+        setState({
+          isOpen: true,
+          title,
+          message,
+          isDanger, // Przekazanie wartości isDanger do stanu
+          resolve,
+        });
       });
-    });
-  }, []);
+    },
+    []
+  );
 
   useEffect(() => {
     globalConfirm = confirm;
-    return () => globalConfirm = null;
+    return () => (globalConfirm = null);
   }, [confirm]);
 
   const handleClose = (result) => {
-    setState(prev => ({ ...prev, isOpen: false }));
+    setState((prev) => ({ ...prev, isOpen: false }));
     state.resolve(result);
   };
 
@@ -44,7 +47,7 @@ export const ConfirmationProvider = ({ children }) => {
         contentLabel={state.title}
         className="modal sm:w-fit w-4/5 shadow-xl "
         overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-        appElement={document.getElementById('root')}
+        appElement={document.getElementById("root")}
       >
         <h2 className="text-2xl font-semibold mb-2 dark:text-white">
           {state.title}
@@ -54,7 +57,9 @@ export const ConfirmationProvider = ({ children }) => {
           <button
             type="button"
             onClick={() => handleClose(true)}
-            className={`w-full ${state.isDanger ? 'button-reject' : 'button-save'}`}  // Dynamiczna klasa
+            className={`w-full ${
+              state.isDanger ? "button-reject" : "button-save"
+            }`} // Dynamiczna klasa
           >
             Tak
           </button>
@@ -72,6 +77,6 @@ export const ConfirmationProvider = ({ children }) => {
 };
 
 export const confirm = (options) => {
-  if (!globalConfirm) throw new Error('ConfirmationProvider not initialized');
+  if (!globalConfirm) throw new Error("ConfirmationProvider not initialized");
   return globalConfirm(options);
 };

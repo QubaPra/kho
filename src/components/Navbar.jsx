@@ -33,8 +33,11 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 sm:shadow-sm dark:shadow-black ${( !isAuthenticated ||
-          !(user?.role === "Administrator" || user?.role === "Członek kapituły")) ? "shadow-sm " : ""
+        className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 sm:shadow-sm dark:shadow-black ${
+          !isAuthenticated ||
+          !(user?.role === "Administrator" || user?.role === "Członek kapituły")
+            ? "shadow-sm "
+            : ""
         } z-40`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -50,7 +53,9 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             {isAuthenticated && user?.role === "Administrator" && (
               <Link
                 to="/uzytkownicy"
-                className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/uzytkownicy" ? "!font-bold" : ""}`}
+                className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
+                  location.pathname === "/uzytkownicy" ? "!font-bold" : ""
+                }`}
               >
                 Użytkownicy
               </Link>
@@ -60,7 +65,9 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                 user?.role === "Członek kapituły") && (
                 <Link
                   to="/proby"
-                  className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/proby" ? "!font-bold" : ""}`}
+                  className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
+                    location.pathname === "/proby" ? "!font-bold" : ""
+                  }`}
                 >
                   Wszystkie próby
                 </Link>
@@ -75,14 +82,10 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             </button>
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/profil"
-                  
-                >
+                <Link to="/profil">
                   <button className="material-symbols-outlined button-save">
-                  person
+                    person
                   </button>
-                  
                 </Link>
                 <button
                   className="material-symbols-outlined button-reject"
@@ -93,22 +96,18 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               </>
             ) : (
               <>
-                <Link
-                  to="/rejestracja"
-                  
-                >
+                <Link to="/rejestracja">
                   <button className="button-orange sm:space-x-1 ">
-                  <span className="material-symbols-outlined">person_add</span>
-                  <span className="sm:block hidden">Rejestracja</span>
+                    <span className="material-symbols-outlined">
+                      person_add
+                    </span>
+                    <span className="sm:block hidden">Rejestracja</span>
                   </button>
-                  
                 </Link>
-                <Link
-                  to="/logowanie"
-                >
+                <Link to="/logowanie">
                   <button className=" sm:space-x-1 button-blue">
-                  <span className="material-symbols-outlined">login</span>
-                  <span className="sm:block hidden">Logowanie</span>
+                    <span className="material-symbols-outlined">login</span>
+                    <span className="sm:block hidden">Logowanie</span>
                   </button>
                 </Link>
               </>
@@ -116,12 +115,20 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
           </div>
         </div>
       </header>
-      <div className={`sticky top-0 pt-8 mt-6 -mb-14  mx-auto px-4 py-2 sm:hidden ${( !isAuthenticated ||
-        !(user?.role === "Administrator" || user?.role === "Członek kapituły") )? "hidden" : "flex"}  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-30`}>
+      <div
+        className={`sticky top-0 pt-8 mt-6 -mb-14  mx-auto px-4 py-2 sm:hidden ${
+          !isAuthenticated ||
+          !(user?.role === "Administrator" || user?.role === "Członek kapituły")
+            ? "hidden"
+            : "flex"
+        }  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-30`}
+      >
         {isAuthenticated && user?.role === "Administrator" && (
           <Link
             to="/uzytkownicy"
-            className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/uzytkownicy" ? "!font-bold" : ""}`}
+            className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
+              location.pathname === "/uzytkownicy" ? "!font-bold" : ""
+            }`}
           >
             Użytkownicy
           </Link>
@@ -131,7 +138,9 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             user?.role === "Członek kapituły") && (
             <Link
               to="/proby"
-              className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${location.pathname === "/proby" ? "!font-bold" : ""}`}
+              className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
+                location.pathname === "/proby" ? "!font-bold" : ""
+              }`}
             >
               Wszystkie próby
             </Link>
