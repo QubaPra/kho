@@ -215,9 +215,12 @@ const Dashboard = ({ user, setUser }) => {
 
           <Link
             to="/edycja-proby"
-            className="material-symbols-outlined button-approve"
+            
           >
+            <button className="material-symbols-outlined button-approve">
             edit_square
+            </button>
+            
           </Link>
           <button onClick={handleDeleteTrial} className="button-reject">
             <span className="material-symbols-outlined">

@@ -3,30 +3,40 @@
 @config "../tailwind.config.js";
 
 body {
-  font-family: 'Rubik', sans-serif;
-  @apply dark:text-gray-100 text-gray-800 bg-gray-100 dark:bg-black;
-  @apply sm:text-base text-sm;
-  background-image: url('./public/backgroundLight.svg');
+  font-family: "Rubik", sans-serif;
+  @apply bg-gray-100 text-gray-800 dark:bg-black dark:text-gray-100 w-screen;
+  @apply text-sm sm:text-base;
+  background-image: url("./public/backgroundLight.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  overflow-x: hidden;  
+}
+
+header {
+  @apply w-screen;
 }
 
 .dark body {
-  background-image: url('./public/backgroundDark.svg');
+  background-image: url("./public/backgroundDark.svg");
 }
 
-
 h2 {
-  @apply sm:text-2xl text-xl font-semibold;
+  @apply text-xl font-semibold sm:text-2xl;
 }
 
 button {
   cursor: pointer;
 }
 
+button:hover {
+  @apply !transition-colors !duration-300 !ease-in-out ;
+
+}
+
+
 .material-symbols-outlined {
-  @apply !text-xl sm:!text-2xl leading-none ;
+  @apply !text-xl leading-none sm:!text-2xl;
 }
 
 .modal {
@@ -62,9 +72,8 @@ th {
 }
 
 textarea {
-  @apply resize-none w-full overflow-hidden break-words rounded-lg border p-2 focus:outline-none;
+  @apply w-full resize-none overflow-hidden rounded-lg border p-2 break-words focus:outline-none;
 }
-
 
 .category-button {
   position: relative;
@@ -83,12 +92,9 @@ textarea {
   opacity: 0;
 }
 
-
-
-
 .category-button:hover::after {
-  content: 'close';
-  font-family: 'Material Symbols Outlined';
+  content: "close";
+  font-family: "Material Symbols Outlined";
   position: absolute;
   opacity: 1;
   transition: opacity 0.2s;
@@ -99,21 +105,19 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="date"] {
-  @apply mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 dark:focus:border-blue-700 sm:text-sm dark:bg-gray-800 dark:text-gray-200;
-
+  @apply mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-600 focus:outline-none sm:text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:focus:border-blue-700;
 }
 
 input[type="text"]:disabled,
 input[type="email"]:disabled,
 input[type="password"]:disabled {
-  @apply bg-white shadow-none dark:bg-gray-900 ;
+  @apply bg-white shadow-none dark:bg-gray-900;
 }
 
 select {
-  @apply mt-1 block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:border-blue-600 dark:focus:border-blue-700 sm:text-sm dark:bg-gray-800 dark:text-gray-200;
+  @apply mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-600 focus:outline-none sm:text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:focus:border-blue-700;
 
-
-  @apply appearance-none cursor-pointer bg-no-repeat bg-right;
+  @apply cursor-pointer appearance-none bg-right bg-no-repeat;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%231e2939'%3E%3Cpath d='M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E");
   background-position: right 0.5rem center;
 }
@@ -125,7 +129,6 @@ select {
 select::-ms-expand {
   appearance: none;
   @apply cursor-pointer;
-  
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -161,7 +164,7 @@ input:-webkit-autofill:active {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-200 rounded-lg;
+  @apply rounded-lg bg-gray-200;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -183,12 +186,11 @@ input:-webkit-autofill:active {
 input[type="checkbox"] {
   appearance: none;
   display: block;
-  @apply w-5 h-5 border border-gray-300 rounded-md checked:bg-gray-300 dark:checked:bg-gray-700 dark:border-gray-700 focus:outline-none;
-   
+  @apply h-5 w-5 rounded-md border border-gray-300 checked:bg-gray-300 focus:outline-none dark:border-gray-700 dark:checked:bg-gray-700;
 }
 
 input[type="checkbox"]:checked:before {
-  content: '✔';
+  content: "✔";
   font-size: 0.8rem;
   color: white;
   display: block;
@@ -197,34 +199,31 @@ input[type="checkbox"]:checked:before {
 }
 
 .button-approve {
-  @apply flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800 content-center justify-center;
+  @apply flex content-center items-center justify-center rounded-lg bg-gray-200 p-1.5 hover:bg-gray-300 sm:p-2 dark:bg-gray-700 dark:hover:bg-gray-800;
 }
 
 .button-reject {
-  @apply flex items-center bg-red-500 sm:p-2 p-1.5 rounded-lg hover:bg-red-600 dark:bg-red-700 text-white dark:hover:bg-red-800 content-center justify-center;
+  @apply flex content-center items-center justify-center rounded-lg bg-red-500 p-1.5 text-white hover:bg-red-600 sm:p-2 dark:bg-red-700 dark:hover:bg-red-800;
 }
 
 .button-orange {
-  @apply flex items-center bg-yellow-600 sm:p-2 p-1.5 rounded-lg hover:bg-yellow-700 dark:bg-yellow-700 dark:hover:bg-yellow-800 text-white  content-center justify-center;
+  @apply flex content-center items-center justify-center rounded-lg bg-yellow-600 p-1.5 text-white hover:bg-yellow-700 sm:p-2  dark:bg-yellow-700 dark:hover:bg-yellow-800;
 }
 
 .button-blue {
-  @apply flex items-center bg-blue-600 sm:p-2 p-1.5 rounded-lg hover:bg-blue-700 dark:bg-blue-700 text-white dark:hover:bg-blue-800 content-center justify-center;
+  @apply flex content-center items-center justify-center rounded-lg bg-blue-600 p-1.5 text-white hover:bg-blue-700 sm:p-2 dark:bg-blue-700 dark:hover:bg-blue-800;
 }
 
 .button-save {
-  @apply flex items-center bg-green-600 sm:p-2 p-1.5 rounded-lg hover:bg-green-700 dark:bg-green-700 text-white dark:hover:bg-green-800 content-center justify-center;
+  @apply flex content-center items-center justify-center rounded-lg bg-green-600 p-1.5 text-white hover:bg-green-700 sm:p-2 dark:bg-green-700 dark:hover:bg-green-800;
 }
-
-
-
 
 table {
   @apply w-full;
 }
 
 thead {
-  @apply bg-gray-50 dark:bg-gray-700 text-left sm:text-sm text-xs rounded-t-2xl;
+  @apply rounded-t-2xl bg-gray-50 text-left text-xs sm:text-sm dark:bg-gray-700;
 }
 
 tbody {

@@ -77,9 +77,12 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <>
                 <Link
                   to="/profil"
-                  className="material-symbols-outlined button-save"
+                  
                 >
+                  <button className="material-symbols-outlined button-save">
                   person
+                  </button>
+                  
                 </Link>
                 <button
                   className="material-symbols-outlined button-reject"
@@ -92,17 +95,21 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <>
                 <Link
                   to="/rejestracja"
-                  className="button-orange sm:space-x-1 "
+                  
                 >
+                  <button className="button-orange sm:space-x-1 ">
                   <span className="material-symbols-outlined">person_add</span>
                   <span className="sm:block hidden">Rejestracja</span>
+                  </button>
+                  
                 </Link>
                 <Link
                   to="/logowanie"
-                  className=" sm:space-x-1 button-blue"
                 >
+                  <button className=" sm:space-x-1 button-blue">
                   <span className="material-symbols-outlined">login</span>
                   <span className="sm:block hidden">Logowanie</span>
+                  </button>
                 </Link>
               </>
             )}
