@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import Modal from "react-modal";
+import { validateEmailName, validatePassword } from "../lib/authFunctions";
 
 Modal.setAppElement('#root');
 
@@ -30,49 +31,6 @@ const Profil = ({ user, setIsAuthenticated }) => {
       window.removeEventListener("keyup", handleCapsLock);
     };
   }, [isPasswordFocused]);
-
-  const validate = () => {
-    const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const nameRegex = /^[A-ZÀ-Ž][a-zà-ž]+(?:[-\s][A-ZÀ-Ž][a-zà-ž]+)+$/;
-
-    if (!email) {
-      newErrors.email = "Email jest wymagany";
-    } else if (!emailRegex.test(email)) {
-      newErrors.email = "Email jest nieprawidłowy";
-    } else if (email.length > 100) {
-      newErrors.email = "Email nie może być dłuższy niż 100 znaków";
-    }
-
-    if (!name) {
-      newErrors.name = "Imię i nazwisko są wymagane";
-    } else if (!nameRegex.test(name)) {
-      newErrors.name = "Imię i nazwisko są nieprawidłowe";
-    } else if (name.length > 100) {
-      newErrors.name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validatePassword = () => {
-    const newErrors = {};
-    if (!currentPassword) {
-      newErrors.currentPassword = "Obecne hasło jest wymagane";
-    }
-    if (!newPassword) {
-      newErrors.newPassword = "Nowe hasło jest wymagane";
-    } else if (newPassword.length < 4) {
-      newErrors.newPassword = "Hasło musi mieć minimum 4 znaki";
-    } else if (/\s/.test(newPassword)) {
-      newErrors.newPassword = "Hasło nie może zawierać spacji";
-    } else if (newPassword.length > 100) {
-      newErrors.newPassword = "Hasło nie może być dłuższe niż 100 znaków";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -110,7 +68,10 @@ const Profil = ({ user, setIsAuthenticated }) => {
   };
 
   const handleSaveClick = async () => {
-    if (validate()) {
+    const newErrors = validateEmailName(email, name);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
       try {
         await axios.patch("/users/me/", {
           login: email,
@@ -153,7 +114,10 @@ const Profil = ({ user, setIsAuthenticated }) => {
   };
 
   const handlePasswordSave = async () => {
-    if (validatePassword()) {
+    const newErrors = validatePassword(currentPassword, newPassword);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
       try {
         const response = await axios.post("/users/me/password/", {
           old_password: currentPassword,

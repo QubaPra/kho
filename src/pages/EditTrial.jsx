@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import teams from "../data/teams";
+import { validate } from "../lib/authFunctions";
 
 const EditTrial = () => {
   const [privEmail, setPrivateEmail] = useState("");
@@ -54,58 +55,6 @@ const EditTrial = () => {
     };
   }, []);
 
-  const validate = () => {
-    const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const nameRegex = /^[A-ZÀ-Ž][a-zà-ž]+(?:[-\s][A-ZÀ-Ž][a-zà-ž]+)+$/;
-    const today = new Date().toISOString().split("T")[0]; // dzisiejsza data w formacie YYYY-MM-DD
-
-    if (!privEmail) {
-      newErrors.privEmail = "Email do kontaktu jest wymagany";
-    } else if (!emailRegex.test(privEmail)) {
-      newErrors.privEmail = "Email do kontaktu jest nieprawidłowy";
-    } else if (privEmail.length > 100) {
-      newErrors.privEmail =
-        "Email do kontaktu nie może być dłuższy niż 100 znaków";
-    }
-
-    if (mentorMail === privEmail) {
-      newErrors.mentorMail = "Email opiekuna nie może być taki sam jak twój";
-    } else if (mentorMail) {
-      if (!emailRegex.test(mentorMail)) {
-        newErrors.mentorMail = "Email opiekuna jest nieprawidłowy";
-      } else if (mentorMail.length > 100) {
-        newErrors.mentorMail =
-          "Email opiekuna nie może być dłuższy niż 100 znaków";
-      }
-    }
-
-    if (name) {
-      if (!nameRegex.test(name)) {
-        newErrors.name = "Imię i nazwisko są nieprawidłowe";
-      } else if (name.length > 100) {
-        newErrors.name = "Imię i nazwisko nie mogą być dłuższe niż 100 znaków";
-      }
-    }
-
-    if (!date) {
-      newErrors.date = "Data urodzenia jest wymagana";
-    } else if (date >= today) {
-      newErrors.date = "Data urodzenia musi być wcześniejsza niż dzisiejsza";
-    }
-
-    if (!team) {
-      newErrors.team = "Drużyna jest wymagana";
-    }
-
-    if (!rank) {
-      newErrors.rank = "Stopień jest wymagany";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handlePrivateEmailChange = (e) => {
     setPrivateEmail(e.target.value);
     setErrors((prevErrors) => ({ ...prevErrors, privEmail: "" }));
@@ -138,7 +87,10 @@ const EditTrial = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
+    const newErrors = validate(privEmail, mentorMail, name, date, team, rank);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
       try {
         const response = await axios.get("/trials/me");
         const trial = response.data;
