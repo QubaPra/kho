@@ -9,18 +9,20 @@ export const ConfirmationProvider = ({ children }) => {
     isOpen: false,
     title: "",
     message: "",
-    isDanger: false, // Dodano domyślną wartość isDanger
+    isDanger: false,
+    isAlert: false,
     resolve: () => {},
   });
 
   const confirm = useCallback(
-    ({ title = "Uwaga!", message, isDanger = false }) => {
+    ({ title = "Uwaga!", message, isDanger = false, isAlert = false }) => {
       return new Promise((resolve) => {
         setState({
           isOpen: true,
           title,
           message,
-          isDanger, // Przekazanie wartości isDanger do stanu
+          isDanger,
+          isAlert,
           resolve,
         });
       });
@@ -54,22 +56,34 @@ export const ConfirmationProvider = ({ children }) => {
         </h2>
         <p className="mb-4 text-gray-600 dark:text-gray-300">{state.message}</p>
         <div className="flex space-x-4">
-          <button
-            type="button"
-            onClick={() => handleClose(true)}
-            className={`w-full ${
-              state.isDanger ? "button-reject" : "button-save"
-            }`} // Dynamiczna klasa
-          >
-            Tak
-          </button>
-          <button
-            type="button"
-            onClick={() => handleClose(false)}
-            className="w-full flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 content-center justify-center"
-          >
-            Anuluj
-          </button>
+          {!state.isAlert ? (
+            <>
+              <button
+                type="button"
+                onClick={() => handleClose(true)}
+                className={`w-full ${
+                  state.isDanger ? "button-reject" : "button-save"
+                }`} // Dynamiczna klasa
+              >
+                Tak
+              </button>
+              <button
+                type="button"
+                onClick={() => handleClose(false)}
+                className="w-full flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 content-center justify-center"
+              >
+                Anuluj
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => handleClose(true)}
+              className="w-full flex items-center bg-gray-200 sm:p-2 p-1.5 rounded-lg hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 content-center justify-center"
+              >
+              OK
+            </button>
+          )}
         </div>
       </Modal>
     </>

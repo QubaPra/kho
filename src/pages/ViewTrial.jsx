@@ -108,11 +108,19 @@ const ViewTrial = ({ user, id: propId }) => {
     } catch (error) {
       console.error("Błąd podczas porzucania próby:", error);
     }
+    try {
+      await axios.post(`/emails`, {
+        function: "leave_trial_mentor",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
+    }
   };
 
   const handleApproveTrialMentor = async () => {
     const result = await confirm({
-      message: "Czy na pewno chcesz usunąć próbę?",
+      message: "Czy na pewno chcesz zatwierdzić tę próbę jako opiekun?",
       isDanger: true,
     });
     if (!result) return;
@@ -130,6 +138,14 @@ const ViewTrial = ({ user, id: propId }) => {
       );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby:", error);
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "approve_trial_mentor",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
     }
   };
 
@@ -158,6 +174,15 @@ const ViewTrial = ({ user, id: propId }) => {
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
     }
+    try {
+      await axios.post(`/emails`, {
+        function: "approve_trial_open",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
+    }
+
   };
 
   const handleRejectTrialCommittee = async () => {
@@ -184,6 +209,14 @@ const ViewTrial = ({ user, id: propId }) => {
       );
     } catch (error) {
       console.error("Błąd podczas odrzucania próby przez komisję:", error);
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "reject_trial",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
     }
   };
 
@@ -222,6 +255,14 @@ const ViewTrial = ({ user, id: propId }) => {
     } catch (error) {
       console.error("Błąd podczas otwierania próby:", error);
     }
+    try {
+      await axios.post(`/emails`, {
+        function: "open_trial",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
+    }
   };
 
   const handleEndTrialCommittee = async () => {
@@ -248,6 +289,14 @@ const ViewTrial = ({ user, id: propId }) => {
       );
     } catch (error) {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "approve_trial_close",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
     }
   };
 
@@ -283,6 +332,14 @@ const ViewTrial = ({ user, id: propId }) => {
       );
     } catch (error) {
       console.error("Błąd podczas zamykania próby:", error);
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "close_trial",
+        trial_id: trial.id,
+      });
+    } catch (error) {
+      console.error("Błąd podczas wysyłania maila:", error);
     }
   };
 

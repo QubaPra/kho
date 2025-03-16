@@ -168,6 +168,66 @@ const Dashboard = ({ user, setUser }) => {
     }
   };
 
+  const handleReqestMentorCheck = async () => {
+    if (sessionStorage.getItem("sentRequestMentorCheck")) {
+      confirm({
+        title: "Uwaga!",
+        message: "Próba została już zgłoszona do opiekuna.",
+        isAlert: true,
+      });
+      return;
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "reqest_mentor_check",
+        trial_id: trial.id,
+      });
+      confirm({
+        title: "Sukces",
+        message: "Pomyślnie zgłoszono próbę do opiekuna.",
+        isAlert: true,
+      });
+      sessionStorage.setItem("sentRequestMentorCheck", true);
+    } catch (error) {
+      console.error("Błąd podczas zgłaszania próby do opiekuna:", error);
+      confirm({
+        title: "Błąd",
+        message: "Wystąpił błąd podczas zgłaszania próby do opiekuna.",
+        isAlert: true,
+      });
+    }
+  }
+
+  const handleSignUpForMeeting = async () => {
+    if (sessionStorage.getItem("signUpForMeetingSent")) {
+      confirm({
+        title: "Uwaga!",
+        message: "Zgłosiłeś się już na kapitułę.",
+        isAlert: true,
+      });
+      return;
+    }
+    try {
+      await axios.post(`/emails`, {
+        function: "sign_up_for_meeting",
+        trial_id: trial.id,
+      });
+      confirm({
+        title: "Sukces",
+        message: "Pomyślnie zgłosiłeś się na kapitułę.",
+        isAlert: true,
+      });
+      sessionStorage.setItem("signUpForMeetingSent", true);
+    } catch (error) {
+      console.error("Błąd podczas zgłaszania na kapitułę:", error);
+      confirm({
+        title: "Błąd",
+        message: "Wystąpił błąd podczas zgłaszania na kapitułę.",
+        isAlert: true,
+      });
+    }
+  }
+
   if (
     trial.status &&
     (trial.status.includes("(do zamknięcia)") ||
@@ -186,7 +246,10 @@ const Dashboard = ({ user, setUser }) => {
           {trial.status === "do akceptacji przez opiekuna" ||
           trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
             trial.mentor_mail && (
-              <button className="button-approve">
+              <button
+                className="button-approve"
+                onClick={handleReqestMentorCheck}
+              >
                 <span className="material-symbols-outlined">
                   list_alt_check
                 </span>
@@ -194,7 +257,10 @@ const Dashboard = ({ user, setUser }) => {
               </button>
             )
           ) : (
-            <button className="button-approve">
+            <button
+              className="button-approve"
+              onClick={handleSignUpForMeeting}
+            >
               <span className="material-symbols-outlined">calendar_add_on</span>
               <span className="ml-2">Zgłoś się na kapitułę</span>
             </button>
