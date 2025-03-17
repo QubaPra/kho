@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import teams from "../data/teams";
+import Cleave from "cleave.js/react";
 
 const TrialForm = ({
   initialData = {},
@@ -79,7 +80,7 @@ const TrialForm = ({
     // Date validation
     if (!formData.birth_date) {
       newErrors.birth_date = "Data urodzenia jest wymagana";
-    } else if (formData.birth_date >= today) {
+    } else if (formatDateForState(formData.birth_date) >= today) {
       newErrors.birth_date =
         "Data urodzenia musi być wcześniejsza niż dzisiejsza";
     }
@@ -109,8 +110,17 @@ const TrialForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      onSubmit(formData);
+      const formattedData = {
+        ...formData,
+        birth_date: formatDateForState(formData.birth_date),
+      };
+      onSubmit(formattedData);
     }
+  };
+
+  const formatDateForState = (date) => {
+    const [day, month, year] = date.split(".");
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -143,12 +153,13 @@ const TrialForm = ({
             <label className="block sm:text-sm text-xs font-medium text-gray-700 dark:text-gray-200">
               Data urodzenia
             </label>
-            <input
-              type="date"
-              id="date"
-              name="date"
+            <Cleave
+              placeholder="DD.MM.YYYY"
+              options={{ date: true, datePattern: ["d", "m", "Y"], delimiter: "."}}
+              id="cleaveDate"
               value={formData.birth_date}
               onChange={handleInputChange("birth_date")}
+              inputMode="numeric"
               className="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             />
             {errors.birth_date && (
