@@ -281,11 +281,12 @@ const UsersList = () => {
               <tr key={user.id}>
                 <td className="p-3">{user.full_name}</td>
                 <td className="p-3">{user.login}</td>
-                <td className="p-3">
+                <td className="p-3 min-w-[180px] sm:min-w-fit">
                   <select
                     id="role"
                     value={user.role}
                     onChange={(e) => handleRoleChange(index, e.target.value)}
+                    className="w-full"
                   >
                     <option value="Kandydat">Kandydat</option>
                     <option value="Członek kapituły">Członek kapituły</option>

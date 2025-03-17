@@ -6,6 +6,7 @@ function CategoryDropdown({
   categories,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropUp, setDropUp] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
@@ -32,9 +33,34 @@ function CategoryDropdown({
       }
     };
 
+    const checkDropdownPosition = () => {
+      if (dropdownRef.current) {
+        const rect = dropdownRef.current.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const dropdownHeight = rect.height;
+
+        if (rect.bottom > viewportHeight && rect.top - dropdownHeight > 0) {
+          setDropUp(true);
+        } else if (rect.bottom > viewportHeight / 1.8) {
+          setDropUp(true);
+        } else {
+          setDropUp(false);
+        }
+      }
+    };
+
+    if (isOpen) {
+      checkDropdownPosition();
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", checkDropdownPosition);
+    window.addEventListener("resize", checkDropdownPosition);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", checkDropdownPosition);
+      window.removeEventListener("resize", checkDropdownPosition);
     };
   }, [isOpen]);
 
@@ -50,7 +76,11 @@ function CategoryDropdown({
         )}
       </button>
       {isOpen && (
-        <div className="absolute bg-white dark:bg-gray-800 rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.2)] dark:shadow-[0_0_40px_rgba(0,0,0,0.7)] z-10 flex flex-wrap sm:w-96 w-72 p-3  sm:space-x-2  space-x-1 mt-2">
+        <div
+          className={`absolute bg-white dark:bg-gray-800 rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.2)] dark:shadow-[0_0_40px_rgba(0,0,0,0.7)] z-10 flex flex-wrap sm:w-96 w-72 p-3 sm:space-x-2 space-x-1 ${
+            dropUp ? "bottom-full mb-2" : "top-full mt-2"
+          }`}
+        >
           {availableCategories.map((category) => (
             <button
               key={category.id}

@@ -34,7 +34,6 @@ button:hover {
 
 }
 
-
 .material-symbols-outlined {
   @apply !text-xl leading-none sm:!text-2xl;
 }
@@ -196,6 +195,13 @@ input[type="checkbox"]:checked:before {
   display: block;
   text-align: center;
   line-height: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  input[type="checkbox"]:checked:before {
+    font-size: 0.6rem; /* Zmień rozmiar czcionki dla urządzeń mobilnych */
+    line-height: 1.2rem; /* Zmień wysokość linii dla urządzeń mobilnych */
+  }
 }
 
 .button-approve {
