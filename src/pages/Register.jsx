@@ -122,17 +122,8 @@ const Register = ({ setIsAuthenticated }) => {
           password: password,
           full_name: name,
         });
-        // Automatyczne logowanie po rejestracji
-        const response = await axios.post("/login/", {
-          login: email,
-          password: password,
-        });
-
-        const data = response.data;
-        localStorage.setItem("access_token", data.access);
-        localStorage.setItem("refresh_token", data.refresh);
-        setIsAuthenticated(true);
-        navigate("/"); // Przekierowanie na stronę główną
+        alert("Rejestracja przebiegła pomyślnie! Potwierdź konto, klikając w link przesłany na podany adres email.");
+        navigate("/logowanie");
       } catch (error) {
         if (
           error.response &&

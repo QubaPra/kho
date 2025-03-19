@@ -57,6 +57,7 @@ const Login = ({ setIsAuthenticated }) => {
       // Przekierowujemy na Dashboard
       navigate("/");
     } catch (error) {
+      console.error("Błąd logowania:", error);
       setError(error.response?.data?.error || "Nieprawidłowe dane logowania");
     }
   };

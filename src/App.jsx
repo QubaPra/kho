@@ -19,6 +19,7 @@ import ViewTrial from "./pages/ViewTrial";
 import Footer from "./components/Footer";
 import axios from "./api/axios";
 import { ConfirmationProvider } from "./components/ConfirmationModal";
+import VerifyAccount from "./pages/VerifyAccount";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -127,6 +128,7 @@ const App = () => {
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}
+            <Route path="/verify/:id/:token" element={<VerifyAccount setIsAuthenticated={setIsAuthenticated} />} />
           </Routes>
         </div>
       </main>
