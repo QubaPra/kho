@@ -133,9 +133,7 @@ const Login = ({ setIsAuthenticated }) => {
           )}
         </div>
         {error && <p className="text-red-500">{error}</p>}
-        <button className="sm:text-sm text-xs text-blue-600 dark:text-blue-700 mb-4 hover:underline ">
-          Zapomniałem danych logowania
-        </button>
+
         <button
           type="submit"
           className="w-full mt-2 button-blue justify-center"

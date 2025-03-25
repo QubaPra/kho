@@ -128,7 +128,7 @@ const App = () => {
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}
-            <Route path="/verify/:id/:token" element={<VerifyAccount setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/weryfikacja/:id/:token" element={<VerifyAccount setIsAuthenticated={setIsAuthenticated} />} />
           </Routes>
         </div>
       </main>
