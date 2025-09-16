@@ -156,6 +156,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
 
   const confirmEditApprovedTrial = async (trial) => {
     if (
+      trial.status != "nowa próba" &&
       trial.status != "do akceptacji przez opiekuna" &&
       trial.status != "odrzucona przez kapitułę (do poprawy)" &&
       trial.status &&
@@ -195,7 +196,8 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       trial.status &&
       !trial.status.includes("(edytowano)") &&
       trial.status != "do akceptacji przez opiekuna" &&
-      trial.status != "odrzucona przez kapitułę (do poprawy)"
+      trial.status != "odrzucona przez kapitułę (do poprawy)" &&
+      trial.status != "nowa próba"
     ) {
       try {
         await axios.patch("/trials/me", {

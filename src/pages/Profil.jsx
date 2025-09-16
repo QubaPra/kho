@@ -120,7 +120,20 @@ const Profil = ({ user, setIsAuthenticated }) => {
         });
         setIsEditing(false);
       } catch (error) {
-        console.error("Error updating user data:", error);
+        const data = error.response?.data;
+        // Map known backend responses to inline email error
+        if (data?.login) {
+          const msg = Array.isArray(data.login) ? data.login[0] : data.login;
+          setErrors((prev) => ({ ...prev, email: msg || "Email jest już zajęty" }));
+        } else if (data?.error === "Login już istnieje") {
+          setErrors((prev) => ({ ...prev, email: "Email jest już zajęty" }));
+        } else {
+          console.error("Error updating user data:", error);
+          // Optional: show a generic form error under email field
+          if (!errors.email) {
+            setErrors((prev) => ({ ...prev, email: data?.error || "Nie udało się zapisać zmian" }));
+          }
+        }
       }
     }
   };
@@ -160,6 +173,8 @@ const Profil = ({ user, setIsAuthenticated }) => {
   const cancelEdit = () => {
     setEmail(user.login);
     setName(user.full_name);
+  // Clear validation errors when cancelling edit
+  setErrors({});
     setIsEditing(false);
   };
 

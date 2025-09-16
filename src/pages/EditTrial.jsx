@@ -30,6 +30,7 @@ const EditTrial = () => {
       const trial = response.data;
 
       if (
+        trial.status !== "nowa próba" &&
         trial.status !== "do akceptacji przez opiekuna" &&
         trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
         trial.status &&
@@ -63,7 +64,8 @@ const EditTrial = () => {
         trial.status &&
         !trial.status.includes("(edytowano)") &&
         trial.status !== "do akceptacji przez opiekuna" &&
-        trial.status !== "odrzucona przez kapitułę (do poprawy)"
+        trial.status !== "odrzucona przez kapitułę (do poprawy)" &&
+        trial.status !== "nowa próba"
       ) {
         try {
           await axios.patch("/trials/me", {

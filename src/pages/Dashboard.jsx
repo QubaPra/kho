@@ -169,7 +169,9 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleReqestMentorCheck = async () => {
-    if (sessionStorage.getItem("sentRequestMentorCheck")) {
+    const resquestedTrial = trial.status === "do akceptacji przez opiekuna";
+
+    if (resquestedTrial && sessionStorage.getItem("sentRequestMentorCheck")) {
       confirm({
         title: "Uwaga!",
         message: "Próba została już zgłoszona do opiekuna.",
@@ -177,14 +179,17 @@ const Dashboard = ({ user, setUser }) => {
       });
       return;
     }
+
     try {
-      await axios.post(`/emails`, {
-        function: "reqest_mentor_check",
-        trial_id: trial.id,
-      });
+      await axios.patch(`/trials/me`, { status: "do akceptacji przez opiekuna" });
+      setTrial((prev) => ({ ...prev, status: "do akceptacji przez opiekuna" }));
+      localStorage.setItem(
+        "trial",
+        JSON.stringify({ ...trial, status: "do akceptacji przez opiekuna" })
+      );
       confirm({
         title: "Sukces",
-        message: "Pomyślnie zgłoszono próbę do opiekuna.",
+        message: "Pomyślnie zgłosiłeś próbę do opiekuna.",
         isAlert: true,
       });
       sessionStorage.setItem("sentRequestMentorCheck", true);
@@ -207,11 +212,7 @@ const Dashboard = ({ user, setUser }) => {
       });
       return;
     }
-    try {
-      await axios.post(`/emails`, {
-        function: "sign_up_for_meeting",
-        trial_id: trial.id,
-      });
+    try {      
       confirm({
         title: "Sukces",
         message: "Pomyślnie zgłosiłeś się na kapitułę.",
@@ -243,9 +244,10 @@ const Dashboard = ({ user, setUser }) => {
           {trial.rank} {user.full_name} próba na stopień HO
         </h2>
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
-          {trial.status === "do akceptacji przez opiekuna" ||
+          {trial.status === "nowa próba" ||
+          trial.status === "do akceptacji przez opiekuna" ||
           trial.status === "odrzucona przez kapitułę (do poprawy)" ? (
-            trial.mentor_mail && (
+            trial.mentor_mail && trial.status !== "do akceptacji przez opiekuna" && (
               <button
                 className="button-approve"
                 onClick={handleReqestMentorCheck}

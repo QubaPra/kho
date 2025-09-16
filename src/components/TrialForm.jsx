@@ -125,7 +125,7 @@ const TrialForm = ({
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col">
-      <h2 className="mb-12">{title}</h2>
+      <h2 className="mb-12 mt-1">{title}</h2>
       <form
         className="flex sm:flex-row flex-col justify-between sm:max-w-4xl"
         onSubmit={handleSubmit}

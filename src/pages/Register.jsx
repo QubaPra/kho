@@ -117,13 +117,22 @@ const Register = ({ setIsAuthenticated }) => {
     e.preventDefault();
     if (validate()) {
       try {
-        await axios.post("/register/", {
+        const res = await axios.post("/register/", {
           login: email,
           password: password,
           full_name: name,
         });
-        alert("Rejestracja przebiegła pomyślnie! Potwierdź konto, klikając w link przesłany na podany adres email.");
-        navigate("/logowanie");
+        // Oczekujemy: { user, access, refresh }
+        const { access, refresh } = res.data;
+        if (access && refresh) {
+          localStorage.setItem("access_token", access);
+          localStorage.setItem("refresh_token", refresh);
+          setIsAuthenticated(true);
+          navigate("/");
+        } else {
+          // Fallback: jeśli backend nie zwrócił tokenów
+          navigate("/logowanie");
+        }
       } catch (error) {
         if (
           error.response &&
