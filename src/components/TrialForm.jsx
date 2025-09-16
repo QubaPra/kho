@@ -8,11 +8,21 @@ const TrialForm = ({
   title,
   submitButtonLabel,
 }) => {
+  const formatDateForInput = (date) => {
+    if (!date) return "";
+    // If already in DD.MM.YYYY, keep as is
+    if (date.includes(".")) return date;
+    // Support YYYY-MM-DD or ISO strings
+    const [year, month, day] = (date.split("T")[0] || "").split("-");
+    if (year && month && day) return `${day}.${month}.${year}`;
+    return date;
+  };
+
   const [formData, setFormData] = useState({
     email: initialData.email || "",
     mentor_mail: initialData.mentor_mail || "",
     mentor_name: initialData.mentor_name || "",
-    birth_date: initialData.birth_date || "",
+    birth_date: formatDateForInput(initialData.birth_date) || "",
     team: initialData.team || "",
     rank: initialData.rank || "",
   });
@@ -26,7 +36,7 @@ const TrialForm = ({
       }
     };
 
-    const inputs = ["date", "privEmail", "mentorEmail"];
+  const inputs = ["cleaveDate", "privEmail", "mentorEmail"];
     inputs.forEach((id) => {
       const input = document.getElementById(id);
       if (input) input.addEventListener("keydown", handleKeyDown);
@@ -39,6 +49,20 @@ const TrialForm = ({
       });
     };
   }, []);
+
+  // Sync form when initialData updates (e.g., after fetch)
+  useEffect(() => {
+    if (!initialData) return;
+    setFormData((prev) => ({
+      ...prev,
+      email: initialData.email || "",
+      mentor_mail: initialData.mentor_mail || "",
+      mentor_name: initialData.mentor_name || "",
+      birth_date: formatDateForInput(initialData.birth_date) || "",
+      team: initialData.team || "",
+      rank: initialData.rank || "",
+    }));
+  }, [initialData]);
 
   const validate = () => {
     const newErrors = {};

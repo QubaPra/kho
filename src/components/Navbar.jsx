@@ -50,16 +50,6 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             </Link>
           </div>
           <div className="max-w-7xl mx-auto px-4 py-2 sm:flex  items-center space-x-6 text-center hidden">
-            {isAuthenticated && user?.role === "Administrator" && (
-              <Link
-                to="/uzytkownicy"
-                className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
-                  location.pathname === "/uzytkownicy" ? "!font-bold" : ""
-                }`}
-              >
-                Użytkownicy
-              </Link>
-            )}
             {isAuthenticated &&
               (user?.role === "Administrator" ||
                 user?.role === "Członek kapituły") && (
@@ -72,6 +62,17 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                   Wszystkie próby
                 </Link>
               )}
+            {isAuthenticated && user?.role === "Administrator" && (
+              <Link
+                to="/uzytkownicy"
+                className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
+                  location.pathname === "/uzytkownicy" ? "!font-bold" : ""
+                }`}
+              >
+                Użytkownicy
+              </Link>
+            )}
+            
           </div>
           <div className="flex items-center space-x-2">
             <button

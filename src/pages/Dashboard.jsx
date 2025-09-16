@@ -169,7 +169,7 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleReqestMentorCheck = async () => {
-    if (sessionStorage.getItem("sentRequestMentorCheck")) {
+    if (localStorage.getItem("sentRequestMentorCheck")) {
       confirm({
         title: "Uwaga!",
         message: "Próba została już zgłoszona do opiekuna.",
@@ -187,7 +187,7 @@ const Dashboard = ({ user, setUser }) => {
         message: "Pomyślnie zgłoszono próbę do opiekuna.",
         isAlert: true,
       });
-      sessionStorage.setItem("sentRequestMentorCheck", true);
+      localStorage.setItem("sentRequestMentorCheck", true);
     } catch (error) {
       console.error("Błąd podczas zgłaszania próby do opiekuna:", error);
       confirm({
@@ -199,7 +199,7 @@ const Dashboard = ({ user, setUser }) => {
   }
 
   const handleSignUpForMeeting = async () => {
-    if (sessionStorage.getItem("signUpForMeetingSent")) {
+    if (localStorage.getItem("signUpForMeetingSent")) {
       confirm({
         title: "Uwaga!",
         message: "Zgłosiłeś się już na kapitułę.",
@@ -217,7 +217,7 @@ const Dashboard = ({ user, setUser }) => {
         message: "Pomyślnie zgłosiłeś się na kapitułę.",
         isAlert: true,
       });
-      sessionStorage.setItem("signUpForMeetingSent", true);
+      localStorage.setItem("signUpForMeetingSent", true);
     } catch (error) {
       console.error("Błąd podczas zgłaszania na kapitułę:", error);
       confirm({
@@ -288,9 +288,12 @@ const Dashboard = ({ user, setUser }) => {
               edit_square
             </button>
           </Link>
-          <button onClick={handleDeleteTrial} className="button-reject">
+          <div>
+            <button onClick={handleDeleteTrial} className="button-reject">
             <span className="material-symbols-outlined">delete</span>
           </button>
+          </div>
+          
         </div>
       </div>
       <div className="flex space-x-4 sm:flex-row flex-col sm:space-y-0 space-y-2">

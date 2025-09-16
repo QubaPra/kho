@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import { confirm } from "../components/ConfirmationModal";
 
 const TrialList = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,9 @@ const TrialList = () => {
         const response = await axios.get("/trials/");
         const formattedData = response.data.map((trial) => ({
           ...trial,
+          // Keep a plain-text version of status for filtering/sorting
+          statusText: trial.status ?? "",
+          // Rendered (formatted) status for display
           status: formatStatus(trial.status),
         }));
         setData(formattedData);
@@ -33,13 +37,18 @@ const TrialList = () => {
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
+    const getSortableValue = (item, k) => {
+      const val = item?.[k];
+      if (val === null || val === undefined) return "";
+      if (typeof val === "number") return val;
+      // Prefer string comparison for strings/JSX
+      return String(val).toLowerCase();
+    };
     const sortedData = [...data].sort((a, b) => {
-      if (a[key] < b[key]) {
-        return direction === "ascending" ? -1 : 1;
-      }
-      if (a[key] > b[key]) {
-        return direction === "ascending" ? 1 : -1;
-      }
+      const aVal = getSortableValue(a, key);
+      const bVal = getSortableValue(b, key);
+      if (aVal < bVal) return direction === "ascending" ? -1 : 1;
+      if (aVal > bVal) return direction === "ascending" ? 1 : -1;
       return 0;
     });
     setData(sortedData);
@@ -50,14 +59,17 @@ const TrialList = () => {
     setFilter(event.target.value);
   };
 
-  const filteredData = data.filter(
-    (trial) =>
-      trial.user.toLowerCase().includes(filter.toLowerCase()) ||
-      trial.status.toLowerCase().includes(filter.toLowerCase()) ||
-      trial.end_date.toLowerCase().includes(filter.toLowerCase()) ||
-      trial.team.toLowerCase().includes(filter.toLowerCase()) ||
-      trial.mentor_name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredData = data.filter((trial) => {
+    const q = (filter ?? "").toLowerCase();
+    const has = (v) => String(v ?? "").toLowerCase().includes(q);
+    return (
+      has(trial.user) ||
+      has(trial.statusText) ||
+      has(trial.end_date) ||
+      has(trial.team) ||
+      has(trial.mentor_name)
+    );
+  });
 
   const formatStatus = (status) => {
     if (!status) return "";
@@ -165,17 +177,17 @@ const TrialList = () => {
               </th>
               <th
                 className="cursor-pointer w-3/12"
-                onClick={() => sortData("status")}
+                onClick={() => sortData("statusText")}
               >
                 <div className="flex justify-between items-center">
                   <span>Stan próby</span>
-                  {sortConfig.key === "status" &&
+                  {sortConfig.key === "statusText" &&
                     sortConfig.direction === "ascending" && (
                       <span className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
-                  {sortConfig.key === "status" &&
+                  {sortConfig.key === "statusText" &&
                     sortConfig.direction === "descending" && (
                       <span className="material-symbols-outlined !text-base">
                         south
@@ -184,7 +196,7 @@ const TrialList = () => {
                 </div>
               </th>
               <th
-                className="cursor-pointer w-2/12 rounded-tr-lg"
+                className="cursor-pointer w-2/12"
                 onClick={() => sortData("end_date")}
               >
                 <div className="flex justify-between items-center">
@@ -203,6 +215,7 @@ const TrialList = () => {
                     )}
                 </div>
               </th>
+              <th className="p-3 rounded-tr-lg w-1/12 text-center">Akcje</th>
             </tr>
           </thead>
           <tbody>
@@ -216,7 +229,32 @@ const TrialList = () => {
                 <td className="p-3">{trial.team}</td>
                 <td className="p-3">{trial.mentor_name}</td>
                 <td className="p-3">{trial.status}</td>
-                <td className="p-3">{trial.end_date}</td>
+                <td className="p-3">{trial.end_date ?? ""}</td>
+                <td className="p-3 text-center">
+                  <button
+                    type="button"
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      const accepted = await confirm({
+                        title: "Potwierdź usunięcie",
+                        message: `Czy na pewno chcesz usunąć tę próbę użytkownika \"${trial.user}\"? Tej operacji nie można cofnąć.`,
+                        isDanger: true,
+                      });
+                      if (!accepted) return;
+                      try {
+                        await axios.delete(`/trials/${trial.id}/`);
+                        setData((prev) => prev.filter((t) => t.id !== trial.id));
+                      } catch (error) {
+                        console.error("Error deleting trial:", error);
+                      }
+                    }}
+                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                    aria-label={`Usuń próbę ${trial.user}`}
+                    title="Usuń próbę"
+                  >
+                    <span className="material-symbols-outlined text-red-600 dark:text-red-400 align-middle">delete</span>
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
