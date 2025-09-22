@@ -388,7 +388,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                       />
                     )}
                   </div>
-                  {isView ? (
+                  {["do akceptacji przez opiekuna", "zaakceptowana przez opiekuna", "odrzucona przez kapitułę (do poprawy)"].includes(trial.status) ? null : isView ? (
                     <span
                       className={`flex items-center space-x-2 self-end mb-2 material-symbols-outlined ${
                         task.is_done

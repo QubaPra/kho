@@ -40,7 +40,7 @@ button:hover {
 }
 
 .material-symbols-outlined {
-  @apply !text-xl leading-none sm:!text-2xl;
+  @apply !text-xl leading-none sm:!text-2xl !select-none;
 }
 
 .modal {
