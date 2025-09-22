@@ -15,7 +15,15 @@ const MentorDashboard = ({ user }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/trials/");
-        setData(response.data);
+        // Ensure completion_percent exists and is numeric for sorting/filtering
+        const formatted = (response.data || []).map((trial) => ({
+          ...trial,
+          completion_percent: (() => {
+            const cp = Number(trial?.completion_percent);
+            return Number.isFinite(cp) ? cp : 0;
+          })(),
+        }));
+        setData(formatted);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -71,14 +79,18 @@ const MentorDashboard = ({ user }) => {
     setFilter(event.target.value);
   };
 
-  const filteredData = data.filter(
-    (trial) =>
-      trial.mentor_mail === user.login &&
-      (trial.user.toLowerCase().includes(filter.toLowerCase()) ||
-        trial.status.toLowerCase().includes(filter.toLowerCase()) ||
-        trial.end_date.toLowerCase().includes(filter.toLowerCase()) ||
-        trial.team.toLowerCase().includes(filter.toLowerCase()))
-  );
+  const filteredData = data.filter((trial) => {
+    if (trial.mentor_mail !== user.login) return false;
+    const q = (filter || "").toLowerCase();
+    const has = (v) => String(v ?? "").toLowerCase().includes(q);
+    return (
+      has(trial.user) ||
+      has(trial.status) ||
+      has(trial.end_date) ||
+      has(trial.team) ||
+      has(trial.completion_percent)
+    );
+  });
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
@@ -107,18 +119,14 @@ const MentorDashboard = ({ user }) => {
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -133,18 +141,14 @@ const MentorDashboard = ({ user }) => {
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -159,25 +163,21 @@ const MentorDashboard = ({ user }) => {
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
                 </div>
               </th>
               <th
-                className="cursor-pointer w-2/12 p-3 rounded-tr-lg"
+                className="cursor-pointer w-2/12"
                 onClick={() => sortData("end_date")}
               >
                 <div className="flex justify-between items-center">
@@ -185,18 +185,37 @@ const MentorDashboard = ({ user }) => {
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
                         north
                       </span>
                     )}
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
                       <span
-                        className="material-symbols-outlined"
-                        style={{ fontSize: "1rem" }}
-                      >
+                        className="material-symbols-outlined !text-base">
+                        south
+                      </span>
+                    )}
+                </div>
+              </th>
+              <th
+                className="cursor-pointer w-1/12 p-3 rounded-tr-lg"
+                onClick={() => sortData("completion_percent")}
+                title="Procent ukończonych zadań"
+              >
+                <div className="flex justify-between items-center">
+                  <span>Zadania</span>
+                  {sortConfig.key === "completion_percent" &&
+                    sortConfig.direction === "ascending" && (
+                      <span
+                        className="material-symbols-outlined !text-base">
+                        north
+                      </span>
+                    )}
+                  {sortConfig.key === "completion_percent" &&
+                    sortConfig.direction === "descending" && (
+                      <span
+                        className="material-symbols-outlined !text-base">
                         south
                       </span>
                     )}
@@ -215,6 +234,7 @@ const MentorDashboard = ({ user }) => {
                 <td className="p-3">{trial.team}</td>
                 <td className="p-3">{formatStatus(trial.status)}</td>
                 <td className="p-3">{trial.end_date}</td>
+                <td className="p-3">{(Number(trial.completion_percent) || 0)}%</td>
               </tr>
             ))}
           </tbody>

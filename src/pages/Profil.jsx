@@ -119,7 +119,24 @@ const Profil = ({ user, setIsAuthenticated }) => {
           full_name: name,
         });
         setIsEditing(false);
+        setErrors({});
       } catch (error) {
+        // Show backend validation errors under the appropriate inputs
+        const backend = error?.response?.data;
+        if (backend) {
+          const newErrors = {};
+          // If DRF returns field errors as { login: ["..."] }
+          if (backend.login) {
+            newErrors.email = Array.isArray(backend.login)
+              ? backend.login[0]
+              : backend.login;
+          }
+          // If API returns a generic error message
+          if (backend.error && !newErrors.email) {
+            newErrors.email = backend.error;
+          }
+          setErrors((prev) => ({ ...prev, ...newErrors }));
+        }
         console.error("Error updating user data:", error);
       }
     }
@@ -161,6 +178,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
     setEmail(user.login);
     setName(user.full_name);
     setIsEditing(false);
+    setErrors({});
   };
 
   const handlePasswordSave = async () => {
@@ -235,7 +253,13 @@ const Profil = ({ user, setIsAuthenticated }) => {
               type="text"
               id="role"
               name="role"
-              value={user.is_mentor ? "Opiekun" : user.role}
+              value={
+                user.is_mentor
+                  ? user.role !== "Kandydat"
+                    ? `Opiekun, ${user.role}`
+                    : "Opiekun"
+                  : user.role
+              }
               disabled
             />
           </div>

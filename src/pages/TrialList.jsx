@@ -22,6 +22,11 @@ const TrialList = () => {
           statusText: trial.status ?? "",
           // Rendered (formatted) status for display
           status: formatStatus(trial.status),
+          // Ensure completion_percent exists and is a number
+          completion_percent: (() => {
+            const cp = Number(trial.completion_percent);
+            return Number.isFinite(cp) ? cp : 0;
+          })(),
         }));
         setData(formattedData);
       } catch (error) {
@@ -67,7 +72,8 @@ const TrialList = () => {
       has(trial.statusText) ||
       has(trial.end_date) ||
       has(trial.team) ||
-      has(trial.mentor_name)
+      has(trial.mentor_name) ||
+      has(trial.completion_percent)
     );
   });
 
@@ -176,7 +182,7 @@ const TrialList = () => {
                 </div>
               </th>
               <th
-                className="cursor-pointer w-3/12"
+                className="cursor-pointer w-2/12"
                 onClick={() => sortData("statusText")}
               >
                 <div className="flex justify-between items-center">
@@ -215,6 +221,27 @@ const TrialList = () => {
                     )}
                 </div>
               </th>
+              <th
+                className="cursor-pointer w-1/12"
+                onClick={() => sortData("completion_percent")}
+                title="Procent ukończonych zadań"
+              >
+                <div className="flex justify-between items-center">
+                  <span>Zadania</span>
+                  {sortConfig.key === "completion_percent" &&
+                    sortConfig.direction === "ascending" && (
+                      <span className="material-symbols-outlined !text-base">
+                        north
+                      </span>
+                    )}
+                  {sortConfig.key === "completion_percent" &&
+                    sortConfig.direction === "descending" && (
+                      <span className="material-symbols-outlined !text-base">
+                        south
+                      </span>
+                    )}
+                </div>
+              </th>
               <th className="p-3 rounded-tr-lg w-1/12 text-center">Akcje</th>
             </tr>
           </thead>
@@ -230,6 +257,7 @@ const TrialList = () => {
                 <td className="p-3">{trial.mentor_name}</td>
                 <td className="p-3">{trial.status}</td>
                 <td className="p-3">{trial.end_date ?? ""}</td>
+                <td className="p-3">{(Number(trial.completion_percent) || 0)}%</td>
                 <td className="p-3 text-center">
                   <button
                     type="button"
