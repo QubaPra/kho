@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Dodaj import
 import axios from "../api/axios";
+import { confirm } from "../components/ConfirmationModal";
 
 const Register = ({ setIsAuthenticated }) => {
   // Dodaj argument
@@ -118,11 +119,15 @@ const Register = ({ setIsAuthenticated }) => {
     if (validate()) {
       try {
         await axios.post("/register/", {
-          login: email,
+          login: email.toLowerCase(),
           password: password,
           full_name: name,
         });
-        alert("Rejestracja przebiegła pomyślnie! Potwierdź konto, klikając w link przesłany na podany adres email.");
+        confirm({
+                title: "Wymagane potwierdzenie!",
+                message: "Rejestracja przebiegła pomyślnie! Potwierdź konto, klikając w link przesłany na podany adres email.",
+                isAlert: true,
+              });
         navigate("/logowanie");
       } catch (error) {
         if (

@@ -21,6 +21,7 @@ import Footer from "./components/Footer";
 import axios from "./api/axios";
 import { ConfirmationProvider } from "./components/ConfirmationModal";
 import VerifyAccount from "./pages/VerifyAccount";
+import GlobalLoader from "./components/GlobalLoader";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -48,7 +49,7 @@ const App = () => {
   }, [isAuthenticated]);
 
   if (isAuthenticated && user === null) {
-    return null;
+    return <GlobalLoader />;
   }
 
   // Route guard for /proba/:id
@@ -88,6 +89,7 @@ const App = () => {
 
   return (
     <ConfirmationProvider>
+      <GlobalLoader />
       <Navbar
         setIsAuthenticated={setIsAuthenticated}
         user={user}

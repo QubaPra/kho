@@ -78,19 +78,21 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             <button
               className="material-symbols-outlined bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 sm:p-2 p-1.5 rounded-lg"
               onClick={toggleDarkMode}
+              title={isDarkMode ? "Tryb jasny" : "Tryb ciemny"}
             >
               {isDarkMode ? "light_mode" : "dark_mode"}
             </button>
             {isAuthenticated ? (
               <>
                 <Link to="/profil">
-                  <button className="material-symbols-outlined button-save">
+                  <button title="Profil" className="material-symbols-outlined button-save">
                     person
                   </button>
                 </Link>
                 <button
                   className="material-symbols-outlined button-reject"
                   onClick={handleLogout}
+                  title="Wyloguj się"
                 >
                   logout
                 </button>

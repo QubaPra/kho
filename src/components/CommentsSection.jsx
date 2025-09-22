@@ -62,7 +62,7 @@ function CommentsSection({ comments, trialId, status }) {
   }, [formattedComments]);
 
   return (
-    <div className="space-y-6 sm:mt-12 mt-8">
+    <div className="comments-section space-y-6 sm:mt-12 mt-8">
       <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
         <span className="material-symbols-outlined ">chat</span>
         <span className="sm:text-xl text-lg font-medium">Komentarze</span>
@@ -92,6 +92,7 @@ function CommentsSection({ comments, trialId, status }) {
         <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
           <div className="flex items-center space-x-2">
             <textarea
+              maxLength="500"
               className="auto-resize-textarea border-gray-200 dark:border-gray-700"
               placeholder="Twój komentarz"
               rows={1}

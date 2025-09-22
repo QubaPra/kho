@@ -10,7 +10,12 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  overflow-x: hidden;  
+  overflow-x: hidden;
+}
+
+:root {
+  /* Minimalnie 16px, rośnie wraz z viewportem, max 30px */
+  font-size: clamp(16px, 0.8vw, 30px);
 }
 
 header {
@@ -138,7 +143,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset;
+  -webkit-box-shadow: 0 0 0 40px white inset;
   -webkit-text-fill-color: #1e2939;
   background-clip: content-box;
 }
@@ -147,7 +152,7 @@ input:-webkit-autofill:active {
 .dark input:-webkit-autofill:hover,
 .dark input:-webkit-autofill:focus,
 .dark input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #1e2939 inset;
+  -webkit-box-shadow: 0 0 0 40px #1e2939 inset;
   -webkit-text-fill-color: #f3f4f6;
   background-clip: content-box;
 }
@@ -234,4 +239,25 @@ thead {
 
 tbody {
   @apply divide-y divide-gray-200 dark:divide-gray-700;
+}
+
+@media print {
+  button, header, footer, .comments-section {
+    display: none !important;
+  }
+  main, body, main > :first-child {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important; 
+    background-color: white !important;   
+  } 
+  main > :first-child > :first-child {
+    @apply shadow-none;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
+    print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
+    }
 }

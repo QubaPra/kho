@@ -7,6 +7,9 @@ const TrialForm = ({
   onSubmit,
   title,
   submitButtonLabel,
+  externalErrors = {},
+  clearExternalError = () => {},
+  loginEmail = "",
 }) => {
   const formatDateForInput = (date) => {
     if (!date) return "";
@@ -79,8 +82,10 @@ const TrialForm = ({
       newErrors.email = "Email do kontaktu nie może być dłuższy niż 100 znaków";
     }
 
-    // Mentor email validation
-    if (formData.mentor_mail === formData.email) {
+    // Mentor email validation (porównanie z emailem logowania użytkownika)
+    const loginNormalized = (loginEmail || "").trim().toLowerCase();
+    const mentorNormalized = (formData.mentor_mail || "").trim().toLowerCase();
+    if (loginNormalized && mentorNormalized && mentorNormalized === loginNormalized) {
       newErrors.mentor_mail = "Email opiekuna nie może być taki sam jak twój";
     } else if (formData.mentor_mail) {
       if (!emailRegex.test(formData.mentor_mail)) {
@@ -124,11 +129,32 @@ const TrialForm = ({
   };
 
   const handleInputChange = (field) => (e) => {
+    const value = e.target.value;
+    // Zaktualizuj dane formularza
     setFormData((prev) => ({
       ...prev,
-      [field]: e.target.value,
+      [field]: value,
     }));
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+    // Czyść błąd dla edytowanego pola
+    setErrors((prev) => {
+      const next = { ...prev, [field]: "" };
+      // Natychmiastowa walidacja: email opiekuna nie może być taki sam jak email logowania użytkownika
+      if (field === "mentor_mail") {
+        const newMentorMail = (value || "").trim().toLowerCase();
+        const userLogin = (loginEmail || "").trim().toLowerCase();
+        const equalMessage = "Email opiekuna nie może być taki sam jak twój";
+
+        if (newMentorMail && userLogin && newMentorMail === userLogin) {
+          next.mentor_mail = equalMessage;
+        } else if (next.mentor_mail === equalMessage) {
+          // Usuń tylko błąd równości, pozostaw inne potencjalne błędy nietknięte
+          next.mentor_mail = "";
+        }
+      }
+      return next;
+    });
+    // wyczyść ewentualny błąd z backendu po edycji pola
+    clearExternalError(field);
   };
 
   const handleSubmit = (e) => {
@@ -136,6 +162,8 @@ const TrialForm = ({
     if (validate()) {
       const formattedData = {
         ...formData,
+        email: (formData.email || "").toLowerCase(),
+        mentor_mail: (formData.mentor_mail || "").toLowerCase(),
         birth_date: formatDateForState(formData.birth_date),
       };
       onSubmit(formattedData);
@@ -167,9 +195,9 @@ const TrialForm = ({
               onChange={handleInputChange("email")}
               className="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             />
-            {errors.email && (
+            {(errors.email || externalErrors.email) && (
               <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                {errors.email}
+                {errors.email || externalErrors.email}
               </p>
             )}
           </div>
@@ -186,9 +214,9 @@ const TrialForm = ({
               inputMode="numeric"
               className="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             />
-            {errors.birth_date && (
+            {(errors.birth_date || externalErrors.birth_date) && (
               <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                {errors.birth_date}
+                {errors.birth_date || externalErrors.birth_date}
               </p>
             )}
           </div>
@@ -209,9 +237,9 @@ const TrialForm = ({
                 </option>
               ))}
             </select>
-            {errors.team && (
+            {(errors.team || externalErrors.team) && (
               <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                {errors.team}
+                {errors.team || externalErrors.team}
               </p>
             )}
           </div>
@@ -230,9 +258,9 @@ const TrialForm = ({
               <option value="wyw.">wyw.</option>
               <option value="ćw.">ćw.</option>
             </select>
-            {errors.rank && (
+            {(errors.rank || externalErrors.rank) && (
               <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                {errors.rank}
+                {errors.rank || externalErrors.rank}
               </p>
             )}
           </div>
@@ -252,9 +280,9 @@ const TrialForm = ({
                 onChange={handleInputChange("mentor_mail")}
                 className="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
               />
-              {errors.mentor_mail && (
+              {(errors.mentor_mail || externalErrors.mentor_mail) && (
                 <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                  {errors.mentor_mail}
+                  {errors.mentor_mail || externalErrors.mentor_mail}
                 </p>
               )}
             </div>
@@ -270,9 +298,9 @@ const TrialForm = ({
                 onChange={handleInputChange("mentor_name")}
                 className="w-full mt-1 px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
               />
-              {errors.mentor_name && (
+              {(errors.mentor_name || externalErrors.mentor_name) && (
                 <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">
-                  {errors.mentor_name}
+                  {errors.mentor_name || externalErrors.mentor_name}
                 </p>
               )}
             </div>

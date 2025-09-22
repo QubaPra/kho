@@ -47,7 +47,7 @@ export const ConfirmationProvider = ({ children }) => {
         isOpen={state.isOpen}
         onRequestClose={() => handleClose(false)}
         contentLabel={state.title}
-        className="modal sm:w-fit w-4/5 shadow-xl "
+        className="modal w-[90vw] md:w-auto md:max-w-2/7 shadow-xl"
         overlayClassName="overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         appElement={document.getElementById("root")}
       >

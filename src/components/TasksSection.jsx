@@ -277,12 +277,14 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           <button
                             className="material-symbols-outlined text-green-600 hover:text-green-800"
                             onClick={handleApproveClick}
+                            title="Zatwierdź"
                           >
                             check
                           </button>
                           <button
                             className="material-symbols-outlined text-red-600 hover:text-red-800"
                             onClick={handleCancelClick}
+                            title="Anuluj"
                           >
                             close
                           </button>
@@ -292,6 +294,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           <button
                             className="material-symbols-outlined text-gray-400 hover:text-gray-600"
                             onClick={() => handleEditClick(task)}
+                            title="Edytuj"
                           >
                             edit
                           </button>
@@ -308,6 +311,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                                 handleDeleteTask(task.id);
                               }
                             }}
+                            title="Usuń"
                           >
                             delete
                           </button>
@@ -319,6 +323,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                 <div>
                   {editTaskId === task.id ? (
                     <textarea
+                      maxLength="1000"
                       className="auto-resize-textarea border-gray-200 dark:border-gray-700 w-full"
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
@@ -327,6 +332,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                     />
                   ) : (
                     <textarea
+                      maxLength="1000"
                       className="auto-resize-textarea border-white dark:border-gray-800 w-full"
                       value={task.content}
                       rows={1}

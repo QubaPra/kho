@@ -112,7 +112,11 @@ const Dashboard = ({ user, setUser }) => {
         navigate("/nowa-proba");
       } catch (error) {
         console.error("Błąd podczas usuwania próby:", error);
-        alert("Wystąpił błąd podczas usuwania próby.");
+        confirm({
+                        title: "Błąd!",
+                        message: "Wystąpił błąd podczas usuwania próby.",
+                        isAlert: true,
+                      });
       }
     }
   };
@@ -249,6 +253,7 @@ const Dashboard = ({ user, setUser }) => {
               <button
                 className="button-approve"
                 onClick={handleReqestMentorCheck}
+                title="Zgłoś próbę do opiekuna"
               >
                 <span className="material-symbols-outlined">
                   list_alt_check
@@ -260,6 +265,7 @@ const Dashboard = ({ user, setUser }) => {
             <button
               className="button-approve"
               onClick={handleSignUpForMeeting}
+              title="Zgłoś się na kapitułę"
             >
               <span className="material-symbols-outlined">calendar_add_on</span>
               <span className="ml-2">Zgłoś się na kapitułę</span>
@@ -270,13 +276,14 @@ const Dashboard = ({ user, setUser }) => {
             <button
               className="button-approve"
               onClick={() => window.open(trial.report, "_blank")}
+              title="Edytuj raport"
             >
               <span className="material-symbols-outlined">Summarize</span>
               <span className="ml-2">Edytuj raport</span>
             </button>
           ) : (
             trial.status?.includes("Otwarta") && (
-              <button className="button-approve" onClick={handleAddReportClick}>
+              <button title="Dodaj raport" className="button-approve" onClick={handleAddReportClick}>
                 <span className="material-symbols-outlined">add</span>
                 <span className="ml-2">Dodaj raport</span>
               </button>
@@ -284,12 +291,12 @@ const Dashboard = ({ user, setUser }) => {
           )}
 
           <Link to="/edycja-proby">
-            <button className="material-symbols-outlined button-approve">
+            <button title="Edytuj próbę" className="material-symbols-outlined button-approve">
               edit_square
             </button>
           </Link>
           <div>
-            <button onClick={handleDeleteTrial} className="button-reject">
+            <button title="Usuń próbę" onClick={handleDeleteTrial} className="button-reject">
             <span className="material-symbols-outlined">delete</span>
           </button>
           </div>

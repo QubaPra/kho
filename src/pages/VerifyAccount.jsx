@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../api/axios";
+import { confirm } from "../components/ConfirmationModal";
 
 const VerifyAccount = ({ setIsAuthenticated }) => {
   const { id, token } = useParams();
@@ -11,7 +12,12 @@ const VerifyAccount = ({ setIsAuthenticated }) => {
       try {
         const response = await axios.get(`/verify/${id}/${token}`);
         
-
+        const ok = await confirm({
+          title: "Sukces!",
+          message: "Konto zostało pomyślnie aktywowane!",
+          isAlert: true,
+        });
+        if (ok) {
         const data = response.data;
 
         // Zapisujemy token w localStorage
@@ -20,14 +26,23 @@ const VerifyAccount = ({ setIsAuthenticated }) => {
 
         // Ustawiamy stan logowania w App.jsx
         setIsAuthenticated(true);
-        alert("Konto zostało pomyślnie aktywowane!");
-        // Przekierowujemy na Dashboard
-        navigate("/");
+        
+        // Przekierowujemy na Dashboard tylko po potwierdzeniu        
+          navigate("/");
+        }
         
       } catch (error) {
         console.error("Błąd podczas aktywacji konta:", error);
-        alert(error.response.data.error || "Błąd podczas aktywacji konta");
-        navigate("/register");
+        const ok = await confirm({
+          title: "Błąd!",
+          message: error.response.data.error || "Błąd podczas aktywacji konta",
+          isAlert: true,
+        });
+        // Przekierowujemy na Dashboard tylko po potwierdzeniu
+        if (ok) {
+          navigate("/register");
+        }
+        
         
       }
     };

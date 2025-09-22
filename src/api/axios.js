@@ -1,8 +1,9 @@
 // filepath: /C:/Users/Quba.TPFMSPZOO/Documents/Github/KHO 2/frontend/src/axios.js
 import axios from "axios";
+import { startRequest, finishRequest } from "../utils/loadingStore";
 
 const instance = axios.create({
-  baseURL: "http://192.168.1.138:8000/api/",
+  baseURL: "https://ekapitula.pythonanywhere.com/api/",
 });
 
 instance.interceptors.request.use(
@@ -11,9 +12,37 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Włącz loader jeśli nie pominięto
+    if (!config.skipLoader) {
+      startRequest();
+    }
     return config;
   },
   (error) => {
+    // Błąd przed wysłaniem requestu – zakończ potencjalny licznik
+    finishRequest();
+    return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use(
+  (response) => {
+    // Zakończ loader dla udanej odpowiedzi
+    if (!response.config?.skipLoader) {
+      finishRequest();
+    }
+    return response;
+  },
+  (error) => {
+    // Zakończ loader dla błędnej odpowiedzi (o ile nie pominięto)
+    try {
+      if (!error.config?.skipLoader) {
+        finishRequest();
+      }
+    } catch (_) {
+      // ignore
+    }
     return Promise.reject(error);
   }
 );

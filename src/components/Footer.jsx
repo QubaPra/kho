@@ -26,18 +26,18 @@ const Footer = () => {
             </div>
 
             <p>
-              Mail do kapituły:{" "}
-              <a href="mailto:kapitulaho.hkk@gmail.com" className=" underline">
-                kapitulaho.hkk@gmail.com
+              Mail do przewodniczącego:{" "}
+              <a href="mailto:jakub.prazuch@zhr.pl" className=" underline">
+                jakub.prazuch@zhr.pl
               </a>
             </p>
             <a
-              href="https://drive.google.com/file/d/1FDp85Au36SpG0OXxA5wEZnFTalU7Cr3A/view?usp=sharing"
+              href="https://docs.google.com/document/d/12wTY5RIqV-cW0qCR6CpVqI0vjONMriKdgoqaYzTj5C8/preview"
               target="_blank"
               rel="noopener noreferrer"
               className=" underline"
             >
-              Instrukcja PDF
+              Instrukcja eKapituła
             </a>
           </div>
         </div>
@@ -50,19 +50,19 @@ const Footer = () => {
           <p>
             pwd. Jakub Prażuch HR -{" "}
             <a
-              href="mailto:jakub.prazuch@malopolska.zhr.pl"
+              href="mailto:jakub.prazuch@zhr.pl"
               className=" underline"
             >
-              jakub.prazuch@malopolska.zhr.pl
+              jakub.prazuch@zhr.pl
             </a>
           </p>
           <p>
             pwd. Jakub Pomorski HR -{" "}
             <a
-              href="mailto:jakub.pomorski@malopolska.zhr.pl"
+              href="mailto:jakub.pomorski@zhr.pl"
               className=" underline"
             >
-              jakub.pomorski@malopolska.zhr.pl
+              jakub.pomorski@zhr.pl
             </a>{" "}
           </p>
         </div>

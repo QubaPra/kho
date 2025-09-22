@@ -231,7 +231,11 @@ const ViewTrial = ({ user, id: propId }) => {
       const orderLink = prompt("Podaj link do PDF rozkazu:");
 
       if (!orderNumber || !orderLink) {
-        alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
+        confirm({
+                title: "Błąd!",
+                message: "Numer rozkazu i link do PDF rozkazu są wymagane.",
+                isAlert: true,
+              });
         return;
       }
 
@@ -311,7 +315,11 @@ const ViewTrial = ({ user, id: propId }) => {
       const orderLink = prompt("Podaj link do PDF rozkazu:");
 
       if (!orderNumber || !orderLink) {
-        alert("Numer rozkazu i link do PDF rozkazu są wymagane.");
+        confirm({
+                title: "Błąd!",
+                message: "Numer rozkazu i link do PDF rozkazu są wymagane.",
+                isAlert: true,
+              });
         return;
       }
 
