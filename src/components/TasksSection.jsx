@@ -246,7 +246,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
           return (
             <div
               key={task.id}
-              className="flex sm:flex-row flex-col sm:space-x-2 sm:space-y-0 space-y-2"
+              className="task flex sm:flex-row flex-col sm:space-x-2 sm:space-y-0 space-y-2"
             >
               <div className="bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
                 {index + 1}

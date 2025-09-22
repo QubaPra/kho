@@ -250,14 +250,29 @@ tbody {
     padding: 0 !important;
     width: 100vw !important;
     height: 100vh !important; 
-    background-color: white !important;   
+    background-image: none !important;
+    @apply bg-white dark:bg-gray-900 ;
   } 
+
   main > :first-child > :first-child {
-    @apply shadow-none;
+    @apply shadow-none rounded-none;
   }
 
   * {
     -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
     print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
     }
+  
+  .task {
+    break-inside: avoid !important;
+  }
+
+  textarea {
+    height: auto !important;
+    field-sizing: content;          /* automatyczna wysokość wg zawartości */
+  }
+
+  :root {
+    font-size: clamp(14px, 1.3vw, 128px);
+  }
 }
