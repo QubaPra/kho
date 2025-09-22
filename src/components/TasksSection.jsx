@@ -232,8 +232,21 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
     }
   };
 
+  const toggleTaskDone = async (task) => {
+  if (isView) return; // Nie pozwalaj na zmianę w trybie podglądu
+  const newValue = !task.is_done;
+  try {
+    await axios.patch(`/tasks/${task.id}`, { is_done: newValue });
+    const updated = tasks.map(t => t.id === task.id ? { ...t, is_done: newValue } : t);
+    setTasks(updated);
+    localStorage.setItem("tasks", JSON.stringify(updated));
+  } catch (err) {
+    console.error("Błąd podczas zmiany statusu zadania:", err);
+  }
+  };
+
   return (
-    <div className="sm:mt-12 mt-8">
+    <div className="sm:mt-12 mt-8 print:mt-6">
       <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
         <span className="material-symbols-outlined ">task_alt</span>
         <span className="sm:text-xl text-lg font-medium">Zadania</span>
@@ -248,10 +261,10 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
               key={task.id}
               className="task flex sm:flex-row flex-col sm:space-x-2 sm:space-y-0 space-y-2"
             >
-              <div className="bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                {index + 1}
+              <div className={`bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)] ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 !shadow-[0_0_15px_rgba(0,0,0,0.1)]/20 !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
+                <span className={`${task.is_done ? "opacity-20" : ""}`}>{index + 1}</span>
               </div>
-              <div className="bg-white w-full dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+              <div className={`w-full rounded-lg sm:p-4 p-2  ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 !shadow-[0_0_15px_rgba(0,0,0,0.1)]/20 !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
                 <div className="flex justify-between items-center mb-2">
                   <span>
                     {editTaskId === task.id ? (
@@ -260,7 +273,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                         onSelectDate={(date) => setEditEndDate(date)}
                       />
                     ) : (
-                      <div className="w-full rounded-lg border border-white dark:border-gray-800 p-2 flex items-center space-x-1 justify-between ">
+                      <div className={`w-full rounded-lg border border-white dark:border-gray-800 p-2 flex items-center space-x-1 justify-between ${task.is_done ? "opacity-20 border-white/0 dark:border-gray-800/0" : "border-white dark:border-gray-800"}`}>
                         <span className="material-symbols-outlined ">
                           calendar_month
                         </span>
@@ -270,7 +283,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                       </div>
                     )}
                   </span>
-                  {!isView ? (
+                  {!isView && task.is_done === false ? (
                     <div className="flex space-x-2 mr-2">
                       {editTaskId === task.id ? (
                         <>
@@ -289,7 +302,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             close
                           </button>
                         </>
-                      ) : (
+                      ) : task.is_done === false ? (
                         <>
                           <button
                             className="material-symbols-outlined text-gray-400 hover:text-gray-600"
@@ -316,7 +329,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             delete
                           </button>
                         </>
-                      )}
+                      ) : null}
                     </div>
                   ) : null}
                 </div>
@@ -333,7 +346,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                   ) : (
                     <textarea
                       maxLength="1000"
-                      className="auto-resize-textarea border-white dark:border-gray-800 w-full"
+                      className={`auto-resize-textarea  w-full ${task.is_done ? "opacity-20 border-white/0 dark:border-gray-800/0" : "border-white dark:border-gray-800"}`}
                       value={task.content}
                       rows={1}
                       placeholder="Treść zadania"
@@ -342,7 +355,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                   )}
                 </div>
                 <div className="flex justify-between items-center px-2">
-                  <div className="flex flex-wrap space-x-2">
+                  <div className={`flex flex-wrap space-x-2 ${task.is_done ? "opacity-20" : ""}`}>
                     {taskCategories.map((category) =>
                       editTaskId === task.id ? (
                         <button
@@ -375,6 +388,39 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                       />
                     )}
                   </div>
+                  {isView ? (
+                    <span
+                      className={`flex items-center space-x-2 self-end mb-2 material-symbols-outlined ${
+                        task.is_done
+                          ? "text-green-600"
+                          : "text-gray-400"
+                      }`}                      
+                    >
+                      check_circle
+                    </span>
+                  ) : (
+                    editTaskId !== task.id && (
+                      <span className="flex items-center space-x-2 self-end mb-2">
+                        {/* ...Twoja data... */}
+                        <div
+                          className={`material-symbols-outlined cursor-pointer ${
+                            task.is_done
+                              ? "text-green-600"
+                              : "text-gray-400 hover:text-gray-600"
+                          }`}
+                          onClick={() => toggleTaskDone(task)}
+                          title={
+                            task.is_done
+                              ? "Oznacz jako niewykonane"
+                              : "Oznacz jako wykonane"
+                          }
+                          disabled={isView}
+                        >
+                          check_circle
+                        </div>
+                      </span>
+                    )
+                  )}
                 </div>
               </div>
             </div>
