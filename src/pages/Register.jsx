@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Dodaj import
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";

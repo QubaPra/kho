@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const MonthDropdown = ({ selectedDate, onSelectDate }) => {
   const [isOpen, setIsOpen] = useState(false);

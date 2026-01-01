@@ -1,9 +1,8 @@
-// filepath: /C:/Users/Quba.TPFMSPZOO/Documents/Github/KHO 2/frontend/src/axios.js
 import axios from "axios";
 import { startRequest, finishRequest } from "../utils/loadingStore";
 
 const instance = axios.create({
-  baseURL: "https://ekapitula.pythonanywhere.com/api/",
+  baseURL: "http://localhost:8000/api/", // "https://ekapitula.pythonanywhere.com/api/"
 });
 
 instance.interceptors.request.use(

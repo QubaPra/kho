@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-  useParams,
 } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import MentorDashboard from "./pages/MentorDashboard";
@@ -22,6 +20,7 @@ import axios from "./api/axios";
 import { ConfirmationProvider } from "./components/ConfirmationModal";
 import VerifyAccount from "./pages/VerifyAccount";
 import GlobalLoader from "./components/GlobalLoader";
+import ProtectedTrialRoute from "./components/ProtectedTrialRoute";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -51,41 +50,6 @@ const App = () => {
   if (isAuthenticated && user === null) {
     return <GlobalLoader />;
   }
-
-  // Route guard for /proba/:id
-  const ProtectedTrialRoute = ({ user, children }) => {
-    const { id } = useParams();
-    const [allowed, setAllowed] = useState(null);
-
-    useEffect(() => {
-      if (!user) {
-        setAllowed(false);
-        return;
-      }
-
-      if (user.role === "Administrator" || user.role === "Członek kapituły") {
-        setAllowed(true);
-        return;
-      }
-
-      const checkAccess = async () => {
-        try {
-          const { data } = await axios.get(`/trials/${id}`);
-          const login = (user.login || "").toLowerCase();
-          const candidates = [data.user, data.email, data.mentor_mail]
-            .map((v) => (v || "").toLowerCase());
-          setAllowed(candidates.includes(login));
-        } catch (e) {
-          setAllowed(false);
-        }
-      };
-
-      checkAccess();
-    }, [user, id]);
-
-    if (allowed === null) return null;
-    return allowed ? children : <Navigate to="/" />;
-  };
 
   return (
     <ConfirmationProvider>
@@ -175,7 +139,7 @@ const App = () => {
                   element={
                     user.role === "Administrator" ||
                     user.role === "Członek kapituły" ? (
-                      <TrialList />
+                      <TrialList user={user} />
                     ) : (
                       <Navigate to="/" />
                     )

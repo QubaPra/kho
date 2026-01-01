@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import { formatStatus } from "../utils/formatters";
 
 const MentorDashboard = ({ user }) => {
   const [data, setData] = useState([]);
@@ -31,31 +32,6 @@ const MentorDashboard = ({ user }) => {
 
     fetchData();
   }, []);
-
-  const formatStatus = (status) => {
-    if (!status) return "";
-    const match = status.match(
-      /^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/
-    );
-    if (match) {
-      const [_, type, orderNumber, orderLink, additionalText] = match;
-      return (
-        <span>
-          {type} rozkazem{" "}
-          <a
-            className="underline hover:text-blue-500 dark:hover:text-blue-400"
-            href={orderLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {orderNumber}
-          </a>
-          {additionalText}
-        </span>
-      );
-    }
-    return status;
-  };
 
   const sortData = (key) => {
     let direction = "ascending";

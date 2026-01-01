@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
 
-const TrialList = () => {
+const TrialList = ({ user }) => {
   const [data, setData] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -104,7 +104,7 @@ const TrialList = () => {
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
-      <h2 className="sm:mb-12 mb-8 mt-1">Lista prób</h2>
+      <h2 className="sm:mb-12 mb-8 mt-1">Lista wszystkich prób</h2>
       <div className="mb-4 sm:max-w-md flex items-center">
         <input
           type="text"
@@ -222,7 +222,9 @@ const TrialList = () => {
                 </div>
               </th>
               <th
-                className="cursor-pointer w-1/12"
+                className={`cursor-pointer w-1/12 ${
+                  user?.role !== "Administrator" ? "rounded-tr-lg" : ""
+                }`}
                 onClick={() => sortData("completion_percent")}
                 title="Procent ukończonych zadań"
               >
@@ -242,7 +244,9 @@ const TrialList = () => {
                     )}
                 </div>
               </th>
-              <th className="p-3 rounded-tr-lg w-1/12 text-center">Akcje</th>
+              {user?.role === "Administrator" && (
+                <th className="p-3 rounded-tr-lg w-1/12 text-center">Akcje</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -258,31 +262,33 @@ const TrialList = () => {
                 <td className="p-3">{trial.status}</td>
                 <td className="p-3">{trial.end_date ?? ""}</td>
                 <td className="p-3">{(Number(trial.completion_percent) || 0)}%</td>
-                <td className="p-3 text-center">
-                  <button
-                    type="button"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      const accepted = await confirm({
-                        title: "Potwierdź usunięcie",
-                        message: `Czy na pewno chcesz usunąć tę próbę użytkownika \"${trial.user}\"? Tej operacji nie można cofnąć.`,
-                        isDanger: true,
-                      });
-                      if (!accepted) return;
-                      try {
-                        await axios.delete(`/trials/${trial.id}/`);
-                        setData((prev) => prev.filter((t) => t.id !== trial.id));
-                      } catch (error) {
-                        console.error("Error deleting trial:", error);
-                      }
-                    }}
-                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
-                    aria-label={`Usuń próbę ${trial.user}`}
-                    title="Usuń próbę"
-                  >
-                    <span className="material-symbols-outlined text-red-600 dark:text-red-400 align-middle">delete</span>
-                  </button>
-                </td>
+                {user?.role === "Administrator" && (
+                  <td className="p-3 text-center">
+                    <button
+                      type="button"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        const accepted = await confirm({
+                          title: "Potwierdź usunięcie",
+                          message: `Czy na pewno chcesz usunąć tę próbę użytkownika \"${trial.user}\"? Tej operacji nie można cofnąć.`,
+                          isDanger: true,
+                        });
+                        if (!accepted) return;
+                        try {
+                          await axios.delete(`/trials/${trial.id}/`);
+                          setData((prev) => prev.filter((t) => t.id !== trial.id));
+                        } catch (error) {
+                          console.error("Error deleting trial:", error);
+                        }
+                      }}
+                      className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                      aria-label={`Usuń próbę ${trial.user}`}
+                      title="Usuń próbę"
+                    >
+                      <span className="material-symbols-outlined text-red-600 dark:text-red-400 align-middle">delete</span>
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

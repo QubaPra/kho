@@ -1,25 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import CommentsSection from "../components/CommentsSection";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import ViewTrial from "./ViewTrial";
 import TasksSection from "../components/TasksSection";
 import { confirm } from "../components/ConfirmationModal";
-
-const monthMap = {
-  styczeń: "01",
-  luty: "02",
-  marzec: "03",
-  kwiecień: "04",
-  maj: "05",
-  czerwiec: "06",
-  lipiec: "07",
-  sierpień: "08",
-  wrzesień: "09",
-  październik: "10",
-  listopad: "11",
-  grudzień: "12",
-};
+import { monthMap, formatStatus, getAgeSuffix, getLatestEndDate } from "../utils/formatters";
 
 const Dashboard = ({ user, setUser }) => {
   const [trial, setTrial] = useState(() => {
@@ -74,29 +60,6 @@ const Dashboard = ({ user, setUser }) => {
     fetchTrialData();
   }, []);
 
-  const getLatestEndDate = useCallback((tasks) => {
-    if (tasks.length === 0) return "";
-    const dates = tasks
-      .map((task) => {
-        if (!task.end_date) {
-          return NaN; // Sprawdzenie, czy endDate jest zdefiniowane
-        }
-        const [monthName, year] = task.end_date.split(" ");
-        const month = monthMap[monthName.toLowerCase()];
-        if (!month || !year) {
-          return NaN;
-        }
-        return new Date(`${year}-${month}-01`);
-      })
-      .filter((date) => !isNaN(date));
-    if (dates.length === 0) return "";
-    const latestDate = new Date(Math.max(...dates));
-    return latestDate.toLocaleDateString("pl-PL", {
-      month: "long",
-      year: "numeric",
-    });
-  }, []);
-
   const handleDeleteTrial = async () => {
     if (
       await confirm({
@@ -121,38 +84,6 @@ const Dashboard = ({ user, setUser }) => {
     }
   };
 
-  const formatStatus = (status) => {
-    if (!status) return "";
-    const match = status.match(
-      /^(Otwarta|Zamknięta) rozkazem ([^<]+) <(.+?)>(.*)$/
-    );
-    if (match) {
-      const [_, type, orderNumber, orderLink, additionalText] = match;
-      return (
-        <span>
-          {type} rozkazem{" "}
-          <a
-            className="underline hover:text-blue-500 dark:hover:text-blue-400"
-            href={orderLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {orderNumber}
-          </a>
-          {additionalText}
-        </span>
-      );
-    }
-    return status;
-  };
-
-  const getAgeSuffix = (age) => {
-    if (age === 1) return "rok";
-    if (age % 10 >= 2 && age % 10 <= 4 && (age % 100 < 10 || age % 100 >= 20))
-      return "lata";
-    return "lat";
-  };
-
   const handleAddReportClick = async () => {
     try {
       const response = await axios.get(`/trials/${trial.id}/report`);
@@ -173,7 +104,7 @@ const Dashboard = ({ user, setUser }) => {
   };
 
   const handleReqestMentorCheck = async () => {
-    if (localStorage.getItem("sentRequestMentorCheck")) {
+    if (sessionStorage.getItem("sentRequestMentorCheck")) {
       confirm({
         title: "Uwaga!",
         message: "Próba została już zgłoszona do opiekuna.",
@@ -191,7 +122,7 @@ const Dashboard = ({ user, setUser }) => {
         message: "Pomyślnie zgłoszono próbę do opiekuna.",
         isAlert: true,
       });
-      localStorage.setItem("sentRequestMentorCheck", true);
+      sessionStorage.setItem("sentRequestMentorCheck", true);
     } catch (error) {
       console.error("Błąd podczas zgłaszania próby do opiekuna:", error);
       confirm({
@@ -203,7 +134,7 @@ const Dashboard = ({ user, setUser }) => {
   }
 
   const handleSignUpForMeeting = async () => {
-    if (localStorage.getItem("signUpForMeetingSent")) {
+    if (sessionStorage.getItem("signUpForMeetingSent")) {
       confirm({
         title: "Uwaga!",
         message: "Zgłosiłeś się już na kapitułę.",
@@ -221,7 +152,7 @@ const Dashboard = ({ user, setUser }) => {
         message: "Pomyślnie zgłosiłeś się na kapitułę.",
         isAlert: true,
       });
-      localStorage.setItem("signUpForMeetingSent", true);
+      sessionStorage.setItem("signUpForMeetingSent", true);
     } catch (error) {
       console.error("Błąd podczas zgłaszania na kapitułę:", error);
       confirm({

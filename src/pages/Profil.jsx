@@ -1,5 +1,4 @@
-// Profil.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import Modal from "react-modal";
 import { confirm } from "../components/ConfirmationModal";

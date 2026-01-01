@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
+
+const BLOCKED_LOGINS = ["jakub.prazuch@zhr.pl"];
 
 const UsersList = ({ currentUser }) => {
   const [data, setData] = useState([]);
@@ -229,11 +231,14 @@ const UsersList = ({ currentUser }) => {
                     id="role"
                     value={user.role}
                     onChange={(e) => handleRoleChange(index, e.target.value)}
-                    className="w-full"
-                    disabled={currentUser && currentUser.id === user.id}
+                    className={`w-full ${BLOCKED_LOGINS.includes(user.login) ? "opacity-50" : ""}`}
+                    style={BLOCKED_LOGINS.includes(user.login) ? { cursor: "not-allowed" } : {}}
+                    disabled={currentUser && currentUser.id === user.id || BLOCKED_LOGINS.includes(user.login)}
                     title={
                       currentUser && currentUser.id === user.id
                         ? "Nie możesz zmienić własnej roli"
+                        : BLOCKED_LOGINS.includes(user.login)
+                        ? "Zmiana roli tego użytkownika jest zablokowana"
                         : undefined
                     }
                   >

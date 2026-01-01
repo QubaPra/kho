@@ -4,21 +4,7 @@ import MonthDropdown from "./MonthDropdown";
 import axios from "../api/axios";
 import resizeTextareas from "../utils/resizeTextareas";
 import { confirm } from "../components/ConfirmationModal";
-
-const monthMap = {
-  styczeń: "01",
-  luty: "02",
-  marzec: "03",
-  kwiecień: "04",
-  maj: "05",
-  czerwiec: "06",
-  lipiec: "07",
-  sierpień: "08",
-  wrzesień: "09",
-  październik: "10",
-  listopad: "11",
-  grudzień: "12",
-};
+import { monthMap } from "../utils/formatters";
 
 const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   const [editTaskId, setEditTaskId] = useState(null);

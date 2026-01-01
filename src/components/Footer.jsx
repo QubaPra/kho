@@ -1,5 +1,3 @@
-//Footer.jsx
-import React from "react";
 import fleurDeLis from "../public/fleur-de-lis.svg";
 
 const Footer = () => {

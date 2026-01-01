@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
@@ -10,15 +9,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </BrowserRouter>
 );
 
-// Ustaw faviconę dynamicznie jako data URI (zostanie zinline'owana w finalnym HTML)
-(function setFavicon() {
-  try {
-    const link = document.createElement("link");
-    link.rel = "icon";
-    link.type = "image/svg+xml";
-    link.href = fleurDeLis; // dzięki asset inline, to będzie data URI
-    document.head.appendChild(link);
-  } catch (e) {
-    // Ignoruj błędy ustawiania favicony
-  }
-})();
+// Ustaw faviconę dynamicznie
+const link = document.createElement("link");
+link.rel = "icon";
+link.type = "image/svg+xml";
+link.href = fleurDeLis;
+document.head.appendChild(link);
