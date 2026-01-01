@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 import resizeTextareas from "../utils/resizeTextareas";
+import { MessageCircle, Send } from "lucide-react";
 
 function CommentsSection({ comments, trialId, status }) {
   const [formattedComments, setFormattedComments] = useState([]);
@@ -64,7 +65,7 @@ function CommentsSection({ comments, trialId, status }) {
   return (
     <div className="comments-section space-y-6 sm:mt-12 mt-8">
       <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
-        <span className="material-symbols-outlined ">chat</span>
+        <MessageCircle size={24} />
         <span className="sm:text-xl text-lg font-medium">Komentarze</span>
       </div>
 
@@ -100,10 +101,10 @@ function CommentsSection({ comments, trialId, status }) {
               onChange={(e) => setNewComment(e.target.value)}
             ></textarea>
             <button
-              className="material-symbols-outlined text-blue-600 hover:text-blue-800"
+              className="text-blue-600 hover:text-blue-800"
               onClick={handleAddComment}
             >
-              send
+              <Send size={20} />
             </button>
           </div>
         </div>

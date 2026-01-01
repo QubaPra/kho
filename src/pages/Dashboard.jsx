@@ -6,6 +6,7 @@ import ViewTrial from "./ViewTrial";
 import TasksSection from "../components/TasksSection";
 import { confirm } from "../components/ConfirmationModal";
 import { monthMap, formatStatus, getAgeSuffix, getLatestEndDate } from "../utils/formatters";
+import { ListCheck, CalendarPlus, FileText, Plus, Edit, Trash2 } from "lucide-react";
 
 const Dashboard = ({ user, setUser }) => {
   const [trial, setTrial] = useState(() => {
@@ -186,9 +187,7 @@ const Dashboard = ({ user, setUser }) => {
                 onClick={handleReqestMentorCheck}
                 title="Zgłoś próbę do opiekuna"
               >
-                <span className="material-symbols-outlined">
-                  list_alt_check
-                </span>
+                <ListCheck size={20} />
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
             )
@@ -198,7 +197,7 @@ const Dashboard = ({ user, setUser }) => {
               onClick={handleSignUpForMeeting}
               title="Zgłoś się na kapitułę"
             >
-              <span className="material-symbols-outlined">calendar_add_on</span>
+              <CalendarPlus size={20} />
               <span className="ml-2">Zgłoś się na kapitułę</span>
             </button>
           )}
@@ -209,26 +208,26 @@ const Dashboard = ({ user, setUser }) => {
               onClick={() => window.open(trial.report, "_blank")}
               title="Edytuj raport"
             >
-              <span className="material-symbols-outlined">Summarize</span>
+              <FileText size={20} />
               <span className="ml-2">Edytuj raport</span>
             </button>
           ) : (
             trial.status?.includes("Otwarta") && (
               <button title="Dodaj raport" className="button-approve" onClick={handleAddReportClick}>
-                <span className="material-symbols-outlined">add</span>
+                <Plus size={20} />
                 <span className="ml-2">Dodaj raport</span>
               </button>
             )
           )}
 
           <Link to="/edycja-proby">
-            <button title="Edytuj próbę" className="material-symbols-outlined button-approve">
-              edit_square
+            <button title="Edytuj próbę" className="button-approve">
+              <Edit size={20} />
             </button>
           </Link>
           <div>
             <button title="Usuń próbę" onClick={handleDeleteTrial} className="button-reject">
-            <span className="material-symbols-outlined">delete</span>
+            <Trash2 size={20} />
           </button>
           </div>
           

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Calendar } from "lucide-react";
 
 const MonthDropdown = ({ selectedDate, onSelectDate }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +94,7 @@ const MonthDropdown = ({ selectedDate, onSelectDate }) => {
         placeholder="Data zakończenia"
         className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-2 flex space-x-1 items-center justify-between "
       >
-        <span className="material-symbols-outlined">calendar_month</span>
+        <Calendar size={20} />
         <p className={!date ? "opacity-50" : ""}>
           {date || "Data zakończenia"}
         </p>

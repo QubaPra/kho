@@ -39,8 +39,8 @@ button:hover {
 
 }
 
-.material-symbols-outlined {
-  @apply !text-xl leading-none sm:!text-2xl !select-none;
+svg {
+  stroke-width: 2.5;
 }
 
 .modal {
@@ -97,8 +97,7 @@ textarea {
 }
 
 .category-button:hover::after {
-  content: "close";
-  font-family: "Material Symbols Outlined";
+  content: "×";
   position: absolute;
   opacity: 1;
   transition: opacity 0.2s;

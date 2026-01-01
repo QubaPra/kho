@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import Modal from "react-modal";
 import { confirm } from "../components/ConfirmationModal";
+import { Check, X, Edit, Lock, Trash2 } from "lucide-react";
 
 Modal.setAppElement("#root");
 
@@ -271,7 +272,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onClick={handleSaveClick}
                 className="w-full  mt-2  justify-center space-x-1 button-save"
               >
-                <span className="material-symbols-outlined">check</span>
+                <Check size={20} />
                 <span>Zapisz</span>
               </button>
               <button
@@ -279,7 +280,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onClick={cancelEdit}
                 className="w-full  mt-2  justify-center space-x-1 button-reject"
               >
-                <span className="material-symbols-outlined">close</span>
+                <X size={20} />
                 <span>Anuluj</span>
               </button>
               <div className="w-full  mt-2 sm:p-2 p-1.5 sm:block hidden" />
@@ -291,7 +292,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onClick={handleEditClick}
                 className="w-full  mt-2  justify-center space-x-1 button-blue"
               >
-                <span className="material-symbols-outlined">edit_square</span>
+                <Edit size={20} />
                 <span>Edytuj dane</span>
               </button>
               <button
@@ -299,7 +300,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onClick={handlePasswordEditClick}
                 className="w-full  mt-2  justify-center space-x-1 button-orange"
               >
-                <span className="material-symbols-outlined">lock</span>
+                <Lock size={20} />
                 <span>Edytuj hasło</span>
               </button>
               <button
@@ -307,7 +308,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
                 onClick={handleDeleteClick}
                 className="w-full  mt-2  justify-center space-x-1 button-reject"
               >
-                <span className="material-symbols-outlined">delete</span>
+                <Trash2 size={20} />
                 <span>Usuń konto</span>
               </button>
             </>

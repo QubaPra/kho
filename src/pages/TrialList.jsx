@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
+import { Search, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
 
 const TrialList = ({ user }) => {
   const [data, setData] = useState([]);
@@ -112,7 +113,7 @@ const TrialList = ({ user }) => {
           value={filter}
           onChange={handleFilterChange}
         />
-        <span className="material-symbols-outlined ml-2">search</span>
+        <Search size={20} className="ml-2" />
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
@@ -126,18 +127,11 @@ const TrialList = ({ user }) => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base"
-                        style={{ fontSize: "1rem" }}
-                      >
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -149,15 +143,11 @@ const TrialList = ({ user }) => {
                   <span>Drużyna</span>
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -169,15 +159,11 @@ const TrialList = ({ user }) => {
                   <span>Opiekun</span>
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -189,15 +175,11 @@ const TrialList = ({ user }) => {
                   <span>Stan próby</span>
                   {sortConfig.key === "statusText" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "statusText" &&
                     sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -209,15 +191,11 @@ const TrialList = ({ user }) => {
                   <span>Data zakończenia</span>
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -232,15 +210,11 @@ const TrialList = ({ user }) => {
                   <span>Zadania</span>
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "ascending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "descending" && (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -285,7 +259,7 @@ const TrialList = ({ user }) => {
                       aria-label={`Usuń próbę ${trial.user}`}
                       title="Usuń próbę"
                     >
-                      <span className="material-symbols-outlined text-red-600 dark:text-red-400 align-middle">delete</span>
+                      <Trash2 size={20} className="text-red-600 dark:text-red-400" />
                     </button>
                   </td>
                 )}

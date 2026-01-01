@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Sun, Moon, User, LogOut, UserPlus, LogIn } from "lucide-react";
 
 const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -76,40 +77,38 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
           </div>
           <div className="flex items-center space-x-2">
             <button
-              className="material-symbols-outlined bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 sm:p-2 p-1.5 rounded-lg"
+              className="bg-gray-800 dark:bg-gray-200 dark:text-gray-800 text-gray-100 sm:p-2 p-1.5 rounded-lg"
               onClick={toggleDarkMode}
               title={isDarkMode ? "Tryb jasny" : "Tryb ciemny"}
             >
-              {isDarkMode ? "light_mode" : "dark_mode"}
+              {isDarkMode ? <Sun /> : <Moon />}
             </button>
             {isAuthenticated ? (
               <>
                 <Link to="/profil">
-                  <button title="Profil" className="material-symbols-outlined button-save">
-                    person
+                  <button title="Profil" className="button-save">
+                    <User size={24} />
                   </button>
                 </Link>
                 <button
-                  className="material-symbols-outlined button-reject"
+                  className="button-reject"
                   onClick={handleLogout}
                   title="Wyloguj się"
                 >
-                  logout
+                  <LogOut size={24} />
                 </button>
               </>
             ) : (
               <>
                 <Link to="/rejestracja">
                   <button className="button-orange sm:space-x-1 ">
-                    <span className="material-symbols-outlined">
-                      person_add
-                    </span>
+                    <UserPlus size={24} />
                     <span className="sm:block hidden">Rejestracja</span>
                   </button>
                 </Link>
                 <Link to="/logowanie">
                   <button className=" sm:space-x-1 button-blue">
-                    <span className="material-symbols-outlined">login</span>
+                    <LogIn size={24} />
                     <span className="sm:block hidden">Logowanie</span>
                   </button>
                 </Link>

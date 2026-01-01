@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { formatStatus } from "../utils/formatters";
+import { Search, ArrowUp, ArrowDown } from "lucide-react";
 
 const MentorDashboard = ({ user }) => {
   const [data, setData] = useState([]);
@@ -80,7 +81,7 @@ const MentorDashboard = ({ user }) => {
           value={filter}
           onChange={handleFilterChange}
         />
-        <span className="material-symbols-outlined ml-2">search</span>
+        <Search size={20} className="ml-2" />
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
@@ -94,17 +95,11 @@ const MentorDashboard = ({ user }) => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -116,17 +111,11 @@ const MentorDashboard = ({ user }) => {
                   <span>Drużyna</span>
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -138,17 +127,11 @@ const MentorDashboard = ({ user }) => {
                   <span>Stan próby</span>
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "status" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -160,17 +143,11 @@ const MentorDashboard = ({ user }) => {
                   <span>Data zakończenia</span>
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>
@@ -183,17 +160,11 @@ const MentorDashboard = ({ user }) => {
                   <span>Zadania</span>
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "ascending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     )}
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "descending" && (
-                      <span
-                        className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     )}
                 </div>
               </th>

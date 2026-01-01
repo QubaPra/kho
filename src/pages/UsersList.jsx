@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
+import { Search, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
 
 const BLOCKED_LOGINS = ["jakub.prazuch@zhr.pl"];
 
@@ -104,7 +105,7 @@ const UsersList = ({ currentUser }) => {
           value={filter}
           onChange={handleFilterChange}
         />
-        <span className="material-symbols-outlined ml-2">search</span>
+        <Search size={20} className="ml-2" />
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
@@ -118,13 +119,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "full_name" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -133,13 +130,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Email</span>
                   {sortConfig.key === "login" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -148,13 +141,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Funkcja</span>
                   {sortConfig.key === "role" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -163,13 +152,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Próba</span>
                   {sortConfig.key === "has_trial" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -178,13 +163,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Opiekun</span>
                   {sortConfig.key === "is_mentor" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -193,13 +174,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Ostatnie logowanie</span>
                   {sortConfig.key === "last_login" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -208,13 +185,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Data dołączenia</span>
                   {sortConfig.key === "date_joined" &&
                     (sortConfig.direction === "ascending" ? (
-                      <span className="material-symbols-outlined !text-base">
-                        north
-                      </span>
+                      <ArrowUp size={16} />
                     ) : (
-                      <span className="material-symbols-outlined !text-base">
-                        south
-                      </span>
+                      <ArrowDown size={16} />
                     ))}
                 </div>
               </th>
@@ -274,7 +247,7 @@ const UsersList = ({ currentUser }) => {
                       aria-label={`Usuń użytkownika ${user.full_name || user.login}`}
                       title="Usuń użytkownika"
                     >
-                      <span className="material-symbols-outlined text-red-600 dark:text-red-400 align-middle">delete</span>
+                      <Trash2 size={20} className="text-red-600 dark:text-red-400" />
                     </button>
                   )}
                 </td>
