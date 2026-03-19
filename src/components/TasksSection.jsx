@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CategoryDropdown from "./CategoryDropdown";
 import MonthDropdown from "./MonthDropdown";
 import axios from "../api/axios";
 import resizeTextareas from "../utils/resizeTextareas";
 import { confirm } from "../components/ConfirmationModal";
 import { monthMap } from "../utils/formatters";
-import { ListChecks, Check, X, Edit, Trash2, Plus, CalendarDays, CheckCircle, Church, SmilePlus, GraduationCap, Drama, Dumbbell, Users, Mountain, Leaf, Trees, Flag } from "lucide-react";
+import { ListTodo, Check, X, Edit, Trash2, Plus, CalendarDays, CircleCheck, Church, SmilePlus, GraduationCap, Drama, Dumbbell, Users, Mountain, Sprout, Trees, Flag, Trophy } from "lucide-react";
 
 const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   const [editTaskId, setEditTaskId] = useState(null);
@@ -163,7 +163,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       trial.status === "odrzucona przez kapitułę (do poprawy)"
     ) {
       try {
-        await axios.patch("/trials/me", {
+        await axios.patch("/trials/me/", {
           status: "do akceptacji przez opiekuna",
         });
         setTrial((prevTrial) => ({
@@ -185,7 +185,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       trial.status != "odrzucona przez kapitułę (do poprawy)"
     ) {
       try {
-        await axios.patch("/trials/me", {
+        await axios.patch("/trials/me/", {
           status: `${trial.status} (edytowano)`,
         });
         setTrial((prevTrial) => ({
@@ -232,28 +232,28 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   }
   };
 
-  // Mapowanie nazw ikon z API na komponenty Lucide
-  const iconMap = {
-    'church': Church,
-    'sentiment_very_satisfied': SmilePlus,
-    'school': GraduationCap,
-    'theater_comedy': Drama,
-    'exercise': Dumbbell,
-    'diversity_4': Users,
-    'mountain_flag': Mountain,
-    'eco': Leaf,
-    'forest': Trees,
-    'flag': Flag
+  const iconComponents = {
+    Church,
+    SmilePlus,
+    GraduationCap,
+    Drama,
+    Dumbbell,
+    Users,
+    Mountain,
+    Sprout,
+    Trees,
+    Flag,
+    Trophy
   };
 
   const getIconComponent = (iconName) => {
-    return iconMap[iconName] || Plus;
+    return iconComponents[iconName] || Trophy;
   };
 
   return (
     <div className="sm:mt-12 mt-8 print:mt-6">
       <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
-        <ListChecks size={24} />
+        <ListTodo/>
         <span className="sm:text-xl text-lg font-medium">Zadania</span>
       </div>
       <div className="space-y-4">
@@ -266,10 +266,10 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
               key={task.id}
               className="task flex sm:flex-row flex-col sm:space-x-2 sm:space-y-0 space-y-2"
             >
-              <div className={`bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)] ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 !shadow-[0_0_15px_rgba(0,0,0,0.1)]/20 !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
+              <div className={`bg-white sm:block hidden content-center sm:w-10 w-full text-center dark:bg-gray-800 rounded-lg sm:p-4 p-2 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)] ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 shadow-[0_0_15px_rgba(0,0,0,0.1)]/5! !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
                 <span className={`${task.is_done ? "opacity-20" : ""}`}>{index + 1}</span>
               </div>
-              <div className={`w-full rounded-lg sm:p-4 p-2  ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 !shadow-[0_0_15px_rgba(0,0,0,0.1)]/20 !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
+              <div className={`w-full rounded-lg sm:p-4 p-2  ${task.is_done ? "bg-white/20 dark:bg-gray-800/20 shadow-[0_0_15px_rgba(0,0,0,0.1)]/5! !dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]/20" : "bg-white dark:bg-gray-800 shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)]"}`}>
                 <div className="flex justify-between items-center mb-2">
                   <span>
                     {editTaskId === task.id ? (
@@ -278,8 +278,8 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                         onSelectDate={(date) => setEditEndDate(date)}
                       />
                     ) : (
-                      <div className={`w-full rounded-lg border border-white dark:border-gray-800 p-2 flex items-center space-x-1 justify-between ${task.is_done ? "opacity-20 border-white/0 dark:border-gray-800/0" : "border-white dark:border-gray-800"}`}>
-                        <CalendarDays size={20} />
+                      <div className={`w-full rounded-lg border border-white dark:border-gray-800 p-2 flex items-center space-x-2 justify-between ${task.is_done ? "opacity-20 border-white/0 dark:border-gray-800/0" : "border-white dark:border-gray-800"}`}>
+                        <CalendarDays/>
                         <p className={!task.end_date ? "opacity-50" : ""}>
                           {task.end_date || "Data zakończenia"}
                         </p>
@@ -295,14 +295,14 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             onClick={handleApproveClick}
                             title="Zatwierdź"
                           >
-                            <Check size={20} />
+                            <Check/>
                           </button>
                           <button
                             className="text-red-600 hover:text-red-800"
                             onClick={handleCancelClick}
                             title="Anuluj"
                           >
-                            <X size={20} />
+                            <X/>
                           </button>
                         </>
                       ) : task.is_done === false ? (
@@ -312,7 +312,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             onClick={() => handleEditClick(task)}
                             title="Edytuj"
                           >
-                            <Edit size={20} />
+                            <Edit/>
                           </button>
                           <button
                             className="text-gray-400 hover:text-red-600"
@@ -329,7 +329,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                             }}
                             title="Usuń"
                           >
-                            <Trash2 size={20} />
+                            <Trash2/>
                           </button>
                         </>
                       ) : null}
@@ -367,7 +367,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           className={`category-button ${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 my-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                           onClick={() => handleRemoveCategory(category.id)}
                         >
-                          <IconComponent size={20} className="category-icon" />
+                          <IconComponent className="category-icon" />
                           <span className="category-name">{category.name}</span>
                         </button>
                       ) : (
@@ -375,7 +375,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           key={category.id}
                           className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} text-center px-3 py-1 my-1 rounded-full sm:text-sm text-xs w-fit flex items-center space-x-1`}
                         >
-                          <IconComponent size={20} />
+                          <IconComponent />
                           <span>{category.name}</span>
                         </div>
                       );
@@ -396,7 +396,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           : "text-gray-400"
                       }`}                      
                     >
-                      <CheckCircle size={20} />
+                      <CircleCheck/>
                     </span>
                   ) : (
                     editTaskId !== task.id && (
@@ -416,7 +416,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
                           }
                           disabled={isView}
                         >
-                          <CheckCircle size={20} />
+                          <CircleCheck/>
                         </div>
                       </span>
                     )
@@ -431,7 +431,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
             className="mt-4 flex items-center text-blue-600 hover:text-blue-800"
             onClick={handleAddTaskClick}
           >
-            <Plus size={20} className="mr-1" />
+            <Plus className="mr-1" />
             Nowe zadanie
           </button>
         )}

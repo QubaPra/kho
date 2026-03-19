@@ -6,7 +6,7 @@ import ViewTrial from "./ViewTrial";
 import TasksSection from "../components/TasksSection";
 import { confirm } from "../components/ConfirmationModal";
 import { monthMap, formatStatus, getAgeSuffix, getLatestEndDate } from "../utils/formatters";
-import { ListCheck, CalendarPlus, FileText, Plus, Edit, Trash2 } from "lucide-react";
+import { ListCheck, CalendarPlus, FileText, FilePlus, Edit, Trash2 } from "lucide-react";
 
 const Dashboard = ({ user, setUser }) => {
   const [trial, setTrial] = useState(() => {
@@ -24,7 +24,7 @@ const Dashboard = ({ user, setUser }) => {
   useEffect(() => {
     const fetchTrialData = async () => {
       try {
-        const response = await axios.get("/trials/me");
+        const response = await axios.get("/trials/me/");
         const trialData = response.data;
 
         // Formatowanie dat zadań
@@ -69,7 +69,7 @@ const Dashboard = ({ user, setUser }) => {
       })
     ) {
       try {
-        await axios.delete("/trials/me");
+        await axios.delete("/trials/me/");
         localStorage.removeItem("trial");
         localStorage.removeItem("tasks");
         setUser((prevUser) => ({ ...prevUser, has_trial: false }));
@@ -138,7 +138,7 @@ const Dashboard = ({ user, setUser }) => {
     if (sessionStorage.getItem("signUpForMeetingSent")) {
       confirm({
         title: "Uwaga!",
-        message: "Zgłosiłeś się już na kapitułę.",
+        message: "Zgłosiłeś się już na kapitułę. Gdy zgłosi się więcej kandydatów, otrzymasz dalsze informacje w wiadomości e-mail.",
         isAlert: true,
       });
       return;
@@ -150,7 +150,7 @@ const Dashboard = ({ user, setUser }) => {
       });
       confirm({
         title: "Sukces",
-        message: "Pomyślnie zgłosiłeś się na kapitułę.",
+        message: "Pomyślnie zgłosiłeś się na kapitułę. Gdy zgłosi się więcej kandydatów, otrzymasz dalsze informacje w wiadomości e-mail.",
         isAlert: true,
       });
       sessionStorage.setItem("signUpForMeetingSent", true);
@@ -187,7 +187,7 @@ const Dashboard = ({ user, setUser }) => {
                 onClick={handleReqestMentorCheck}
                 title="Zgłoś próbę do opiekuna"
               >
-                <ListCheck size={20} />
+                <ListCheck/>
                 <span className="ml-2">Zgłoś próbę do opiekuna</span>
               </button>
             )
@@ -197,7 +197,7 @@ const Dashboard = ({ user, setUser }) => {
               onClick={handleSignUpForMeeting}
               title="Zgłoś się na kapitułę"
             >
-              <CalendarPlus size={20} />
+              <CalendarPlus/>
               <span className="ml-2">Zgłoś się na kapitułę</span>
             </button>
           )}
@@ -208,13 +208,13 @@ const Dashboard = ({ user, setUser }) => {
               onClick={() => window.open(trial.report, "_blank")}
               title="Edytuj raport"
             >
-              <FileText size={20} />
+              <FileText/>
               <span className="ml-2">Edytuj raport</span>
             </button>
           ) : (
             trial.status?.includes("Otwarta") && (
               <button title="Dodaj raport" className="button-approve" onClick={handleAddReportClick}>
-                <Plus size={20} />
+                <FilePlus/>
                 <span className="ml-2">Dodaj raport</span>
               </button>
             )
@@ -222,12 +222,12 @@ const Dashboard = ({ user, setUser }) => {
 
           <Link to="/edycja-proby">
             <button title="Edytuj próbę" className="button-approve">
-              <Edit size={20} />
+              <Edit/>
             </button>
           </Link>
           <div>
             <button title="Usuń próbę" onClick={handleDeleteTrial} className="button-reject">
-            <Trash2 size={20} />
+            <Trash2/>
           </button>
           </div>
           

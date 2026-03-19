@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Church, SmilePlus, GraduationCap, Drama, Dumbbell, Users, Mountain, Church as ChurchAlt, Leaf, Trees, Flag } from "lucide-react";
+import { Plus, Church, SmilePlus, GraduationCap, Drama, Dumbbell, Users, Mountain, Sprout, Trees, Flag, Trophy } from "lucide-react";
 
 function CategoryDropdown({
   selectedCategories,
@@ -65,22 +65,22 @@ function CategoryDropdown({
     };
   }, [isOpen]);
 
-  // Mapowanie nazw ikon z API na komponenty Lucide
-  const iconMap = {
-    'church': Church,
-    'sentiment_very_satisfied': SmilePlus,
-    'school': GraduationCap,
-    'theater_comedy': Drama,
-    'exercise': Dumbbell,
-    'diversity_4': Users,
-    'mountain_flag': Mountain,
-    'eco': Leaf,
-    'forest': Trees,
-    'flag': Flag
+  const iconComponents = {
+    Church,
+    SmilePlus,
+    GraduationCap,
+    Drama,
+    Dumbbell,
+    Users,
+    Mountain,
+    Sprout,
+    Trees,
+    Flag,
+    Trophy
   };
 
   const getIconComponent = (iconName) => {
-    return iconMap[iconName] || Plus;
+    return iconComponents[iconName] || Trophy;
   };
 
   return (
@@ -89,7 +89,7 @@ function CategoryDropdown({
         className="bg-gray-200 dark:bg-gray-600 px-3 py-1  my-1 rounded-full w-fit flex items-center hover:bg-gray-300 dark:hover:bg-gray-700"
         onClick={toggleDropdown}
       >
-        <Plus size={20} />
+        <Plus/>
         {availableCategories.length > 11 && (
           <span className="ml-1 sm:text-sm text-xs">Dodaj kategorię</span>
         )}
@@ -108,7 +108,7 @@ function CategoryDropdown({
                 className={`${category.bg_color} ${category.font_color} ${category.dark_bg_color} ${category.dark_font_color} px-3 py-1 rounded-full sm:text-sm sm:my-1 my-0.5 text-xs w-fit flex items-center space-x-1 dark:hover:opacity-80 hover:opacity-80`}
                 onClick={() => handleCategoryClick(category)}
               >
-                <IconComponent size={20} />
+                <IconComponent/>
                 <span>{category.name}</span>
               </button>
             );

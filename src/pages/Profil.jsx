@@ -270,17 +270,17 @@ const Profil = ({ user, setIsAuthenticated }) => {
               <button
                 type="button"
                 onClick={handleSaveClick}
-                className="w-full  mt-2  justify-center space-x-1 button-save"
+                className="w-full  mt-2  justify-center space-x-2 button-save"
               >
-                <Check size={20} />
+                <Check/>
                 <span>Zapisz</span>
               </button>
               <button
                 type="button"
                 onClick={cancelEdit}
-                className="w-full  mt-2  justify-center space-x-1 button-reject"
+                className="w-full  mt-2  justify-center space-x-2 button-reject"
               >
-                <X size={20} />
+                <X/>
                 <span>Anuluj</span>
               </button>
               <div className="w-full  mt-2 sm:p-2 p-1.5 sm:block hidden" />
@@ -290,25 +290,25 @@ const Profil = ({ user, setIsAuthenticated }) => {
               <button
                 type="button"
                 onClick={handleEditClick}
-                className="w-full  mt-2  justify-center space-x-1 button-blue"
+                className="w-full  mt-2  justify-center space-x-2 button-blue"
               >
-                <Edit size={20} />
+                <Edit/>
                 <span>Edytuj dane</span>
               </button>
               <button
                 type="button"
                 onClick={handlePasswordEditClick}
-                className="w-full  mt-2  justify-center space-x-1 button-orange"
+                className="w-full  mt-2  justify-center space-x-2 button-orange"
               >
-                <Lock size={20} />
+                <Lock/>
                 <span>Edytuj hasło</span>
               </button>
               <button
                 type="button"
                 onClick={handleDeleteClick}
-                className="w-full  mt-2  justify-center space-x-1 button-reject"
+                className="w-full  mt-2  justify-center space-x-2 button-reject"
               >
-                <Trash2 size={20} />
+                <Trash2/>
                 <span>Usuń konto</span>
               </button>
             </>

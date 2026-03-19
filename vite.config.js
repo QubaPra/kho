@@ -15,7 +15,7 @@ export default defineConfig({
     port: 5173,
   },
   // Uwaga: baza pozostaje dla hostingu na GitHub Pages. W przypadku użycia pliku lokalnie można zmienić na './'.
-  base: '/kho',
+  base: '/kapitula',
   build: {
     // Zmniejsza liczbę wyjściowych plików CSS (i ułatwia inline)
     cssCodeSplit: false,

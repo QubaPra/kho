@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import fleurDeLis from "./public/fleur-de-lis.svg";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/kho">
+  <BrowserRouter basename="/kapitula">
     <App />
   </BrowserRouter>
 );

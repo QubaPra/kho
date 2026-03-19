@@ -5,7 +5,7 @@ import CommentsSection from "../components/CommentsSection";
 import TasksSection from "../components/TasksSection";
 import { confirm } from "../components/ConfirmationModal";
 import { monthMap, formatStatus, getAgeSuffix, getLatestEndDate } from "../utils/formatters";
-import { FileText, ListCheck, Trash2, X, CheckCheck } from "lucide-react";
+import { FileText, ListCheck, UserX, Undo2, CheckCheck } from "lucide-react";
 
 const ViewTrial = ({ user, id: propId }) => {
   const { id: paramId } = useParams();
@@ -329,7 +329,7 @@ const ViewTrial = ({ user, id: propId }) => {
               className="button-approve"
               onClick={() => window.open(trial.report, "_blank")}
             >
-              <FileText size={20} />
+              <FileText/>
               <span className="ml-2">Zobacz raport</span>
             </button>
           ) : (
@@ -338,7 +338,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 className="button-approve"
                 onClick={() => window.open(trial.report + "/preview", "_blank")}
               >
-                <FileText size={20} />
+                <FileText/>
                 <span className="ml-2">Zobacz raport</span>
               </button>
             )
@@ -351,12 +351,12 @@ const ViewTrial = ({ user, id: propId }) => {
                 onClick={handleApproveTrialMentor}
                 className="flex items-center button-approve"
               >
-                <ListCheck size={20} />
+                <ListCheck/>
                 <span className="ml-2">Zatwierdź próbę</span>
               </button>
 
               <button onClick={handleLeaveTrial} className="button-reject">
-                <Trash2 size={20} />
+                <UserX/>
                 <span className="ml-2">Porzuć próbę</span>
               </button>
             </>
@@ -367,7 +367,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 onClick={handleApproveTrialCommittee}
                 className="button-approve"
               >
-                <ListCheck size={20} />
+                <ListCheck/>
                 <span className="ml-2">Zatwierdź próbę (do otwarcia)</span>
               </button>
 
@@ -375,7 +375,7 @@ const ViewTrial = ({ user, id: propId }) => {
                 onClick={handleRejectTrialCommittee}
                 className="button-reject"
               >
-                <X size={20} />
+                <Undo2/>
                 <span className="ml-2">Odrzuć próbę (do poprawy)</span>
               </button>
             </>
@@ -386,14 +386,14 @@ const ViewTrial = ({ user, id: propId }) => {
               onClick={handleEndTrialCommittee}
               className="button-approve"
             >
-              <CheckCheck size={20} />
+              <CheckCheck/>
               <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
             </button>
           ) : (user.role == "Członek kapituły" ||
               user.role == "Administrator") &&
             trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
             <button onClick={handleEndTrial} className="button-approve">
-              <CheckCheck size={20} />
+              <CheckCheck/>
               <span className="ml-2">Zmień status na zamknięta</span>
             </button>
           ) : (user.role == "Członek kapituły" ||
@@ -401,7 +401,7 @@ const ViewTrial = ({ user, id: propId }) => {
             trial.status &&
             trial.status.includes("(do otwarcia)") ? (
             <button onClick={handleOpenTrial} className="button-approve">
-              <CheckCheck size={20} />
+              <CheckCheck/>
               <span className="ml-2">Zmień status na otwarta</span>
             </button>
           ) : (

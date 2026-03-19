@@ -20,7 +20,7 @@ const Footer = () => {
           </a>
           <div className="flex flex-col  order-1 sm:order-2">
             <div className="flex items-center space-x-2 mb-1">
-              <HelpCircle size={20} />
+              <HelpCircle/>
               <p className=" font-semibold">Pomoc:</p>
             </div>
 
@@ -43,7 +43,7 @@ const Footer = () => {
 
         <div className="flex flex-col sm:mt-0 mt-4 sm:items-start">
           <div className="flex items-center space-x-2 mb-1">
-            <Users size={20} />
+            <Users/>
             <p className=" font-semibold">Autorzy:</p>
           </div>
           <p>

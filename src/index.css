@@ -35,12 +35,13 @@ button {
 }
 
 button:hover {
-  @apply !transition-colors !duration-300 !ease-in-out ;
+  @apply transition-colors! duration-300! ease-in-out! ;
 
 }
 
-svg {
-  stroke-width: 2.5;
+.lucide, svg.lucide {
+  @apply size-5 sm:size-6; 
+  stroke-width: 2.4;
 }
 
 .modal {
@@ -76,7 +77,7 @@ th {
 }
 
 textarea {
-  @apply w-full resize-none overflow-hidden rounded-lg border p-2 break-words focus:outline-none;
+  @apply w-full resize-none overflow-hidden rounded-lg border p-2 wrap-break-word focus:outline-none;
 }
 
 .category-button {

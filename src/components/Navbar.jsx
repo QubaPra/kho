@@ -57,7 +57,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                 <Link
                   to="/proby"
                   className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
-                    location.pathname === "/proby" ? "!font-bold" : ""
+                    location.pathname === "/proby" ? "font-bold!" : ""
                   }`}
                 >
                   Wszystkie próby
@@ -67,7 +67,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <Link
                 to="/uzytkownicy"
                 className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
-                  location.pathname === "/uzytkownicy" ? "!font-bold" : ""
+                  location.pathname === "/uzytkownicy" ? "font-bold!" : ""
                 }`}
               >
                 Użytkownicy
@@ -87,7 +87,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
               <>
                 <Link to="/profil">
                   <button title="Profil" className="button-save">
-                    <User size={24} />
+                    <User/>
                   </button>
                 </Link>
                 <button
@@ -95,20 +95,20 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                   onClick={handleLogout}
                   title="Wyloguj się"
                 >
-                  <LogOut size={24} />
+                  <LogOut/>
                 </button>
               </>
             ) : (
               <>
                 <Link to="/rejestracja">
                   <button className="button-orange sm:space-x-1 ">
-                    <UserPlus size={24} />
+                    <UserPlus/>
                     <span className="sm:block hidden">Rejestracja</span>
                   </button>
                 </Link>
                 <Link to="/logowanie">
                   <button className=" sm:space-x-1 button-blue">
-                    <LogIn size={24} />
+                    <LogIn/>
                     <span className="sm:block hidden">Logowanie</span>
                   </button>
                 </Link>
@@ -129,7 +129,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
           <Link
             to="/uzytkownicy"
             className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
-              location.pathname === "/uzytkownicy" ? "!font-bold" : ""
+              location.pathname === "/uzytkownicy" ? "font-bold!" : ""
             }`}
           >
             Użytkownicy
@@ -141,7 +141,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             <Link
               to="/proby"
               className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
-                location.pathname === "/proby" ? "!font-bold" : ""
+                location.pathname === "/proby" ? "font-bold!" : ""
               }`}
             >
               Wszystkie próby

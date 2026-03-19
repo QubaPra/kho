@@ -10,7 +10,7 @@ const NewTrial = ({ user, setUser }) => {
 
   const handleSubmit = async (formData) => {
     try {
-      await axios.post("/trials/me", formData);
+      await axios.post("/trials/me/", formData);
       setUser((prevUser) => ({ ...prevUser, has_trial: true }));
       navigate("/");
     } catch (error) {

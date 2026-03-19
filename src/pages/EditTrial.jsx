@@ -16,7 +16,7 @@ const EditTrial = ({ user }) => {
   useEffect(() => {
     const fetchTrialData = async () => {
       try {
-        const response = await axios.get("/trials/me");
+        const response = await axios.get("/trials/me/");
         setInitialData(response.data);
       } catch (error) {
         console.error("Error fetching trial data:", error);
@@ -27,7 +27,7 @@ const EditTrial = ({ user }) => {
 
   const handleSubmit = async (formData) => {
     try {
-      await axios.patch("/trials/me", formData);
+      await axios.patch("/trials/me/", formData);
       navigate("/");
     } catch (error) {
       // Obsługa błędu 400 z backendu (np. nieistniejący mentor_mail)

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
-import { Search, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
+import { Search, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp, Trash2  } from "lucide-react";
 
 const BLOCKED_LOGINS = ["jakub.prazuch@zhr.pl"];
 
@@ -32,10 +32,19 @@ const UsersList = ({ currentUser }) => {
       direction = "descending";
     }
     const sortedData = [...data].sort((a, b) => {
-      if (a[key] < b[key]) {
+      let aVal = a[key];
+      let bVal = b[key];
+      
+      // Dla kolumn z datami - sortuj chronologicznie
+      if (key === "last_login" || key === "date_joined") {
+        aVal = aVal ? new Date(aVal).getTime() : 0;
+        bVal = bVal ? new Date(bVal).getTime() : 0;
+      }
+      
+      if (aVal < bVal) {
         return direction === "ascending" ? -1 : 1;
       }
-      if (a[key] > b[key]) {
+      if (aVal > bVal) {
         return direction === "ascending" ? 1 : -1;
       }
       return 0;
@@ -105,7 +114,7 @@ const UsersList = ({ currentUser }) => {
           value={filter}
           onChange={handleFilterChange}
         />
-        <Search size={20} className="ml-2" />
+        <Search className="ml-2" />
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
@@ -119,9 +128,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "full_name" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     ))}
                 </div>
               </th>
@@ -130,9 +139,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Email</span>
                   {sortConfig.key === "login" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     ))}
                 </div>
               </th>
@@ -141,9 +150,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Funkcja</span>
                   {sortConfig.key === "role" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     ))}
                 </div>
               </th>
@@ -152,9 +161,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Próba</span>
                   {sortConfig.key === "has_trial" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <ArrowDown01/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <ArrowDown10/>
                     ))}
                 </div>
               </th>
@@ -163,9 +172,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Opiekun</span>
                   {sortConfig.key === "is_mentor" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <ArrowDown01/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <ArrowDown10/>
                     ))}
                 </div>
               </th>
@@ -174,9 +183,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Ostatnie logowanie</span>
                   {sortConfig.key === "last_login" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <CalendarArrowDown/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <CalendarArrowUp/>
                     ))}
                 </div>
               </th>
@@ -185,9 +194,9 @@ const UsersList = ({ currentUser }) => {
                   <span>Data dołączenia</span>
                   {sortConfig.key === "date_joined" &&
                     (sortConfig.direction === "ascending" ? (
-                      <ArrowUp size={16} />
+                      <CalendarArrowDown/>
                     ) : (
-                      <ArrowDown size={16} />
+                      <CalendarArrowUp/>
                     ))}
                 </div>
               </th>
@@ -199,7 +208,7 @@ const UsersList = ({ currentUser }) => {
               <tr key={user.id}>
                 <td className="p-3">{user.full_name}</td>
                 <td className="p-3">{user.login}</td>
-                <td className="p-3 min-w-[180px] sm:min-w-fit">
+                <td className="p-3 min-w-45 sm:min-w-fit">
                   <select
                     id="role"
                     value={user.role}
@@ -247,7 +256,7 @@ const UsersList = ({ currentUser }) => {
                       aria-label={`Usuń użytkownika ${user.full_name || user.login}`}
                       title="Usuń użytkownika"
                     >
-                      <Trash2 size={20} className="text-red-600 dark:text-red-400" />
+                      <Trash2 className="text-red-600 dark:text-red-400" />
                     </button>
                   )}
                 </td>

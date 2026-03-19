@@ -3,7 +3,7 @@ import { subscribe, getCount } from "../utils/loadingStore";
 
 const Spinner = () => (
   <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-blue-500 motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status" aria-label="Ładowanie">
-    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+    <span className="absolute! -m-px! h-px! w-px! overflow-hidden! whitespace-nowrap! border-0! p-0! [clip:rect(0,0,0,0)]!">Loading...</span>
   </div>
 );
 
@@ -89,7 +89,7 @@ export default function GlobalLoader() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/30 backdrop-blur-[1px]">
+    <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/30 backdrop-blur-[1px]">
       <Spinner />
     </div>
   );

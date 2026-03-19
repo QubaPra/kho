@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "../api/axios";
 import resizeTextareas from "../utils/resizeTextareas";
-import { MessageCircle, Send } from "lucide-react";
+import { MessageSquareText, SendHorizontal } from "lucide-react";
 
 function CommentsSection({ comments, trialId, status }) {
   const [formattedComments, setFormattedComments] = useState([]);
@@ -65,7 +65,7 @@ function CommentsSection({ comments, trialId, status }) {
   return (
     <div className="comments-section space-y-6 sm:mt-12 mt-8">
       <div className="flex items-center space-x-1.5 sm:text-xl text-lg mb-4">
-        <MessageCircle size={24} />
+        <MessageSquareText/>
         <span className="sm:text-xl text-lg font-medium">Komentarze</span>
       </div>
 
@@ -80,7 +80,7 @@ function CommentsSection({ comments, trialId, status }) {
             </p>
             <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
               <p className="font-medium">{comment.user}:</p>
-              <p className="whitespace-pre-wrap break-words">
+              <p className="whitespace-pre-wrap wrap-break-word">
                 {comment.content}
               </p>
             </div>
@@ -101,10 +101,15 @@ function CommentsSection({ comments, trialId, status }) {
               onChange={(e) => setNewComment(e.target.value)}
             ></textarea>
             <button
-              className="text-blue-600 hover:text-blue-800"
+              className={`${
+                newComment.trim()
+                  ? "text-blue-600 hover:text-blue-800"
+                  : "text-gray-400 dark:text-gray-600 opacity-50 cursor-default!"
+              }`}              
               onClick={handleAddComment}
+              disabled={!newComment.trim()}
             >
-              <Send size={20} />
+              <SendHorizontal/>
             </button>
           </div>
         </div>

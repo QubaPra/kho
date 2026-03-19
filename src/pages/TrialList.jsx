@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
-import { Search, ArrowUp, ArrowDown, Trash2 } from "lucide-react";
+import { Search, Trash2, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp } from "lucide-react";
 
 const TrialList = ({ user }) => {
   const [data, setData] = useState([]);
@@ -38,6 +38,25 @@ const TrialList = ({ user }) => {
     fetchData();
   }, []);
 
+  // Funkcja parsująca datę zakończenia (np. "wrzesień 2025") do timestamp
+  const parseEndDate = (dateStr) => {
+    if (!dateStr) return 0;
+    const monthMap = {
+      'styczeń': 0, 'luty': 1, 'marzec': 2, 'kwiecień': 3,
+      'maj': 4, 'czerwiec': 5, 'lipiec': 6, 'sierpień': 7,
+      'wrzesień': 8, 'październik': 9, 'listopad': 10, 'grudzień': 11
+    };
+    const parts = dateStr.toLowerCase().trim().split(' ');
+    if (parts.length === 2) {
+      const month = monthMap[parts[0]];
+      const year = parseInt(parts[1]);
+      if (month !== undefined && !isNaN(year)) {
+        return new Date(year, month).getTime();
+      }
+    }
+    return 0;
+  };
+
   const sortData = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -46,6 +65,17 @@ const TrialList = ({ user }) => {
     const getSortableValue = (item, k) => {
       const val = item?.[k];
       if (val === null || val === undefined) return "";
+      
+      // Dla daty zakończenia - parsuj do timestamp
+      if (k === "end_date") {
+        return parseEndDate(val);
+      }
+      
+      // Dla completion_percent - zwróć jako liczbę
+      if (k === "completion_percent") {
+        return Number(val) || 0;
+      }
+      
       if (typeof val === "number") return val;
       // Prefer string comparison for strings/JSX
       return String(val).toLowerCase();
@@ -113,7 +143,7 @@ const TrialList = ({ user }) => {
           value={filter}
           onChange={handleFilterChange}
         />
-        <Search size={20} className="ml-2" />
+        <Search className="ml-2" />
       </div>
       <div className="overflow-x-auto sm:overflow-visible">
         <table>
@@ -127,11 +157,11 @@ const TrialList = ({ user }) => {
                   <span>Imię i nazwisko</span>
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     )}
                   {sortConfig.key === "user" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     )}
                 </div>
               </th>
@@ -143,11 +173,11 @@ const TrialList = ({ user }) => {
                   <span>Drużyna</span>
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     )}
                   {sortConfig.key === "team" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     )}
                 </div>
               </th>
@@ -159,11 +189,11 @@ const TrialList = ({ user }) => {
                   <span>Opiekun</span>
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     )}
                   {sortConfig.key === "mentor_name" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     )}
                 </div>
               </th>
@@ -175,11 +205,11 @@ const TrialList = ({ user }) => {
                   <span>Stan próby</span>
                   {sortConfig.key === "statusText" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <ArrowDownAZ/>
                     )}
                   {sortConfig.key === "statusText" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <ArrowDownZA/>
                     )}
                 </div>
               </th>
@@ -191,11 +221,11 @@ const TrialList = ({ user }) => {
                   <span>Data zakończenia</span>
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <CalendarArrowUp/>
                     )}
                   {sortConfig.key === "end_date" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <CalendarArrowDown/>
                     )}
                 </div>
               </th>
@@ -210,11 +240,11 @@ const TrialList = ({ user }) => {
                   <span>Zadania</span>
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "ascending" && (
-                      <ArrowUp size={16} />
+                      <ArrowDown01/>
                     )}
                   {sortConfig.key === "completion_percent" &&
                     sortConfig.direction === "descending" && (
-                      <ArrowDown size={16} />
+                      <ArrowDown10/>
                     )}
                 </div>
               </th>
@@ -259,7 +289,7 @@ const TrialList = ({ user }) => {
                       aria-label={`Usuń próbę ${trial.user}`}
                       title="Usuń próbę"
                     >
-                      <Trash2 size={20} className="text-red-600 dark:text-red-400" />
+                      <Trash2 className="text-red-600 dark:text-red-400" />
                     </button>
                   </td>
                 )}
