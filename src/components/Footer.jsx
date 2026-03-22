@@ -25,9 +25,15 @@ const Footer = () => {
             </div>
 
             <p>
-              Mail do przewodniczącego:{" "}
+              Przewodniczący KHO:{" "}
               <a href="mailto:jakub.prazuch@zhr.pl" className=" underline">
                 jakub.prazuch@zhr.pl
+              </a>
+            </p>
+            <p>
+              Przewodniczący KHR:{" "}
+              <a href="mailto:michal.mroz@zhr.pl" className=" underline">
+                michal.mroz@zhr.pl
               </a>
             </p>
             <a
@@ -47,7 +53,7 @@ const Footer = () => {
             <p className=" font-semibold">Autorzy:</p>
           </div>
           <p>
-            pwd. Jakub Prażuch HR -{" "}
+            phm. Jakub Prażuch HR -{" "}
             <a
               href="mailto:jakub.prazuch@zhr.pl"
               className=" underline"

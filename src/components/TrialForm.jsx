@@ -10,6 +10,7 @@ const TrialForm = ({
   externalErrors = {},
   clearExternalError = () => {},
   loginEmail = "",
+  isEditing = false,
 }) => {
   const formatDateForInput = (date) => {
     if (!date) return "";
@@ -22,6 +23,7 @@ const TrialForm = ({
   };
 
   const [formData, setFormData] = useState({
+    trial_rank: initialData.trial_rank || "HO",
     email: initialData.email || "",
     mentor_mail: initialData.mentor_mail || "",
     mentor_name: initialData.mentor_name || "",
@@ -58,6 +60,7 @@ const TrialForm = ({
     if (!initialData) return;
     setFormData((prev) => ({
       ...prev,
+      trial_rank: initialData.trial_rank || prev.trial_rank || "HO",
       email: initialData.email || "",
       mentor_mail: initialData.mentor_mail || "",
       mentor_name: initialData.mentor_name || "",
@@ -131,10 +134,14 @@ const TrialForm = ({
   const handleInputChange = (field) => (e) => {
     const value = e.target.value;
     // Zaktualizuj dane formularza
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      // Jeśli zmieniono trial_rank na HO, a obecny stopień to HO, zresetuj go
+      if (field === "trial_rank" && value === "HO" && prev.rank === "HO") {
+        next.rank = "";
+      }
+      return next;
+    });
     // Czyść błąd dla edytowanego pola
     setErrors((prev) => {
       const next = { ...prev, [field]: "" };
@@ -177,7 +184,19 @@ const TrialForm = ({
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col">
-      <h2 className="mb-12">{title}</h2>
+      <div className="mb-12 flex flex-row items-center gap-2 sm:gap-6">
+        <h2 className="mb-0 w-fit">{title.replace(/\s*(HO|HR)$/, "")}</h2>
+        {!isEditing && (
+          <select
+            value={formData.trial_rank}
+            onChange={handleInputChange("trial_rank")}
+            className="font-bold w-fit! pr-10! h-fit!"
+          >
+            <option value="HO" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HO</option>
+            <option value="HR" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HR</option>
+          </select>
+        )}
+      </div>
       <form
         className="flex sm:flex-row flex-col justify-between sm:max-w-4xl"
         onSubmit={handleSubmit}
@@ -257,6 +276,7 @@ const TrialForm = ({
               <option value="mł.">mł.</option>
               <option value="wyw.">wyw.</option>
               <option value="ćw.">ćw.</option>
+              {formData.trial_rank === "HR" && <option value="HO">HO</option>}
             </select>
             {(errors.rank || externalErrors.rank) && (
               <p className="text-red-500 dark:text-red-600 sm:text-sm text-xs">

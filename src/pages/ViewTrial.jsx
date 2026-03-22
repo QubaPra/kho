@@ -319,7 +319,7 @@ const ViewTrial = ({ user, id: propId }) => {
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6">
       <div className="sm:flex items-center justify-between mb-2">
         <h2>
-          {trial.rank} {trial.user} próba na stopień HO
+          {trial.rank} {trial.user} próba na stopień {trial.trial_rank}
         </h2>
         <div className="flex space-x-2 sm:my-0 mb-2 mt-2 md:min-w-fit md:ml-4">
           {trial.report &&

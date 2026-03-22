@@ -53,6 +53,7 @@ const EditTrial = ({ user }) => {
       submitButtonLabel="Zapisz zmiany"
       loginEmail={user?.login || ""}
       externalErrors={externalErrors}
+      isEditing={true}
       clearExternalError={(field) =>
         setExternalErrors((prev) => (field in prev ? { ...prev, [field]: "" } : prev))
       }

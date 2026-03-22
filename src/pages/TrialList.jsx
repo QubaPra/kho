@@ -11,6 +11,7 @@ const TrialList = ({ user }) => {
     direction: "ascending",
   });
   const [filter, setFilter] = useState("");
+  const [trialRankFilter, setTrialRankFilter] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,14 +99,20 @@ const TrialList = ({ user }) => {
   const filteredData = data.filter((trial) => {
     const q = (filter ?? "").toLowerCase();
     const has = (v) => String(v ?? "").toLowerCase().includes(q);
-    return (
+    
+    // Filtruj po tekście wyszukiwania
+    const matchesSearch = 
       has(trial.user) ||
       has(trial.statusText) ||
       has(trial.end_date) ||
       has(trial.team) ||
       has(trial.mentor_name) ||
-      has(trial.completion_percent)
-    );
+      has(trial.completion_percent);
+    
+    // Filtruj po trial_rank (jeśli wybrany)
+    const matchesRank = !trialRankFilter || trial.trial_rank === trialRankFilter;
+    
+    return matchesSearch && matchesRank;
   });
 
   const formatStatus = (status) => {
@@ -135,7 +142,18 @@ const TrialList = ({ user }) => {
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
-      <h2 className="sm:mb-12 mb-8 mt-1">Lista wszystkich prób</h2>
+      <div className="mb-12 flex flex-row items-center gap-2 sm:gap-6">
+        <h2 className="mb-0 w-fit">Lista wszystkich prób</h2>
+        <select
+          value={trialRankFilter}
+          onChange={(e) => setTrialRankFilter(e.target.value)}
+          className="font-bold w-fit! pr-10! h-fit!"
+        >
+          <option value="">HO i HR</option>
+          <option value="HO" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HO</option>
+          <option value="HR" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HR</option>
+        </select>
+      </div>
       <div className="mb-4 sm:max-w-md flex items-center">
         <input
           type="text"
