@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "../api/axios";
 import { confirm } from "../components/ConfirmationModal";
-import { Search, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp, Trash2  } from "lucide-react";
+import { Search, ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp, Trash2, KeyRound } from "lucide-react";
 
 const BLOCKED_LOGINS = ["jakub.prazuch@zhr.pl"];
 
@@ -71,7 +71,7 @@ const UsersList = ({ currentUser }) => {
   const handleDeleteUser = async (user) => {
     const accepted = await confirm({
       title: "Potwierdź usunięcie",
-      message: `Czy na pewno chcesz usunąć użytkownika \"${user.full_name || user.login}\"? Tej operacji nie można cofnąć.`,
+      message: `Czy na pewno chcesz usunąć użytkownika "${user.full_name || user.login}"? Tej operacji nie można cofnąć.`,
       isDanger: true,
     });
     if (!accepted) return;
@@ -80,6 +80,32 @@ const UsersList = ({ currentUser }) => {
       setData((prev) => prev.filter((u) => u.id !== user.id));
     } catch (error) {
       console.error("Error deleting user:", error);
+    }
+  };
+
+  const handleResetPassword = async (user) => {
+    const accepted = await confirm({
+      title: "Potwierdź reset hasła",
+      message: `Czy na pewno chcesz zresetować hasło użytkownika "${user.full_name || user.login}"?`,
+      isDanger: true,
+    });
+    if (!accepted) return;
+    try {
+      const response = await axios.post(`/users/${user.id}/reset-password/`);
+      const newPassword = response.data.new_password;
+      await confirm({
+        title: "Hasło zresetowane",
+        message: `Nowe hasło dla użytkownika to: ${newPassword}`,
+        isAlert: true,
+      });
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      await confirm({
+        title: "Błąd",
+        message: "Wystąpił błąd podczas resetowania hasła.",
+        isAlert: true,
+        isDanger: true,
+      });
     }
   };
 
@@ -250,17 +276,30 @@ const UsersList = ({ currentUser }) => {
                 <td className="p-3">{formatDate(user.last_login)}</td>
                 <td className="p-3">{formatDate(user.date_joined)}</td>
                 <td className="p-3 text-center">
-                  {!(currentUser && currentUser.id === user.id) && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteUser(user)}
-                      className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
-                      aria-label={`Usuń użytkownika ${user.full_name || user.login}`}
-                      title="Usuń użytkownika"
-                    >
-                      <Trash2 className="text-red-600 dark:text-red-400" />
-                    </button>
-                  )}
+                  <div className="flex justify-center items-center space-x-2">
+                    {!(currentUser && currentUser.id === user.id) && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleResetPassword(user)}
+                          className="p-1 rounded hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
+                          aria-label={`Resetuj hasło użytkownika ${user.full_name || user.login}`}
+                          title="Resetuj hasło"
+                        >
+                          <KeyRound className="text-yellow-600 dark:text-yellow-400" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteUser(user)}
+                          className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                          aria-label={`Usuń użytkownika ${user.full_name || user.login}`}
+                          title="Usuń użytkownika"
+                        >
+                          <Trash2 className="text-red-600 dark:text-red-400" />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

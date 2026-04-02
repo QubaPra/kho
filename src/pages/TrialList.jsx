@@ -165,12 +165,12 @@ const TrialList = ({ user }) => {
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow sm:p-6 p-4 mb-6 w-full flex flex-col items-left">
-      <div className="mb-12 flex flex-row items-center gap-2 sm:gap-6">
+      <div className="mb-12 flex flex-row items-center gap-2 sm:gap-6 sm:h-8 sm:mt-1">
         <h2 className="mb-0 w-fit">Lista wszystkich prób</h2>
         <select
           value={trialRankFilter}
           onChange={(e) => setTrialRankFilter(e.target.value)}
-          className="font-bold w-fit! pr-10! h-fit!"
+          className="font-bold w-fit! pr-10! h-fit! mt-0!"
           title={availableRanks.length === 1 ? "Twoja rola pozwala przeglądać tylko ten rodzaj prób" : ""}
         >
           {availableRanks.length > 1 && <option value="">HO i HR</option>}

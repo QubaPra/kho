@@ -3,7 +3,7 @@ const teams = [
     "5 KDH Piorun",
     "19 KLDH Ptaki Polskie",
     "10 KDH Dzieci Słońca",
-    "40 KGZ Smocze Bractwo",
+    "40 KGZ Bractwo Smoczej Doliny",
     "inna",
   ];
   

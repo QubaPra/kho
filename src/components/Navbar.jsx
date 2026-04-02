@@ -31,14 +31,15 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
     setIsAuthenticated(false);
   };
 
-  const isChapterMember = user?.role === "Administrator" || 
+  const canSeeTrialList = user?.role === "Administrator" || 
                            ["Członek KHO", "Członek KHR", "Członek KHO i KHR"].includes(user?.role);
+  const canSeeUserList = user?.role === "Administrator";
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 sm:shadow-sm dark:shadow-black ${
-          !isAuthenticated || !isChapterMember
+          !isAuthenticated || !canSeeTrialList
             ? "shadow-sm "
             : ""
         } z-40`}
@@ -53,7 +54,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             </Link>
           </div>
           <div className="max-w-7xl mx-auto px-4 py-2 sm:flex  items-center space-x-6 text-center hidden">
-            {isAuthenticated && isChapterMember && (
+            {isAuthenticated && canSeeTrialList && (
                 <Link
                   to="/proby"
                   className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
@@ -63,7 +64,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
                   Wszystkie próby
                 </Link>
               )}
-            {isAuthenticated && user?.role === "Administrator" && (
+            {isAuthenticated && canSeeUserList && (
               <Link
                 to="/uzytkownicy"
                 className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
@@ -119,12 +120,12 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
       </header>
       <div
         className={`sticky top-0 pt-8 mt-6 -mb-14  mx-auto px-4 py-2 sm:hidden ${
-          !isAuthenticated || !isChapterMember
+          !isAuthenticated || !canSeeTrialList
             ? "hidden"
             : "flex"
         }  items-center space-x-6 text-center justify-center bg-white dark:bg-gray-900 shadow-sm dark:shadow-black z-30`}
       >
-        {isAuthenticated && user?.role === "Administrator" && (
+        {isAuthenticated && canSeeUserList && (
           <Link
             to="/uzytkownicy"
             className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${
@@ -134,7 +135,7 @@ const Navbar = ({ setIsAuthenticated, isAuthenticated, user }) => {
             Użytkownicy
           </Link>
         )}
-        {isAuthenticated && isChapterMember && (
+        {isAuthenticated && canSeeTrialList && (
             <Link
               to="/proby"
               className={`sm:text-sm text-xs font-medium hover:text-blue-800 dark:hover:text-blue-600 ${

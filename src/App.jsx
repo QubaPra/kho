@@ -80,8 +80,7 @@ const App = () => {
                 <Route
                   path="/"
                   element={
-                    user.is_mentor ||
-                    ["Członek KHO", "Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role) ? (
+                    ["Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role) ? (
                       <MentorDashboard user={user} />
                     ) : user.has_trial ? (
                       <Dashboard setUser={setUser} user={user} />
@@ -96,8 +95,7 @@ const App = () => {
                   path="/nowa-proba"
                   element={
                     user.has_trial ||
-                    user.is_mentor ||
-                    ["Członek KHO", "Członek KHR", "Członek KHO i KHR"].includes(user.role) ? (
+                    ["Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role) ? (
                       <Navigate to="/" />
                     ) : (
                       <NewTrial setUser={setUser} user={user} />
