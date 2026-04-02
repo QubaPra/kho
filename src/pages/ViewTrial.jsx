@@ -389,15 +389,13 @@ const ViewTrial = ({ user, id: propId }) => {
               <CheckCheck/>
               <span className="ml-2">Zatwierdź próbę (do zamknięcia)</span>
             </button>
-          ) : (user.role == "Członek kapituły" ||
-              user.role == "Administrator") &&
+          ) : (["Członek KHO", "Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role)) &&
             trial.status == "zatwierdzona przez kapitułę (do zamknięcia)" ? (
             <button onClick={handleEndTrial} className="button-approve">
               <CheckCheck/>
               <span className="ml-2">Zmień status na zamknięta</span>
             </button>
-          ) : (user.role == "Członek kapituły" ||
-              user.role == "Administrator") &&
+          ) : (["Członek KHO", "Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role)) &&
             trial.status &&
             trial.status.includes("(do otwarcia)") ? (
             <button onClick={handleOpenTrial} className="button-approve">

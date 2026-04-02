@@ -81,8 +81,7 @@ const App = () => {
                   path="/"
                   element={
                     user.is_mentor ||
-                    user.role === "Członek kapituły" ||
-                    user.role === "Administrator" ? (
+                    ["Członek KHO", "Członek KHR", "Członek KHO i KHR", "Administrator"].includes(user.role) ? (
                       <MentorDashboard user={user} />
                     ) : user.has_trial ? (
                       <Dashboard setUser={setUser} user={user} />
@@ -98,7 +97,7 @@ const App = () => {
                   element={
                     user.has_trial ||
                     user.is_mentor ||
-                    user.role === "Członek kapituły" ? (
+                    ["Członek KHO", "Członek KHR", "Członek KHO i KHR"].includes(user.role) ? (
                       <Navigate to="/" />
                     ) : (
                       <NewTrial setUser={setUser} user={user} />
@@ -138,7 +137,7 @@ const App = () => {
                   path="/proby"
                   element={
                     user.role === "Administrator" ||
-                    user.role === "Członek kapituły" ? (
+                    ["Członek KHO", "Członek KHR", "Członek KHO i KHR"].includes(user.role) ? (
                       <TrialList user={user} />
                     ) : (
                       <Navigate to="/" />

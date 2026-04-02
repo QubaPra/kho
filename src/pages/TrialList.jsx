@@ -14,6 +14,29 @@ const TrialList = ({ user }) => {
   const [trialRankFilter, setTrialRankFilter] = useState("");
   const navigate = useNavigate();
 
+  // Określ dostępne opcje filtrowania według roli
+  const getAvailableRanks = () => {
+    if (user.role === "Członek KHO") {
+      return ["HO"]; // Tylko HO
+    } else if (user.role === "Członek KHR") {
+      return ["HR"]; // Tylko HR
+    } else if (user.role === "Członek KHO i KHR" || user.role === "Administrator") {
+      return ["HO", "HR"]; // Obie opcje
+    }
+    return [];
+  };
+
+  const availableRanks = getAvailableRanks();
+
+  // Ustaw domyślny filtr według roli użytkownika
+  useEffect(() => {
+    if (user.role === "Członek KHO") {
+      setTrialRankFilter("HO");
+    } else if (user.role === "Członek KHR") {
+      setTrialRankFilter("HR");
+    }
+  }, [user.role]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -148,10 +171,15 @@ const TrialList = ({ user }) => {
           value={trialRankFilter}
           onChange={(e) => setTrialRankFilter(e.target.value)}
           className="font-bold w-fit! pr-10! h-fit!"
+          title={availableRanks.length === 1 ? "Twoja rola pozwala przeglądać tylko ten rodzaj prób" : ""}
         >
-          <option value="">HO i HR</option>
-          <option value="HO" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HO</option>
-          <option value="HR" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HR</option>
+          {availableRanks.length > 1 && <option value="">HO i HR</option>}
+          {availableRanks.includes("HO") && (
+            <option value="HO" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HO</option>
+          )}
+          {availableRanks.includes("HR") && (
+            <option value="HR" className="text-base font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800">HR</option>
+          )}
         </select>
       </div>
       <div className="mb-4 sm:max-w-md flex items-center">

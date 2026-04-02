@@ -225,7 +225,9 @@ const UsersList = ({ currentUser }) => {
                     }
                   >
                     <option value="Kandydat">Kandydat</option>
-                    <option value="Członek kapituły">Członek kapituły</option>
+                    <option value="Członek KHO">Członek KHO</option>
+                    <option value="Członek KHR">Członek KHR</option>
+                    <option value="Członek KHO i KHR">Członek KHO i KHR</option>
                     <option value="Administrator">Administrator</option>
                   </select>
                 </td>
