@@ -109,6 +109,7 @@ const Login = ({ setIsAuthenticated }) => {
             type="email"
             id="email"
             name="email"
+            autoComplete="username email"
             value={email}
             onChange={handleEmailChange}
           />
@@ -121,6 +122,7 @@ const Login = ({ setIsAuthenticated }) => {
             type="password"
             id="password"
             name="password"
+            autoComplete="current-password"
             value={password}
             onChange={handlePasswordChange}
             onFocus={handlePasswordFocus}

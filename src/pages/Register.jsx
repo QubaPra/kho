@@ -155,6 +155,7 @@ const Register = ({ setIsAuthenticated }) => {
             type="email"
             id="email"
             name="email"
+            autoComplete="username email"
             value={email}
             onChange={handleEmailChange}
           />
@@ -172,6 +173,7 @@ const Register = ({ setIsAuthenticated }) => {
             type="text"
             id="name"
             name="name"
+            autoComplete="name"
             value={name}
             onChange={handleNameChange}
           />
@@ -189,6 +191,7 @@ const Register = ({ setIsAuthenticated }) => {
             type="password"
             id="password"
             name="password"
+            autoComplete="new-password"
             value={password}
             onChange={handlePasswordChange}
             onFocus={handlePasswordFocus}

@@ -213,6 +213,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
               type="email"
               id="email"
               name="email"
+              autoComplete="username email"
               value={email}
               onChange={handleEmailChange}
               disabled={!isEditing}
@@ -233,6 +234,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
               type="text"
               id="name"
               name="name"
+              autoComplete="name"
               value={name}
               onChange={handleNameChange}
               disabled={!isEditing}
@@ -330,6 +332,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
           </label>
           <input
             type="password"
+            autoComplete="current-password"
             value={currentPassword}
             onChange={handleCurrentPasswordChange}
             className="w-full p-2 border border-gray-300 rounded"
@@ -350,6 +353,7 @@ const Profil = ({ user, setIsAuthenticated }) => {
           </label>
           <input
             type="password"
+            autoComplete="new-password"
             value={newPassword}
             onChange={handlePasswordChange}
             className="w-full p-2 border border-gray-300 rounded"
