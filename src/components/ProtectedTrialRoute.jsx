@@ -20,7 +20,7 @@ const ProtectedTrialRoute = ({ user, children }) => {
 
     const checkAccess = async () => {
       try {
-        const { data } = await axios.get(`/trials/${id}`);
+        const { data } = await axios.get(`/trials/${id}/`);
         const login = (user.login || "").toLowerCase();
         
         // Sprawdź czy użytkownik jest właścicielem lub opiekunem

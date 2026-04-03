@@ -87,7 +87,7 @@ const Dashboard = ({ user, setUser }) => {
 
   const handleAddReportClick = async () => {
     try {
-      const response = await axios.get(`/trials/${trial.id}/report`);
+      const response = await axios.get(`/trials/${trial.id}/report/`);
       const reportUrl = response.data.message;
       localStorage.setItem(
         "trial",
@@ -114,7 +114,7 @@ const Dashboard = ({ user, setUser }) => {
       return;
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "reqest_mentor_check",
         trial_id: trial.id,
       });
@@ -144,7 +144,7 @@ const Dashboard = ({ user, setUser }) => {
       return;
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "sign_up_for_meeting",
         trial_id: trial.id,
       });

@@ -10,7 +10,7 @@ const VerifyAccount = ({ setIsAuthenticated }) => {
   useEffect(() => {
     const verifyAccount = async () => {
       try {
-        const response = await axios.get(`/verify/${id}/${token}`);
+        const response = await axios.get(`/verify/${id}/${token}/`);
         
         const ok = await confirm({
           title: "Sukces!",

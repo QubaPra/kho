@@ -17,7 +17,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("/categories");
+        const response = await axios.get("/categories/");
         setCategories(response.data);
       } catch (error) {
         console.error("Błąd podczas pobierania kategorii:", error);
@@ -62,7 +62,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
           categories: editCategories,
         };
 
-        const response = await axios.patch(`/tasks/${editTaskId}`, payload);
+        const response = await axios.patch(`/tasks/${editTaskId}/`, payload);
         setTasks(
           tasks.map((task) =>
             task.id === editTaskId
@@ -93,7 +93,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       originalTask.categories.length === 0
     ) {
       try {
-        await axios.delete(`/tasks/${editTaskId}`);
+        await axios.delete(`/tasks/${editTaskId}/`);
         const updatedTasks = tasks.filter((task) => task.id !== editTaskId);
         setTasks(updatedTasks);
         localStorage.setItem("tasks", JSON.stringify(updatedTasks));
@@ -128,7 +128,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
         end_date: "",
         trial: trial.id,
       };
-      const response = await axios.post("/tasks/me", payload);
+      const response = await axios.post("/tasks/me/", payload);
       const newTask = response.data;
       setTasks([...tasks, newTask]);
       setEditTaskId(newTask.id);
@@ -210,7 +210,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
       return;
     }
     try {
-      await axios.delete(`/tasks/${taskId}`);
+      await axios.delete(`/tasks/${taskId}/`);
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
       setTasks(updatedTasks);
       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
@@ -223,7 +223,7 @@ const TasksSection = ({ trial, tasks, setTasks, setTrial, isView = false }) => {
   if (isView) return; // Nie pozwalaj na zmianę w trybie podglądu
   const newValue = !task.is_done;
   try {
-    await axios.patch(`/tasks/${task.id}`, { is_done: newValue });
+    await axios.patch(`/tasks/${task.id}/`, { is_done: newValue });
     const updated = tasks.map(t => t.id === task.id ? { ...t, is_done: newValue } : t);
     setTasks(updated);
     localStorage.setItem("tasks", JSON.stringify(updated));

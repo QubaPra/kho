@@ -19,7 +19,7 @@ const ViewTrial = ({ user, id: propId }) => {
   useEffect(() => {
     const fetchTrialData = async () => {
       try {
-        const response = await axios.get(`/trials/${id}`);
+        const response = await axios.get(`/trials/${id}/`);
         const trialData = response.data;
 
         // Formatowanie dat zadań
@@ -64,7 +64,7 @@ const ViewTrial = ({ user, id: propId }) => {
     if (!result) return;
 
     try {
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         mentor_mail: "",
         mentor_name: "",
       });
@@ -73,7 +73,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas porzucania próby:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "leave_trial_mentor",
         trial_id: trial.id,
       });
@@ -89,7 +89,7 @@ const ViewTrial = ({ user, id: propId }) => {
     });
     if (!result) return;
     try {
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: "zaakceptowana przez opiekuna",
       });
       setTrial((prevTrial) => ({
@@ -104,7 +104,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas zatwierdzania próby:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "approve_trial_mentor",
         trial_id: trial.id,
       });
@@ -121,7 +121,7 @@ const ViewTrial = ({ user, id: propId }) => {
     if (!result) return;
 
     try {
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: "zaakceptowana przez kapitułę (do otwarcia)",
       });
       setTrial((prevTrial) => ({
@@ -139,7 +139,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "approve_trial_open",
         trial_id: trial.id,
       });
@@ -157,7 +157,7 @@ const ViewTrial = ({ user, id: propId }) => {
     if (!result) return;
 
     try {
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: "odrzucona przez kapitułę (do poprawy)",
       });
       setTrial((prevTrial) => ({
@@ -175,7 +175,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas odrzucania próby przez komisję:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "reject_trial",
         trial_id: trial.id,
       });
@@ -208,7 +208,7 @@ const ViewTrial = ({ user, id: propId }) => {
         newStatus += " (edytowano)";
       }
 
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: newStatus,
       });
 
@@ -224,7 +224,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas otwierania próby:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "open_trial",
         trial_id: trial.id,
       });
@@ -241,7 +241,7 @@ const ViewTrial = ({ user, id: propId }) => {
     if (!result) return;
 
     try {
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: "zatwierdzona przez kapitułę (do zamknięcia)",
       });
       setTrial((prevTrial) => ({
@@ -259,7 +259,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas zatwierdzania próby przez komisję:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "approve_trial_close",
         trial_id: trial.id,
       });
@@ -287,7 +287,7 @@ const ViewTrial = ({ user, id: propId }) => {
         return;
       }
 
-      await axios.patch(`/trials/${id}`, {
+      await axios.patch(`/trials/${id}/`, {
         status: `Zamknięta rozkazem ${orderNumber} <${orderLink}>`,
       });
 
@@ -306,7 +306,7 @@ const ViewTrial = ({ user, id: propId }) => {
       console.error("Błąd podczas zamykania próby:", error);
     }
     try {
-      await axios.post(`/emails`, {
+      await axios.post(`/emails/`, {
         function: "close_trial",
         trial_id: trial.id,
       });
